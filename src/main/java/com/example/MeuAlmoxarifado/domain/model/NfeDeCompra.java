@@ -1,0 +1,114 @@
+package com.example.MeuAlmoxarifado.domain.model;
+
+
+import com.example.MeuAlmoxarifado.controller.compra.dto.request.EditCompraDTO;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "transacoes_entrada")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+public class NfeDeCompra {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @JoinColumn(name = "nfe")
+    private String nfe;
+
+    @JoinColumn(name = "chave_nfe")
+    private String chaveNfe;
+
+    @JoinColumn(name = "data_emissao")
+    private LocalDateTime dataEmissao;
+
+    @JoinColumn(name = "data_recebimento")
+    private LocalDateTime dataRecebimento;
+
+    @JoinColumn(name = "valor_total_produtos")
+    private BigDecimal valorTotalProdutos;
+
+    @JoinColumn(name = "valor_frete")
+    private BigDecimal valorFrete;
+
+    @JoinColumn(name = "valor_total_ipi")
+    private BigDecimal valorTotalIpi;
+
+    @JoinColumn(name = "valor_seguro")
+    private BigDecimal valorSeguro;
+
+    @JoinColumn(name = "valor_desconto")
+    private BigDecimal valorDesconto;
+
+    @JoinColumn(name = "valor_total_nfe")
+    private BigDecimal valorTotalNfe;
+
+    @JoinColumn(name = "valor_outros")
+    private BigDecimal valorOutros;
+
+    @JoinColumn(name = "obs")
+    private String obs;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transportadoras_id")
+    private Transportadora transportadora;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fornecedoras_id")
+    private Fornecedora fornecedora;
+
+    @OneToMany(mappedBy = "nfeDeCompra", cascade = CascadeType.ALL)
+    private List<ItemDeCompra> itens = new ArrayList<>();
+
+    public void adicionarItem(ItemDeCompra item) {
+        this.itens.add(item);
+    }
+    public void removerItem(ItemDeCompra item) {
+        this.itens.remove(item);
+    }
+
+    public void update(EditCompraDTO dados, Transportadora transportadora, Fornecedora fornecedora) {
+        if(dados.nfe() != null) {
+            this.chaveNfe = dados.nfe();
+        }
+        if(dados.dataEmissao() != null) {
+            this.dataEmissao = dados.dataEmissao();
+        }
+        if(dados.dataRecebimento() != null) {
+            this.dataRecebimento = dados.dataRecebimento();
+        }
+        if(dados.valorFrete() != null) {
+            this.valorFrete = dados.valorFrete();
+        }
+        if(dados.obs() != null) {
+            this.obs = dados.obs();
+        }
+        if(dados.idTransportadora() != null) {
+            this.transportadora = transportadora;
+        }
+        if(dados.idFornecedora() != null) {
+            this.fornecedora = fornecedora;
+        }
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotalNfe = valorTotal;
+    }
+
+    public void setValorIpiTotal(BigDecimal ipi) {
+        this.valorTotalIpi = ipi;
+    }
+
+}
