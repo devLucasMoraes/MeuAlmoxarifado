@@ -1,6 +1,5 @@
 package com.example.MeuAlmoxarifado.domain.model;
 
-import com.example.MeuAlmoxarifado.controller.conversaoDeCompra.dto.request.EditConversaoDeCompraDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,17 +33,4 @@ public class ConversaoDeCompra {
     @JoinColumn(name = "vinculos_materiais_fornecedoras_id")
     private VinculoMaterialComFornecedora vinculoComFornecedoras;
 
-    public void update(EditConversaoDeCompraDTO conversaoAtualizada, VinculoMaterialComFornecedora vinculo) {
-        this.vinculoComFornecedoras = vinculo;
-
-        if(conversaoAtualizada.undCompra() != null) {
-            this.undCompra = conversaoAtualizada.undCompra();
-        }
-        if(conversaoAtualizada.undCompra() != null) {
-            this.undEstoque = conversaoAtualizada.undEstoque();
-        }
-        if(conversaoAtualizada.fatorDeConversao() != null) {
-            this.fatorDeConversao = conversaoAtualizada.fatorDeConversao();
-        }
-    }
 }

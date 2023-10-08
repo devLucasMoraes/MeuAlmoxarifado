@@ -1,5 +1,6 @@
 package com.example.MeuAlmoxarifado.controller.itemTransacoesSaida.dto.request;
 
+import com.example.MeuAlmoxarifado.domain.model.ItemTransacaoSaida;
 import com.example.MeuAlmoxarifado.domain.model.Unidade;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -18,4 +19,11 @@ public record EditItemTransacaoSaidaDTO(
 
         BigDecimal valorUntEntregue
 ) {
+    public ItemTransacaoSaida toModel() {
+        ItemTransacaoSaida model = new ItemTransacaoSaida();
+        model.setUndConsumo(this.undConsumo);
+        model.setQuantEnt(this.quantEntregue);
+        model.setValorUntEnt(valorUntEntregue);
+        return model;
+    }
 }

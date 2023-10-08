@@ -5,50 +5,53 @@ import com.example.MeuAlmoxarifado.controller.transacaoSaida.dto.request.EditTra
 import com.example.MeuAlmoxarifado.controller.transacaoSaida.dto.request.NewTransacaoSaidaDTO;
 import com.example.MeuAlmoxarifado.controller.transacaoSaida.dto.response.ListTransacaoSaidaDTO;
 import com.example.MeuAlmoxarifado.controller.transacaoSaida.dto.response.ShowTransacaoSaidaDTO;
-import com.example.MeuAlmoxarifado.service.impl.TransacaoSaidaService;
+import com.example.MeuAlmoxarifado.service.TransacaoSaidaService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/transacoes_saida")
-public class TransacaoSaidaController {
+public record TransacaoSaidaController(TransacaoSaidaService transacaoSaidaService) {
 
-    @Autowired
-    private TransacaoSaidaService transacaoSaidaService;
 
     @PostMapping("new")
-    public ResponseEntity<ShowTransacaoSaidaDTO> create(@RequestBody @Valid NewTransacaoSaidaDTO dados, UriComponentsBuilder componentsBuilder) {
-        var dto = transacaoSaidaService.create(dados);
-        var uri = componentsBuilder.path("/transacoes_saida/show/{id}").buildAndExpand(dto.id()).toUri();
-        return ResponseEntity.created(uri).body(dto);
+    public ResponseEntity<ShowTransacaoSaidaDTO> create(@RequestBody @Valid NewTransacaoSaidaDTO newTransacaoSaidaDTO) {
+        var transacaoSaida = transacaoSaidaService.create(newTransacaoSaidaDTO.toModel());
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(transacaoSaida.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(new ShowTransacaoSaidaDTO(transacaoSaida));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ListTransacaoSaidaDTO>> getAll(Pageable pageable) {
-        var page = transacaoSaidaService.getAll(pageable);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<List<ListTransacaoSaidaDTO>> getAll() {
+        var transacoesSaida = transacaoSaidaService.findAll();
+        var transacoesSaidaDTO = transacoesSaida.stream().map(ListTransacaoSaidaDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok(transacoesSaidaDTO);
     }
 
     @GetMapping("show/{id}")
     public ResponseEntity<ShowTransacaoSaidaDTO> getById(@PathVariable Long id) {
-        var dto = transacaoSaidaService.getById(id);
-        return ResponseEntity.ok(dto);
+        var transacaoSaida = transacaoSaidaService.findById(id);
+        return ResponseEntity.ok(new ShowTransacaoSaidaDTO(transacaoSaida));
     }
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowTransacaoSaidaDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditTransacaoSaidaDTO dados) {
-        var dto = transacaoSaidaService.updateById(id,dados);
-        return ResponseEntity.ok(dto);
+    public  ResponseEntity<ShowTransacaoSaidaDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditTransacaoSaidaDTO editTransacaoSaidaDTO) {
+        var transacaoSaida = transacaoSaidaService.update(id,editTransacaoSaidaDTO.toModel());
+        return ResponseEntity.ok(new ShowTransacaoSaidaDTO(transacaoSaida));
     }
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        transacaoSaidaService.deleteById(id);
+        transacaoSaidaService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

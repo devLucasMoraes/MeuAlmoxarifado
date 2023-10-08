@@ -6,13 +6,13 @@ import com.example.MeuAlmoxarifado.controller.destino.dto.response.ListDestinoDT
 import com.example.MeuAlmoxarifado.controller.destino.dto.response.ShowDestinoDTO;
 import com.example.MeuAlmoxarifado.service.DestinoService;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -30,9 +30,10 @@ public record DestinoController(DestinoService destinoService) {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ListDestinoDTO>> getAll(Pageable pageable, @RequestParam(defaultValue = "") String nome) {
-        var page = destinoService.findAll(pageable, nome);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<List<ListDestinoDTO>> getAll() {
+        var destinos = destinoService.findAll();
+        var destinosDTO = destinos.stream().map(ListDestinoDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok(destinosDTO);
     }
 
     @GetMapping("show/{id}")
@@ -43,8 +44,8 @@ public record DestinoController(DestinoService destinoService) {
 
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowDestinoDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditDestinoDTO dados) {
-        var destino = destinoService.update(id, dados.toModel());
+    public  ResponseEntity<ShowDestinoDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditDestinoDTO editDestinoDTO) {
+        var destino = destinoService.update(id, editDestinoDTO.toModel());
         return ResponseEntity.ok(new ShowDestinoDTO(destino));
     }
 
