@@ -5,56 +5,52 @@ import com.example.MeuAlmoxarifado.controller.fornecedora.dto.request.EditFornec
 import com.example.MeuAlmoxarifado.controller.fornecedora.dto.request.NewFornecedoraDTO;
 import com.example.MeuAlmoxarifado.controller.fornecedora.dto.response.ListFornecedoraDTO;
 import com.example.MeuAlmoxarifado.controller.fornecedora.dto.response.ShowFornecedoraDTO;
-import com.example.MeuAlmoxarifado.service.impl.FornecedoraService;
+import com.example.MeuAlmoxarifado.service.FornecedoraService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/fornecedoras")
-public class FornecedoraController {
-
-    @Autowired
-    private FornecedoraService fornecedoraService;
+public record FornecedoraController(FornecedoraService fornecedoraService) {
 
     @PostMapping("new")
-    public ResponseEntity<ShowFornecedoraDTO> create(@RequestBody @Valid NewFornecedoraDTO dados, UriComponentsBuilder componentsBuilder) {
-        var dto = fornecedoraService.create(dados);
-        var uri = componentsBuilder.path("/fornecedoras/show/{id}").buildAndExpand(dto.id()).toUri();
-        return ResponseEntity.created(uri).body(dto);
+    public ResponseEntity<ShowFornecedoraDTO> create(@RequestBody @Valid NewFornecedoraDTO newFornecedoraDTO) {
+        var fornecedora = fornecedoraService.create(newFornecedoraDTO.toModel());
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(fornecedora.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(new ShowFornecedoraDTO(fornecedora));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ListFornecedoraDTO>> getAll(Pageable pageable, @RequestParam(defaultValue = "") String nomeFantasia) {
-        var page = fornecedoraService.getAll(pageable, nomeFantasia);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<List<ListFornecedoraDTO>> getAll() {
+        var fornecedoras = fornecedoraService.findAll();
+        var fornecedorasDTO = fornecedoras.stream().map(ListFornecedoraDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok(fornecedorasDTO);
     }
 
     @GetMapping("show/{id}")
     public ResponseEntity<ShowFornecedoraDTO> getById(@PathVariable Long id){
-        var dto = fornecedoraService.getById(id);
-        return ResponseEntity.ok(dto);
-    }
-
-    @GetMapping("show/cnpj/{cnpj}")
-    public ResponseEntity<ShowFornecedoraDTO> getByCnpj(@PathVariable String cnpj){
-        var dto = fornecedoraService.getByCnpj(cnpj);
-        return ResponseEntity.ok(dto);
+        var fornecedora = fornecedoraService.findById(id);
+        return ResponseEntity.ok(new ShowFornecedoraDTO(fornecedora));
     }
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowFornecedoraDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditFornecedoraDTO dados) {
-        var dto = fornecedoraService.updateById(id, dados);
-        return ResponseEntity.ok(dto);
+    public  ResponseEntity<ShowFornecedoraDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditFornecedoraDTO editFornecedoraDTO) {
+        var fornecedora = fornecedoraService.update(id, editFornecedoraDTO.toModel());
+        return ResponseEntity.ok(new ShowFornecedoraDTO(fornecedora));
     }
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        fornecedoraService.deleteById(id);
+        fornecedoraService.delete(id);
         return ResponseEntity.noContent().build();
     }
 

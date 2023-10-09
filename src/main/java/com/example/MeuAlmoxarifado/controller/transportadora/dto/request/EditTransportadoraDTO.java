@@ -1,5 +1,7 @@
 package com.example.MeuAlmoxarifado.controller.transportadora.dto.request;
 
+import com.example.MeuAlmoxarifado.domain.model.Transportadora;
+
 public record EditTransportadoraDTO(
 
         Long id,
@@ -10,6 +12,14 @@ public record EditTransportadoraDTO(
 
         String nomeFantasia,
 
-        String fone
-) {
+        String fone) {
+    public Transportadora toModel() {
+        Transportadora model = new Transportadora();
+        model.setId(this.id);
+        model.setCnpj(this.cnpj);
+        model.setRazaoSocial(this.razaoSocial);
+        model.setNomeFantasia(this.nomeFantasia);
+        model.setFone(this.fone);
+        return model;
+    }
 }

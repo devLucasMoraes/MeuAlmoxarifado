@@ -2,8 +2,13 @@ package com.example.MeuAlmoxarifado.controller.vinculoMaterialComFornecedora.dto
 
 
 import com.example.MeuAlmoxarifado.controller.conversaoDeCompra.dto.request.EditConversaoDeCompraDTO;
+import com.example.MeuAlmoxarifado.domain.model.VinculoMaterialComFornecedora;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 
 public record EditVinculoComFornecedorasDTO(
 
@@ -14,6 +19,13 @@ public record EditVinculoComFornecedorasDTO(
 
         String codProd,
 
-        ArrayList<EditConversaoDeCompraDTO> conversoesDeCompra
-) {
+        List<EditConversaoDeCompraDTO> conversoesDeCompra) {
+    public VinculoMaterialComFornecedora toModel() {
+        VinculoMaterialComFornecedora model = new VinculoMaterialComFornecedora();
+        model.setCodProd(this.codProd);
+        model.setConversaoDeCompras(ofNullable(this.conversoesDeCompra)
+                .orElse(emptyList())
+                .stream().map(EditConversaoDeCompraDTO::toModel).collect(toList()));
+        return model;
+    }
 }

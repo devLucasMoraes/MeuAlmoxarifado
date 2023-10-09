@@ -1,7 +1,5 @@
 package com.example.MeuAlmoxarifado.domain.model;
 
-import com.example.MeuAlmoxarifado.controller.destino.dto.request.EditDestinoDTO;
-import com.example.MeuAlmoxarifado.controller.destino.dto.request.NewDestinoDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,17 +22,4 @@ public class Destino {
     @JoinColumn(name = "fone")
     private String fone;
 
-    public Destino(NewDestinoDTO dados) {
-        this.nome = dados.nome();
-        this.fone = dados.fone();
-    }
-
-    public void update(EditDestinoDTO dados) {
-        if(dados.nome() != null) {
-            this.nome = dados.nome();
-        }
-        if(dados.fone() != null) {
-            this.fone = dados.fone();
-        }
-    }
 }

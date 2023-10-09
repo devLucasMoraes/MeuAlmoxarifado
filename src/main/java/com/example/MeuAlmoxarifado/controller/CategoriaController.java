@@ -3,52 +3,53 @@ package com.example.MeuAlmoxarifado.controller;
 
 import com.example.MeuAlmoxarifado.controller.categoria.dto.request.EditCategoriaDTO;
 import com.example.MeuAlmoxarifado.controller.categoria.dto.request.NewCategoriaDTO;
-import com.example.MeuAlmoxarifado.controller.categoria.dto.response.ListCategoriaDTO;
 import com.example.MeuAlmoxarifado.controller.categoria.dto.response.ShowCategoriaDTO;
-import com.example.MeuAlmoxarifado.service.impl.CategoriaService;
+import com.example.MeuAlmoxarifado.service.CategoriaService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/categorias")
-public class CategoriaController {
-
-    @Autowired
-    private CategoriaService categoriaService;
+public record CategoriaController(CategoriaService categoriaService) {
 
     @PostMapping("new")
-    public ResponseEntity<ShowCategoriaDTO> create(@RequestBody @Valid NewCategoriaDTO dados, UriComponentsBuilder componentsBuilder) {
-        var dto = categoriaService.create(dados);
-        var uri = componentsBuilder.path("/categorias/show/{id}").buildAndExpand(dto.id()).toUri();
-        return ResponseEntity.created(uri).body(dto);
+    public ResponseEntity<ShowCategoriaDTO> create(@RequestBody @Valid NewCategoriaDTO newCategoriaDTO) {
+        var categoria = categoriaService.create(newCategoriaDTO.toModel());
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(categoria.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(new ShowCategoriaDTO(categoria));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ListCategoriaDTO>> getAll(Pageable pageable, @RequestParam(defaultValue = "") String nome) {
-        var page = categoriaService.getAll(pageable, nome);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<List<ShowCategoriaDTO>> getAll() {
+        var categorias = categoriaService.findAll();
+        var categoriasDTO = categorias.stream().map(ShowCategoriaDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok(categoriasDTO);
     }
 
     @GetMapping("show/{id}")
     public ResponseEntity<ShowCategoriaDTO> getById(@PathVariable Long id){
-        var dto = categoriaService.getById(id);
-        return ResponseEntity.ok(dto);
+        var categoria = categoriaService.findById(id);
+        return ResponseEntity.ok(new ShowCategoriaDTO(categoria));
     }
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowCategoriaDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditCategoriaDTO dados) {
-        var dto = categoriaService.updateById(id, dados);
-        return ResponseEntity.ok(dto);
+    public  ResponseEntity<ShowCategoriaDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditCategoriaDTO editCategoriaDTO) {
+        var categoria = categoriaService.update(id, editCategoriaDTO.toModel());
+        return ResponseEntity.ok(new ShowCategoriaDTO(categoria));
     }
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        categoriaService.deleteById(id);
+        categoriaService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

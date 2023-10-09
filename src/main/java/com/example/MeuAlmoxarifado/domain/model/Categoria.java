@@ -1,23 +1,19 @@
 package com.example.MeuAlmoxarifado.domain.model;
 
-import com.example.MeuAlmoxarifado.controller.categoria.dto.request.EditCategoriaDTO;
-import com.example.MeuAlmoxarifado.controller.categoria.dto.request.NewCategoriaDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "categorias")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@ToString
 public class Categoria {
 
     @Id
@@ -34,28 +30,7 @@ public class Categoria {
     @JoinColumn(name = "estoque_minimo")
     private BigDecimal estoqueMinimo;
 
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ConversaoDeConsumo> conversoesDeConsumo = new ArrayList<>();
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ConversaoDeConsumo> conversoesDeConsumo;
 
-    public Categoria(NewCategoriaDTO dados) {
-        this.nome = dados.nome();
-        this.undEstoque = dados.undEstoque();
-        this.estoqueMinimo = dados.estoqueMinimo();
-    }
-
-    public void update(EditCategoriaDTO dados) {
-        if(dados.nome() != null) {
-            this.nome = dados.nome();
-        }
-        if(dados.undEstoque() != null) {
-            this.undEstoque = dados.undEstoque();
-        }
-        if(dados.estoqueMinimo() != null) {
-            this.estoqueMinimo = dados.estoqueMinimo();
-        }
-    }
-
-    public void adicionarConversao(ConversaoDeConsumo conversao) {
-        conversoesDeConsumo.add(conversao);
-    }
 }

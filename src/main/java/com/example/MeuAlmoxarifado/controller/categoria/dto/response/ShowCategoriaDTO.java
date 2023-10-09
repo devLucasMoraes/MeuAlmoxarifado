@@ -7,7 +7,10 @@ import com.example.MeuAlmoxarifado.domain.model.Unidade;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 
 public record ShowCategoriaDTO(
         Long id,
@@ -26,9 +29,8 @@ public record ShowCategoriaDTO(
                 categoria.getNome(),
                 categoria.getUndEstoque(),
                 categoria.getEstoqueMinimo(),
-                categoria.getConversoesDeConsumo()
-                        .stream()
-                        .map(ShowConversaoDeConsumoDTO::new)
-                        .collect(Collectors.toList()));
+                ofNullable(categoria.getConversoesDeConsumo())
+                        .orElse(emptyList())
+                        .stream().map(ShowConversaoDeConsumoDTO::new).collect(toList()));
     }
 }

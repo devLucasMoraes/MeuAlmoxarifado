@@ -1,17 +1,13 @@
 package com.example.MeuAlmoxarifado.domain.model;
 
 
-import com.example.MeuAlmoxarifado.controller.requisitante.dto.request.EditRequisitanteDTO;
-import com.example.MeuAlmoxarifado.controller.requisitante.dto.request.NewRequisitanteDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "requisitantes")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -27,17 +23,4 @@ public class Requisitante {
     @JoinColumn(name = "fone")
     private String fone;
 
-    public Requisitante(NewRequisitanteDTO dados) {
-        this.nome = dados.nome();
-        this.fone = dados.fone();
-    }
-
-    public void update(EditRequisitanteDTO dados) {
-        if(dados.nome() != null) {
-            this.nome = dados.nome();
-        }
-        if(dados.fone() != null) {
-            this.fone = dados.fone();
-        }
-    }
 }
