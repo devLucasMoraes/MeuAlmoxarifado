@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString
 public class Categoria {
 
     @Id
@@ -30,7 +29,7 @@ public class Categoria {
     @JoinColumn(name = "estoque_minimo")
     private BigDecimal estoqueMinimo;
 
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.EAGER,orphanRemoval = true)
     private List<ConversaoDeConsumo> conversoesDeConsumo;
 
 }

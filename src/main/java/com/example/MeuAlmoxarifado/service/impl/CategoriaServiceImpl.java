@@ -62,7 +62,8 @@ public class CategoriaServiceImpl implements CategoriaService {
         dbCategoria.setNome(categoriaToUpdate.getNome());
         dbCategoria.setUndEstoque(categoriaToUpdate.getUndEstoque());
         dbCategoria.setEstoqueMinimo(categoriaToUpdate.getEstoqueMinimo());
-        dbCategoria.setConversoesDeConsumo(categoriaToUpdate.getConversoesDeConsumo());
+        dbCategoria.getConversoesDeConsumo().clear();
+        dbCategoria.getConversoesDeConsumo().addAll(categoriaToUpdate.getConversoesDeConsumo());
 
         return this.categoriaRepository.save(dbCategoria);
     }
