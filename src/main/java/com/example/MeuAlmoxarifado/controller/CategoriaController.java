@@ -1,9 +1,9 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.categoria.dto.request.EditCategoriaDTO;
-import com.example.MeuAlmoxarifado.controller.categoria.dto.request.NewCategoriaDTO;
-import com.example.MeuAlmoxarifado.controller.categoria.dto.response.ShowCategoriaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.categoria.request.EditCategoriaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.categoria.request.NewCategoriaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.categoria.response.ShowCategoriaDTO;
 import com.example.MeuAlmoxarifado.service.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

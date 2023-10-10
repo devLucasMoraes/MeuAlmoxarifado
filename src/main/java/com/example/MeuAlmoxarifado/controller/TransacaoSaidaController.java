@@ -1,10 +1,10 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.transacaoSaida.dto.request.EditTransacaoSaidaDTO;
-import com.example.MeuAlmoxarifado.controller.transacaoSaida.dto.request.NewTransacaoSaidaDTO;
-import com.example.MeuAlmoxarifado.controller.transacaoSaida.dto.response.ListTransacaoSaidaDTO;
-import com.example.MeuAlmoxarifado.controller.transacaoSaida.dto.response.ShowTransacaoSaidaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.request.EditTransacaoSaidaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.request.NewTransacaoSaidaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.response.ListTransacaoSaidaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.response.ShowTransacaoSaidaDTO;
 import com.example.MeuAlmoxarifado.service.TransacaoSaidaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

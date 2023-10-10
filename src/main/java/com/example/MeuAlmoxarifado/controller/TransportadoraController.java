@@ -1,10 +1,10 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.transportadora.dto.request.EditTransportadoraDTO;
-import com.example.MeuAlmoxarifado.controller.transportadora.dto.request.NewTransportadoraDTO;
-import com.example.MeuAlmoxarifado.controller.transportadora.dto.response.ListTransportadoraDTO;
-import com.example.MeuAlmoxarifado.controller.transportadora.dto.response.ShowTransportadoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.transportadora.request.EditTransportadoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.transportadora.request.NewTransportadoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.transportadora.response.ListTransportadoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.transportadora.response.ShowTransportadoraDTO;
 import com.example.MeuAlmoxarifado.service.TransportadoraService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

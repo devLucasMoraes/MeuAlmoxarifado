@@ -1,10 +1,10 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.material.dto.request.EditMaterialDTO;
-import com.example.MeuAlmoxarifado.controller.material.dto.request.NewMaterialDTO;
-import com.example.MeuAlmoxarifado.controller.material.dto.response.ListMateriaisDTO;
-import com.example.MeuAlmoxarifado.controller.material.dto.response.ShowMaterialDTO;
+import com.example.MeuAlmoxarifado.controller.dto.material.request.EditMaterialDTO;
+import com.example.MeuAlmoxarifado.controller.dto.material.request.NewMaterialDTO;
+import com.example.MeuAlmoxarifado.controller.dto.material.response.ListMateriaisDTO;
+import com.example.MeuAlmoxarifado.controller.dto.material.response.ShowMaterialDTO;
 import com.example.MeuAlmoxarifado.service.MaterialService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
