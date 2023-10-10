@@ -1,10 +1,10 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.requisitante.dto.request.EditRequisitanteDTO;
-import com.example.MeuAlmoxarifado.controller.requisitante.dto.request.NewRequisitanteDTO;
-import com.example.MeuAlmoxarifado.controller.requisitante.dto.response.ListRequisitanteDTO;
-import com.example.MeuAlmoxarifado.controller.requisitante.dto.response.ShowRequisitanteDTO;
+import com.example.MeuAlmoxarifado.controller.dto.requisitante.request.EditRequisitanteDTO;
+import com.example.MeuAlmoxarifado.controller.dto.requisitante.request.NewRequisitanteDTO;
+import com.example.MeuAlmoxarifado.controller.dto.requisitante.response.ListRequisitanteDTO;
+import com.example.MeuAlmoxarifado.controller.dto.requisitante.response.ShowRequisitanteDTO;
 import com.example.MeuAlmoxarifado.service.RequisitanteService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

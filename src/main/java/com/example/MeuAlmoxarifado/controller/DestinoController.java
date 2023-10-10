@@ -1,9 +1,9 @@
 package com.example.MeuAlmoxarifado.controller;
 
-import com.example.MeuAlmoxarifado.controller.destino.dto.request.EditDestinoDTO;
-import com.example.MeuAlmoxarifado.controller.destino.dto.request.NewDestinoDTO;
-import com.example.MeuAlmoxarifado.controller.destino.dto.response.ListDestinoDTO;
-import com.example.MeuAlmoxarifado.controller.destino.dto.response.ShowDestinoDTO;
+import com.example.MeuAlmoxarifado.controller.dto.destino.request.EditDestinoDTO;
+import com.example.MeuAlmoxarifado.controller.dto.destino.request.NewDestinoDTO;
+import com.example.MeuAlmoxarifado.controller.dto.destino.response.ListDestinoDTO;
+import com.example.MeuAlmoxarifado.controller.dto.destino.response.ShowDestinoDTO;
 import com.example.MeuAlmoxarifado.service.DestinoService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

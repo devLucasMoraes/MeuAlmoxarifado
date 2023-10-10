@@ -1,10 +1,10 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.fornecedora.dto.request.EditFornecedoraDTO;
-import com.example.MeuAlmoxarifado.controller.fornecedora.dto.request.NewFornecedoraDTO;
-import com.example.MeuAlmoxarifado.controller.fornecedora.dto.response.ListFornecedoraDTO;
-import com.example.MeuAlmoxarifado.controller.fornecedora.dto.response.ShowFornecedoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.fornecedora.request.EditFornecedoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.fornecedora.request.NewFornecedoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.fornecedora.response.ListFornecedoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.fornecedora.response.ShowFornecedoraDTO;
 import com.example.MeuAlmoxarifado.service.FornecedoraService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
