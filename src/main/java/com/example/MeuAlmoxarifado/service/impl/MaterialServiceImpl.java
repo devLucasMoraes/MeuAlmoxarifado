@@ -54,7 +54,8 @@ public class MaterialServiceImpl implements MaterialService {
         dbMaterial.setDescricao(materialToUpdate.getDescricao());
         dbMaterial.setValorUnt(materialToUpdate.getValorUnt());
         dbMaterial.setQtdEmEstoque(materialToUpdate.getQtdEmEstoque());
-        dbMaterial.setFornecedorasVinculadas(materialToUpdate.getFornecedorasVinculadas());
+        dbMaterial.getFornecedorasVinculadas().clear();
+        dbMaterial.getFornecedorasVinculadas().addAll(materialToUpdate.getFornecedorasVinculadas());
         dbMaterial.setCategoria(materialToUpdate.getCategoria());
 
         return this.materialRepository.save(materialToUpdate);

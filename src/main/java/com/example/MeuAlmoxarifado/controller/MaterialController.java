@@ -1,8 +1,7 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.material.request.EditMaterialDTO;
-import com.example.MeuAlmoxarifado.controller.dto.material.request.NewMaterialDTO;
+import com.example.MeuAlmoxarifado.controller.dto.material.request.MaterialDTO;
 import com.example.MeuAlmoxarifado.controller.dto.material.response.ListMateriaisDTO;
 import com.example.MeuAlmoxarifado.controller.dto.material.response.ShowMaterialDTO;
 import com.example.MeuAlmoxarifado.service.MaterialService;
@@ -20,8 +19,8 @@ import java.util.stream.Collectors;
 public record MaterialController(MaterialService materialService) {
 
     @PostMapping("new")
-    public ResponseEntity<ShowMaterialDTO> create(@RequestBody @Valid NewMaterialDTO newMaterialDTO) {
-        var material = materialService.create(newMaterialDTO.toModel());
+    public ResponseEntity<ShowMaterialDTO> create(@RequestBody @Valid MaterialDTO materialDTO) {
+        var material = materialService.create(materialDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(material.getId())
@@ -44,8 +43,8 @@ public record MaterialController(MaterialService materialService) {
 
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowMaterialDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditMaterialDTO editMaterialDTO) {
-        var material = materialService.update(id, editMaterialDTO.toModel());
+    public  ResponseEntity<ShowMaterialDTO> updateById(@PathVariable Long id, @RequestBody @Valid MaterialDTO materialDTO) {
+        var material = materialService.update(id, materialDTO.toModel());
         return ResponseEntity.ok(new ShowMaterialDTO(material));
     }
 
