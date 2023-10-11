@@ -32,4 +32,7 @@ public class Categoria {
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.EAGER,orphanRemoval = true)
     private List<ConversaoDeConsumo> conversoesDeConsumo;
 
+    public Categoria(Long id) {
+        this.id = id;
+    }
 }

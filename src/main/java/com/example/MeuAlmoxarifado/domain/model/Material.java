@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,7 +34,7 @@ public class Material {
     private Categoria categoria;
 
     @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VinculoMaterialComFornecedora> fornecedorasVinculadas = new ArrayList<>();
+    private List<VinculoMaterialComFornecedora> fornecedorasVinculadas;
 
 
 }

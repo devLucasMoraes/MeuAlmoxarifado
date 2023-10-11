@@ -1,8 +1,7 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.categoria.request.EditCategoriaDTO;
-import com.example.MeuAlmoxarifado.controller.dto.categoria.request.NewCategoriaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.categoria.request.CategoriaDTO;
 import com.example.MeuAlmoxarifado.controller.dto.categoria.response.ShowCategoriaDTO;
 import com.example.MeuAlmoxarifado.service.CategoriaService;
 import jakarta.validation.Valid;
@@ -19,8 +18,8 @@ import java.util.stream.Collectors;
 public record CategoriaController(CategoriaService categoriaService) {
 
     @PostMapping("new")
-    public ResponseEntity<ShowCategoriaDTO> create(@RequestBody @Valid NewCategoriaDTO newCategoriaDTO) {
-        var categoria = categoriaService.create(newCategoriaDTO.toModel());
+    public ResponseEntity<ShowCategoriaDTO> create(@RequestBody @Valid CategoriaDTO categoriaDTO) {
+        var categoria = categoriaService.create(categoriaDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(categoria.getId())
@@ -42,8 +41,8 @@ public record CategoriaController(CategoriaService categoriaService) {
     }
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowCategoriaDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditCategoriaDTO editCategoriaDTO) {
-        var categoria = categoriaService.update(id, editCategoriaDTO.toModel());
+    public  ResponseEntity<ShowCategoriaDTO> updateById(@PathVariable Long id, @RequestBody @Valid CategoriaDTO categoriaDTO) {
+        var categoria = categoriaService.update(id, categoriaDTO.toModel());
         return ResponseEntity.ok(new ShowCategoriaDTO(categoria));
     }
 
