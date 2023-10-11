@@ -24,7 +24,7 @@ public class Material {
     private String descricao;
 
     @JoinColumn(name = "valor_unt")
-    private BigDecimal valorUnt;
+        private BigDecimal valorUnt;
 
     @JoinColumn(name = "qtd_em_estoque")
     private BigDecimal qtdEmEstoque;
@@ -36,5 +36,7 @@ public class Material {
     @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VinculoMaterialComFornecedora> fornecedorasVinculadas;
 
-
+    public Material(Long id) {
+        this.id = id;
+    }
 }

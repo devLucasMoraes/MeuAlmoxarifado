@@ -1,8 +1,7 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.transportadora.request.EditTransportadoraDTO;
-import com.example.MeuAlmoxarifado.controller.dto.transportadora.request.NewTransportadoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.transportadora.request.TransportadoraDTO;
 import com.example.MeuAlmoxarifado.controller.dto.transportadora.response.ListTransportadoraDTO;
 import com.example.MeuAlmoxarifado.controller.dto.transportadora.response.ShowTransportadoraDTO;
 import com.example.MeuAlmoxarifado.service.TransportadoraService;
@@ -20,8 +19,8 @@ import java.util.stream.Collectors;
 public record TransportadoraController(TransportadoraService transportadoraService) {
 
     @PostMapping("new")
-    public ResponseEntity<ShowTransportadoraDTO> create(@RequestBody @Valid NewTransportadoraDTO newTransportadoraDTO) {
-        var transportadora = transportadoraService.create(newTransportadoraDTO.toModel());
+    public ResponseEntity<ShowTransportadoraDTO> create(@RequestBody @Valid TransportadoraDTO transportadoraDTO) {
+        var transportadora = transportadoraService.create(transportadoraDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(transportadora.getId())
@@ -44,8 +43,8 @@ public record TransportadoraController(TransportadoraService transportadoraServi
 
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowTransportadoraDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditTransportadoraDTO editTransportadoraDTO) {
-        var transportadora = transportadoraService.update(id, editTransportadoraDTO.toModel());
+    public  ResponseEntity<ShowTransportadoraDTO> updateById(@PathVariable Long id, @RequestBody @Valid TransportadoraDTO transportadoraDTO) {
+        var transportadora = transportadoraService.update(id, transportadoraDTO.toModel());
         return ResponseEntity.ok(new ShowTransportadoraDTO(transportadora));
     }
 

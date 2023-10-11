@@ -22,4 +22,7 @@ public class Destino {
     @JoinColumn(name = "fone")
     private String fone;
 
+    public Destino(Long id) {
+        this.id = id;
+    }
 }

@@ -1,7 +1,6 @@
 package com.example.MeuAlmoxarifado.controller;
 
-import com.example.MeuAlmoxarifado.controller.dto.destino.request.EditDestinoDTO;
-import com.example.MeuAlmoxarifado.controller.dto.destino.request.NewDestinoDTO;
+import com.example.MeuAlmoxarifado.controller.dto.destino.request.DestinoDTO;
 import com.example.MeuAlmoxarifado.controller.dto.destino.response.ListDestinoDTO;
 import com.example.MeuAlmoxarifado.controller.dto.destino.response.ShowDestinoDTO;
 import com.example.MeuAlmoxarifado.service.DestinoService;
@@ -20,8 +19,8 @@ import java.util.stream.Collectors;
 public record DestinoController(DestinoService destinoService) {
 
     @PostMapping("new")
-    public ResponseEntity<ShowDestinoDTO> create(@RequestBody @Valid NewDestinoDTO newDestinoDTO) {
-        var destino = destinoService.create(newDestinoDTO.toModel());
+    public ResponseEntity<ShowDestinoDTO> create(@RequestBody @Valid DestinoDTO destinoDTO) {
+        var destino = destinoService.create(destinoDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(destino.getId())
@@ -44,8 +43,8 @@ public record DestinoController(DestinoService destinoService) {
 
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowDestinoDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditDestinoDTO editDestinoDTO) {
-        var destino = destinoService.update(id, editDestinoDTO.toModel());
+    public  ResponseEntity<ShowDestinoDTO> updateById(@PathVariable Long id, @RequestBody @Valid DestinoDTO destinoDTO) {
+        var destino = destinoService.update(id, destinoDTO.toModel());
         return ResponseEntity.ok(new ShowDestinoDTO(destino));
     }
 

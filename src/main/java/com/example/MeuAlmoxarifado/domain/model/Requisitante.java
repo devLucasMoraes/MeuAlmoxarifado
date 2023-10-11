@@ -23,4 +23,7 @@ public class Requisitante {
     @JoinColumn(name = "fone")
     private String fone;
 
+    public Requisitante(Long id) {
+        this.id = id;
+    }
 }

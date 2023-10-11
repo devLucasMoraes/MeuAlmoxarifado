@@ -1,6 +1,8 @@
 package com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.request;
 
-import com.example.MeuAlmoxarifado.controller.dto.itemTransacoesSaida.request.NewItemTransacaoSaidaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.itemTransacoesSaida.request.ItemTransacaoSaidaDTO;
+import com.example.MeuAlmoxarifado.domain.model.Destino;
+import com.example.MeuAlmoxarifado.domain.model.Requisitante;
 import com.example.MeuAlmoxarifado.domain.model.TransacaoSaida;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
@@ -15,36 +17,33 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
-public record NewTransacaoSaidaDTO(
-
+public record TransacaoSaidaDTO(
+        Long id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", locale = "pt_BR")
         LocalDateTime dataRequisicao,
         BigDecimal valorTotal,
-
         String obs,
-
         String ordemProducao,
-
         @NotNull
         Long idRequisitante,
-
         @NotNull
         Long idDestino,
-
         @Valid
         @NotNull
         @NotEmpty
-        List<NewItemTransacaoSaidaDTO> itens
-) {
+        List<ItemTransacaoSaidaDTO> itens) {
     public TransacaoSaida toModel() {
         TransacaoSaida model = new TransacaoSaida();
+        model.setId(this.id);
         model.setDataRequisicao(this.dataRequisicao);
         model.setValorTotal(this.valorTotal);
         model.setObs(this.obs);
         model.setOrdemProducao(this.ordemProducao);
+        model.setDestino(new Destino(this.idDestino));
+        model.setRequisitante(new Requisitante(this.idRequisitante));
         model.setItens(ofNullable(this.itens)
                 .orElse(emptyList())
-                .stream().map(NewItemTransacaoSaidaDTO::toModel).collect(toList()));
+                .stream().map(ItemTransacaoSaidaDTO::toModel).collect(toList()));
         return model;
     }
 }

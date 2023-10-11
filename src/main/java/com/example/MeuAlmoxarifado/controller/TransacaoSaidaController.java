@@ -1,8 +1,7 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.request.EditTransacaoSaidaDTO;
-import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.request.NewTransacaoSaidaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.request.TransacaoSaidaDTO;
 import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.response.ListTransacaoSaidaDTO;
 import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.response.ShowTransacaoSaidaDTO;
 import com.example.MeuAlmoxarifado.service.TransacaoSaidaService;
@@ -21,8 +20,8 @@ public record TransacaoSaidaController(TransacaoSaidaService transacaoSaidaServi
 
 
     @PostMapping("new")
-    public ResponseEntity<ShowTransacaoSaidaDTO> create(@RequestBody @Valid NewTransacaoSaidaDTO newTransacaoSaidaDTO) {
-        var transacaoSaida = transacaoSaidaService.create(newTransacaoSaidaDTO.toModel());
+    public ResponseEntity<ShowTransacaoSaidaDTO> create(@RequestBody @Valid TransacaoSaidaDTO transacaoSaidaDTO) {
+        var transacaoSaida = transacaoSaidaService.create(transacaoSaidaDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(transacaoSaida.getId())
@@ -44,8 +43,8 @@ public record TransacaoSaidaController(TransacaoSaidaService transacaoSaidaServi
     }
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowTransacaoSaidaDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditTransacaoSaidaDTO editTransacaoSaidaDTO) {
-        var transacaoSaida = transacaoSaidaService.update(id,editTransacaoSaidaDTO.toModel());
+    public ResponseEntity<ShowTransacaoSaidaDTO> updateById(@PathVariable Long id, @RequestBody @Valid TransacaoSaidaDTO transacaoSaidaDTO) {
+        var transacaoSaida = transacaoSaidaService.update(id, transacaoSaidaDTO.toModel());
         return ResponseEntity.ok(new ShowTransacaoSaidaDTO(transacaoSaida));
     }
 

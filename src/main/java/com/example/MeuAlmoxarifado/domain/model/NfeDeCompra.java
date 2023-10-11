@@ -67,7 +67,7 @@ public class NfeDeCompra {
     private Fornecedora fornecedora;
 
     @OneToMany(mappedBy = "nfeDeCompra", cascade = CascadeType.ALL)
-    private List<ItemDeCompra> itens = new ArrayList<>();
+    private List<ItemDeCompra> itens;
 
 
 }

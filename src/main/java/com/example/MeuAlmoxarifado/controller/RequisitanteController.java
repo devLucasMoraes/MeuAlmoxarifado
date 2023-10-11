@@ -1,8 +1,7 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.requisitante.request.EditRequisitanteDTO;
-import com.example.MeuAlmoxarifado.controller.dto.requisitante.request.NewRequisitanteDTO;
+import com.example.MeuAlmoxarifado.controller.dto.requisitante.request.RequisitanteDTO;
 import com.example.MeuAlmoxarifado.controller.dto.requisitante.response.ListRequisitanteDTO;
 import com.example.MeuAlmoxarifado.controller.dto.requisitante.response.ShowRequisitanteDTO;
 import com.example.MeuAlmoxarifado.service.RequisitanteService;
@@ -20,8 +19,8 @@ import java.util.stream.Collectors;
 public record RequisitanteController(RequisitanteService requisitanteService) {
 
     @PostMapping("new")
-    public ResponseEntity<ShowRequisitanteDTO> create(@RequestBody @Valid NewRequisitanteDTO newRequisitanteDTO) {
-        var requisitante = requisitanteService.create(newRequisitanteDTO.toModel());
+    public ResponseEntity<ShowRequisitanteDTO> create(@RequestBody @Valid RequisitanteDTO requisitanteDTO) {
+        var requisitante = requisitanteService.create(requisitanteDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(requisitante.getId())
@@ -44,8 +43,8 @@ public record RequisitanteController(RequisitanteService requisitanteService) {
 
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowRequisitanteDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditRequisitanteDTO editRequisitanteDTO) {
-        var requisitante = requisitanteService.update(id, editRequisitanteDTO.toModel());
+    public  ResponseEntity<ShowRequisitanteDTO> updateById(@PathVariable Long id, @RequestBody @Valid RequisitanteDTO requisitanteDTO) {
+        var requisitante = requisitanteService.update(id, requisitanteDTO.toModel());
         return ResponseEntity.ok(new ShowRequisitanteDTO(requisitante));
     }
 
