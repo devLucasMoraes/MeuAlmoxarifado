@@ -28,5 +28,7 @@ public class Fornecedora {
     @JoinColumn(name = "fone")
     private String fone;
 
-
+    public Fornecedora(Long id) {
+        this.id = id;
+    }
 }

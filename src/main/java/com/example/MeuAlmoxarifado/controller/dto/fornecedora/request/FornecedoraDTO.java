@@ -1,17 +1,15 @@
 package com.example.MeuAlmoxarifado.controller.dto.fornecedora.request;
 
 import com.example.MeuAlmoxarifado.domain.model.Fornecedora;
+import jakarta.validation.constraints.NotBlank;
 
-public record EditFornecedoraDTO(
-
+public record FornecedoraDTO(
         Long id,
-
+        @NotBlank
         String cnpj,
-
+        @NotBlank
         String razaoSocial,
-
         String nomeFantasia,
-
         String fone) {
     public Fornecedora toModel() {
         Fornecedora model = new Fornecedora();

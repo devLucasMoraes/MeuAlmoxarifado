@@ -1,7 +1,9 @@
 package com.example.MeuAlmoxarifado.controller.dto.compra.request;
 
-import com.example.MeuAlmoxarifado.controller.dto.itemDeCompra.request.EditItemDeCompraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.itemDeCompra.request.ItemDeCompraDTO;
+import com.example.MeuAlmoxarifado.domain.model.Fornecedora;
 import com.example.MeuAlmoxarifado.domain.model.NfeDeCompra;
+import com.example.MeuAlmoxarifado.domain.model.Transportadora;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -15,7 +17,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
-public record EditCompraDTO(
+public record CompraDTO(
         Long id,
         String nfe,
         String chaveNfe,
@@ -37,12 +39,12 @@ public record EditCompraDTO(
         @NotNull
         Long idFornecedora,
         @Valid
-        @NotEmpty
         @NotNull
-        List<EditItemDeCompraDTO> itens
-) {
+        @NotEmpty
+        List<ItemDeCompraDTO> itens) {
     public NfeDeCompra toModel() {
         NfeDeCompra model = new NfeDeCompra();
+        model.setId(this.id);
         model.setNfe(this.nfe);
         model.setChaveNfe(this.chaveNfe);
         model.setDataEmissao(this.dataEmissao);
@@ -55,9 +57,11 @@ public record EditCompraDTO(
         model.setValorTotalNfe(this.valorTotalNfe);
         model.setValorOutros(this.valorOutros);
         model.setObs(this.obs);
+        model.setTransportadora(new Transportadora(this.idTransportadora));
+        model.setFornecedora(new Fornecedora(this.idFornecedora));
         model.setItens(ofNullable(this.itens)
                 .orElse(emptyList())
-                .stream().map(EditItemDeCompraDTO::toModel).collect(toList()));
+                .stream().map(ItemDeCompraDTO::toModel).collect(toList()));
         return model;
     }
 }

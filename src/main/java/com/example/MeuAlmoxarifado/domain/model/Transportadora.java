@@ -28,4 +28,7 @@ public class Transportadora {
     @JoinColumn(name = "fone")
     private String fone;
 
+    public Transportadora(Long id) {
+        this.id = id;
+    }
 }

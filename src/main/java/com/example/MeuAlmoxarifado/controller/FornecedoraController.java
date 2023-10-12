@@ -1,8 +1,7 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.fornecedora.request.EditFornecedoraDTO;
-import com.example.MeuAlmoxarifado.controller.dto.fornecedora.request.NewFornecedoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.fornecedora.request.FornecedoraDTO;
 import com.example.MeuAlmoxarifado.controller.dto.fornecedora.response.ListFornecedoraDTO;
 import com.example.MeuAlmoxarifado.controller.dto.fornecedora.response.ShowFornecedoraDTO;
 import com.example.MeuAlmoxarifado.service.FornecedoraService;
@@ -20,8 +19,8 @@ import java.util.stream.Collectors;
 public record FornecedoraController(FornecedoraService fornecedoraService) {
 
     @PostMapping("new")
-    public ResponseEntity<ShowFornecedoraDTO> create(@RequestBody @Valid NewFornecedoraDTO newFornecedoraDTO) {
-        var fornecedora = fornecedoraService.create(newFornecedoraDTO.toModel());
+    public ResponseEntity<ShowFornecedoraDTO> create(@RequestBody @Valid FornecedoraDTO fornecedoraDTO) {
+        var fornecedora = fornecedoraService.create(fornecedoraDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(fornecedora.getId())
@@ -43,8 +42,8 @@ public record FornecedoraController(FornecedoraService fornecedoraService) {
     }
 
     @PutMapping("edit/{id}")
-    public  ResponseEntity<ShowFornecedoraDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditFornecedoraDTO editFornecedoraDTO) {
-        var fornecedora = fornecedoraService.update(id, editFornecedoraDTO.toModel());
+    public  ResponseEntity<ShowFornecedoraDTO> updateById(@PathVariable Long id, @RequestBody @Valid FornecedoraDTO fornecedoraDTO) {
+        var fornecedora = fornecedoraService.update(id, fornecedoraDTO.toModel());
         return ResponseEntity.ok(new ShowFornecedoraDTO(fornecedora));
     }
 

@@ -1,8 +1,7 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.compra.request.EditCompraDTO;
-import com.example.MeuAlmoxarifado.controller.dto.compra.request.NewCompraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.compra.request.CompraDTO;
 import com.example.MeuAlmoxarifado.controller.dto.compra.response.ListCompraDTO;
 import com.example.MeuAlmoxarifado.controller.dto.compra.response.ShowCompraDTO;
 import com.example.MeuAlmoxarifado.service.CompraService;
@@ -21,8 +20,8 @@ public record CompraController(CompraService compraService) {
 
 
     @PostMapping("new")
-    public ResponseEntity<ShowCompraDTO> create(@RequestBody @Valid NewCompraDTO newCompraDTO) {
-        var nfeDeCompra = compraService.create(newCompraDTO.toModel());
+    public ResponseEntity<ShowCompraDTO> create(@RequestBody @Valid CompraDTO compraDTO) {
+        var nfeDeCompra = compraService.create(compraDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(nfeDeCompra.getId())
@@ -44,8 +43,8 @@ public record CompraController(CompraService compraService) {
     }
 
     @PutMapping("edit/{id}")
-    public ResponseEntity<ShowCompraDTO> updateById(@PathVariable Long id, @RequestBody @Valid EditCompraDTO editCompraDTO) {
-        var nfeDeCompra = compraService.update(id, editCompraDTO.toModel());
+    public ResponseEntity<ShowCompraDTO> updateById(@PathVariable Long id, @RequestBody @Valid CompraDTO compraDTO) {
+        var nfeDeCompra = compraService.update(id, compraDTO.toModel());
         return ResponseEntity.ok(new ShowCompraDTO(nfeDeCompra));
     }
 
