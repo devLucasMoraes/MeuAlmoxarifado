@@ -1,7 +1,7 @@
 package com.example.MeuAlmoxarifado.service.impl;
 
 import com.example.MeuAlmoxarifado.domain.model.NfeDeCompra;
-import com.example.MeuAlmoxarifado.domain.repository.CompraRepository;
+import com.example.MeuAlmoxarifado.domain.repository.NfeDeCompraRepository;
 import com.example.MeuAlmoxarifado.service.NfeDeCompraService;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
@@ -15,20 +15,20 @@ import static java.util.Optional.ofNullable;
 @Service
 public class NfeDeCompraServiceImpl implements NfeDeCompraService {
 
-    private final CompraRepository compraRepository;
+    private final NfeDeCompraRepository nfeDeCompraRepository;
 
-    public NfeDeCompraServiceImpl(CompraRepository compraRepository) {
-        this.compraRepository = compraRepository;
+    public NfeDeCompraServiceImpl(NfeDeCompraRepository nfeDeCompraRepository) {
+        this.nfeDeCompraRepository = nfeDeCompraRepository;
     }
 
     @Transactional(readOnly = true)
     public List<NfeDeCompra> findAll() {
-        return this.compraRepository.findAll();
+        return this.nfeDeCompraRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     public NfeDeCompra findById(Long id) {
-        return this.compraRepository.findById(id).orElseThrow(NotFoundException::new);
+        return this.nfeDeCompraRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Transactional
@@ -36,7 +36,7 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
         ofNullable(nfeDeCompraToCreate).orElseThrow(() -> new BusinessException("A transação a ser criada não deve ser nula."));
 
 
-        return this.compraRepository.save(nfeDeCompraToCreate);
+        return this.nfeDeCompraRepository.save(nfeDeCompraToCreate);
     }
 
     @Transactional
@@ -66,12 +66,12 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
 
 
 
-        return this.compraRepository.save(dbNfeDeCompra);
+        return this.nfeDeCompraRepository.save(dbNfeDeCompra);
     }
 
     @Transactional
     public void delete(Long id) {
         NfeDeCompra dbNfeDeCompra = this.findById(id);
-        this.compraRepository.delete(dbNfeDeCompra);
+        this.nfeDeCompraRepository.delete(dbNfeDeCompra);
     }
 }
