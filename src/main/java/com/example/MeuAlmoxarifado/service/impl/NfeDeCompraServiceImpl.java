@@ -2,7 +2,7 @@ package com.example.MeuAlmoxarifado.service.impl;
 
 import com.example.MeuAlmoxarifado.domain.model.NfeDeCompra;
 import com.example.MeuAlmoxarifado.domain.repository.CompraRepository;
-import com.example.MeuAlmoxarifado.service.CompraService;
+import com.example.MeuAlmoxarifado.service.NfeDeCompraService;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -13,11 +13,11 @@ import java.util.List;
 import static java.util.Optional.ofNullable;
 
 @Service
-public class CompraServiceImpl implements CompraService {
+public class NfeDeCompraServiceImpl implements NfeDeCompraService {
 
     private final CompraRepository compraRepository;
 
-    public CompraServiceImpl(CompraRepository compraRepository) {
+    public NfeDeCompraServiceImpl(CompraRepository compraRepository) {
         this.compraRepository = compraRepository;
     }
 

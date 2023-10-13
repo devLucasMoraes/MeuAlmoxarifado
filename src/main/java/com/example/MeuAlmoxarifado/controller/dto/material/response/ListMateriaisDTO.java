@@ -17,6 +17,6 @@ public record ListMateriaisDTO(
         Long idCategoria
 ) {
     public ListMateriaisDTO(Material material) {
-        this(material.getId(), material.getDescricao(), material.getValorUnt(), material.getQtdEmEstoque(), material.getCategoria().getId());
+        this(material.getId(), material.getDescricao(), material.getValorUntMed(), material.getQtdEmEstoque(), material.getCategoria().getId());
     }
 }

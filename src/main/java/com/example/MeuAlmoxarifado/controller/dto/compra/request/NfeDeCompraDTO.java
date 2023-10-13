@@ -17,7 +17,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
-public record CompraDTO(
+public record NfeDeCompraDTO(
         Long id,
         String nfe,
         String chaveNfe,

@@ -25,7 +25,7 @@ public record MaterialDTO(
         Material model = new Material();
         model.setId(this.id);
         model.setDescricao(this.descricao);
-        model.setValorUnt(this.valorUnt);
+        model.setValorUntMed(this.valorUnt);
         model.setCategoria(new Categoria(this.idCategoria));
         model.setFornecedorasVinculadas(ofNullable(this.fornecedorasVinculadas)
                 .orElse(emptyList())
