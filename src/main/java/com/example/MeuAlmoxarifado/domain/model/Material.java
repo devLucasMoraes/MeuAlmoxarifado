@@ -23,11 +23,17 @@ public class Material {
     @JoinColumn(name = "descricao")
     private String descricao;
 
-    @JoinColumn(name = "valor_unt")
-        private BigDecimal valorUnt;
+    @JoinColumn(name = "valor_unt_med")
+    private BigDecimal valorUntMed;
 
     @JoinColumn(name = "qtd_em_estoque")
     private BigDecimal qtdEmEstoque;
+
+    @JoinColumn(name = "qtd_a_receber")
+    private BigDecimal qtdAReceber;
+
+    @JoinColumn(name = "qtd_a_pagar")
+    private BigDecimal qtdAPagar;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categorias_id")

@@ -25,7 +25,7 @@ public record ShowMaterialDTO(
         List<ShowVinculoComFornecedorasDTO> fornecedorasVinculadas
 ) {
     public ShowMaterialDTO(Material material) {
-        this(material.getId(), material.getDescricao(), material.getValorUnt(), material.getQtdEmEstoque(), material.getCategoria().getId(), toDTO(material.getFornecedorasVinculadas()));
+        this(material.getId(), material.getDescricao(), material.getValorUntMed(), material.getQtdEmEstoque(), material.getCategoria().getId(), toDTO(material.getFornecedorasVinculadas()));
     }
 
     private static List<ShowVinculoComFornecedorasDTO> toDTO(List<VinculoMaterialComFornecedora> vinculo) {
