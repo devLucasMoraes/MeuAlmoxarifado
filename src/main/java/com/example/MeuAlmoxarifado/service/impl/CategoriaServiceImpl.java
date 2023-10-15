@@ -28,7 +28,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Transactional(readOnly = true)
     public Categoria findById(Long id) {
-        return this.categoriaRepository.findById(id).orElseThrow(NotFoundException::new);
+        return this.categoriaRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria"));
     }
 
     @Transactional
@@ -72,5 +72,9 @@ public class CategoriaServiceImpl implements CategoriaService {
     public void delete(Long id) {
         Categoria dbCategoria = this.findById(id);
         this.categoriaRepository.delete(dbCategoria);
+    }
+
+    public Boolean existsById(Long id) {
+        return this.categoriaRepository.existsById(id);
     }
 }

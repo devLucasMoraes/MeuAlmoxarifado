@@ -7,15 +7,11 @@ import com.example.MeuAlmoxarifado.domain.model.Unidade;
 import java.math.BigDecimal;
 
 public record ShowConversaoDeCompraDTO(
-
+        Long id,
         Unidade undCompra,
-
         Unidade undEstoque,
-
-        BigDecimal fatorDeConversao
-
-) {
-    public ShowConversaoDeCompraDTO(ConversaoDeCompra conversaoDeCompras) {
-        this(conversaoDeCompras.getUndCompra(), conversaoDeCompras.getUndEstoque(), conversaoDeCompras.getFatorDeConversao());
+        BigDecimal fatorDeConversao) {
+    public ShowConversaoDeCompraDTO(ConversaoDeCompra model) {
+        this(model.getId(), model.getUndCompra(), model.getUndEstoque(), model.getFatorDeConversao());
     }
 }

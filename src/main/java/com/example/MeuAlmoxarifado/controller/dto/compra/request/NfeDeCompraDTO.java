@@ -26,13 +26,13 @@ public record NfeDeCompraDTO(
         @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", locale = "pt_BR")
         LocalDateTime dataRecebimento,
-        BigDecimal valorTotalProdutos,
         BigDecimal valorFrete,
-        BigDecimal valorTotalIpi,
         BigDecimal valorSeguro,
         BigDecimal valorDesconto,
-        BigDecimal valorTotalNfe,
         BigDecimal valorOutros,
+        BigDecimal valorTotalIpi,
+        BigDecimal valorTotalProdutos,
+        BigDecimal valorTotalNfe,
         String obs,
         @NotNull
         Long idTransportadora,
@@ -62,6 +62,27 @@ public record NfeDeCompraDTO(
         model.setItens(ofNullable(this.itens)
                 .orElse(emptyList())
                 .stream().map(ItemDeCompraDTO::toModel).collect(toList()));
+        return model;
+    }
+    public NfeDeCompra toNewModel() {
+        NfeDeCompra model = new NfeDeCompra();
+        model.setNfe(this.nfe);
+        model.setChaveNfe(this.chaveNfe);
+        model.setDataEmissao(this.dataEmissao);
+        model.setDataRecebimento(this.dataRecebimento);
+        model.setValorTotalProdutos(this.valorTotalProdutos);
+        model.setValorFrete(this.valorFrete);
+        model.setValorTotalIpi(this.valorTotalIpi);
+        model.setValorSeguro(this.valorSeguro);
+        model.setValorDesconto(this.valorDesconto);
+        model.setValorTotalNfe(this.valorTotalNfe);
+        model.setValorOutros(this.valorOutros);
+        model.setObs(this.obs);
+        model.setTransportadora(new Transportadora(this.idTransportadora));
+        model.setFornecedora(new Fornecedora(this.idFornecedora));
+        model.setItens(ofNullable(this.itens)
+                .orElse(emptyList())
+                .stream().map(ItemDeCompraDTO::toNewModel).collect(toList()));
         return model;
     }
 }

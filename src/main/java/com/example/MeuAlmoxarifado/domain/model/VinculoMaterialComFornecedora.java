@@ -31,7 +31,7 @@ public class VinculoMaterialComFornecedora {
     @JoinColumn(name = "fornecedoras_id")
     private Fornecedora fornecedora;
 
-    @OneToMany(mappedBy = "vinculoComFornecedoras", cascade = CascadeType.ALL)
-    private List<ConversaoDeCompra> conversaoDeCompras = new ArrayList<>();
+    @OneToMany(mappedBy = "vinculoComFornecedoras", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<ConversaoDeCompra> conversaoDeCompras;
 
 }

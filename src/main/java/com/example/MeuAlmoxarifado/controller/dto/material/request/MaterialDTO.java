@@ -17,7 +17,9 @@ public record MaterialDTO(
         Long id,
         @NotBlank
         String descricao,
-        BigDecimal valorUnt,
+        @NotNull
+        Boolean valorUntMedAuto,
+        BigDecimal valorUntMed,
         @NotNull
         Long idCategoria,
         List<VinculoComFornecedorasDTO> fornecedorasVinculadas) {
@@ -25,7 +27,10 @@ public record MaterialDTO(
         Material model = new Material();
         model.setId(this.id);
         model.setDescricao(this.descricao);
-        model.setValorUntMed(this.valorUnt);
+        model.setValorUntMedAuto(this.valorUntMedAuto);
+        if(!this.valorUntMedAuto) {
+            model.setValorUntMed(this.valorUntMed);
+        }
         model.setCategoria(new Categoria(this.idCategoria));
         model.setFornecedorasVinculadas(ofNullable(this.fornecedorasVinculadas)
                 .orElse(emptyList())

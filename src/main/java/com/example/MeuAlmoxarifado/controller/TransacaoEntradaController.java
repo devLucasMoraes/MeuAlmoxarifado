@@ -24,7 +24,7 @@ public record TransacaoEntradaController(NfeDeCompraService nfeDeCompraService, 
 
     @PostMapping("/nfe_de_compra/new")
     public ResponseEntity<ShowCompraDTO> create(@RequestBody @Valid NfeDeCompraDTO nfeDeCompraDTO) {
-        var nfeDeCompra = nfeDeCompraService.create(nfeDeCompraDTO.toModel());
+        var nfeDeCompra = nfeDeCompraService.create(nfeDeCompraDTO.toNewModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(nfeDeCompra.getId())

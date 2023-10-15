@@ -25,8 +25,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleNoContentException() {
-        return new ResponseEntity<>("Resource ID not found.", HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> handleNoContentException(NotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<String> handleUnexpectedException(Throwable unexpectedException){
+    public ResponseEntity<String> handleUnexpectedException(Throwable unexpectedException) {
         String message = "Unexpected server error.";
         LOGGER.error(message, unexpectedException);
         return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
