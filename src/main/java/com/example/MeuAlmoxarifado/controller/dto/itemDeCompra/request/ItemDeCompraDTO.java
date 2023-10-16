@@ -35,4 +35,15 @@ public record ItemDeCompraDTO(
         model.setReferenciaFornecedor(this.referenciaFornecedor);
         return model;
     }
+    public ItemDeCompra toNewModel() {
+        ItemDeCompra model = new ItemDeCompra();
+        model.setMaterial(new Material(this.idMaterial));
+        model.setUndCom(this.undCom);
+        model.setQuantCom(this.quantCom);
+        model.setValorUntCom(this.valorUntCom);
+        model.setValorIpi(this.valorIpi);
+        model.setDescricaoFornecedor(this.descricaoFornecedor);
+        model.setReferenciaFornecedor(this.referenciaFornecedor);
+        return model;
+    }
 }

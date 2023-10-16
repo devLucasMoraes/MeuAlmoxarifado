@@ -28,7 +28,7 @@ public class TransacaoSaidaServiceImpl implements TransacaoSaidaService {
 
     @Transactional(readOnly = true)
     public TransacaoSaida findById(Long id) {
-        return this.transacaoSaidaRepository.findById(id).orElseThrow(NotFoundException::new);
+        return this.transacaoSaidaRepository.findById(id).orElseThrow(() -> new NotFoundException("Saida"));
     }
 
     @Transactional

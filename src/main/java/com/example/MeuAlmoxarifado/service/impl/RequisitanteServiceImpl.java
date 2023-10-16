@@ -29,7 +29,7 @@ public class RequisitanteServiceImpl implements RequisitanteService {
 
     @Transactional(readOnly = true)
     public Requisitante findById(Long id) {
-        return this.requisitanteRepository.findById(id).orElseThrow(NotFoundException::new);
+        return this.requisitanteRepository.findById(id).orElseThrow(() -> new NotFoundException("Requisitante"));
     }
 
     @Transactional

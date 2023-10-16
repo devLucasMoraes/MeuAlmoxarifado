@@ -28,7 +28,7 @@ public class FornecedoraServiceImpl implements FornecedoraService {
 
     @Transactional(readOnly = true)
     public Fornecedora findById(Long id) {
-        return this.fornecedoraRepository.findById(id).orElseThrow(NotFoundException::new);
+        return this.fornecedoraRepository.findById(id).orElseThrow(() -> new NotFoundException("Fornecedora"));
     }
 
     @Transactional
@@ -64,5 +64,9 @@ public class FornecedoraServiceImpl implements FornecedoraService {
     public void delete(Long id) {
         Fornecedora dbFornecedora = this.findById(id);
         this.fornecedoraRepository.delete(dbFornecedora);
+    }
+
+    public Boolean existsById(Long id) {
+        return this.fornecedoraRepository.existsById(id);
     }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@ToString
 public class Material {
 
     @Id
@@ -23,23 +24,26 @@ public class Material {
     @JoinColumn(name = "descricao")
     private String descricao;
 
+    @JoinColumn(name = "valor_unt_med_auto")
+    private Boolean valorUntMedAuto = true;
+
     @JoinColumn(name = "valor_unt_med")
-    private BigDecimal valorUntMed;
+    private BigDecimal valorUntMed = BigDecimal.ZERO;
 
     @JoinColumn(name = "qtd_em_estoque")
-    private BigDecimal qtdEmEstoque;
+    private BigDecimal qtdEmEstoque = BigDecimal.ZERO;
 
     @JoinColumn(name = "qtd_a_receber")
-    private BigDecimal qtdAReceber;
+    private BigDecimal qtdAReceber = BigDecimal.ZERO;
 
     @JoinColumn(name = "qtd_a_pagar")
-    private BigDecimal qtdAPagar;
+    private BigDecimal qtdAPagar = BigDecimal.ZERO;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "categorias_id")
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<VinculoMaterialComFornecedora> fornecedorasVinculadas;
 
     public Material(Long id) {

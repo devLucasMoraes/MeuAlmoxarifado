@@ -2,6 +2,8 @@ package com.example.MeuAlmoxarifado.service.impl;
 
 import com.example.MeuAlmoxarifado.domain.model.Material;
 import com.example.MeuAlmoxarifado.domain.repository.MaterialRepository;
+import com.example.MeuAlmoxarifado.service.CategoriaService;
+import com.example.MeuAlmoxarifado.service.FornecedoraService;
 import com.example.MeuAlmoxarifado.service.MaterialService;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
@@ -10,15 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static java.util.Optional.ofNullable;
-
 @Service
 public class MaterialServiceImpl implements MaterialService {
 
     private final MaterialRepository materialRepository;
 
-    public MaterialServiceImpl(MaterialRepository materialRepository) {
+    private final CategoriaService categoriaService;
+
+    private final FornecedoraService fornecedoraService;
+
+    public MaterialServiceImpl(MaterialRepository materialRepository, CategoriaService categoriaService, FornecedoraService fornecedoraService) {
         this.materialRepository = materialRepository;
+        this.categoriaService = categoriaService;
+        this.fornecedoraService = fornecedoraService;
     }
 
     @Transactional(readOnly = true)
@@ -28,17 +34,30 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Transactional(readOnly = true)
     public Material findById(Long id) {
-        return this.materialRepository.findById(id).orElseThrow(NotFoundException::new);
+        return this.materialRepository.findById(id).orElseThrow(() -> new NotFoundException("Material"));
     }
 
     @Transactional
     public Material create(Material materialToCreate) {
-        ofNullable(materialToCreate).orElseThrow(() -> new BusinessException("o material a ser criada não deve ser nulo."));
-        ofNullable(materialToCreate.getDescricao()).orElseThrow(() -> new BusinessException("A descrição do material a ser criado não deve ser nula."));
+
+        if(!categoriaService.existsById(materialToCreate.getCategoria().getId())) {
+            throw new NotFoundException("Categoria");
+        }
 
         if(materialRepository.existsByDescricao(materialToCreate.getDescricao())){
             throw new BusinessException("Material com mesma descrição já cadastrada");
         }
+
+        materialToCreate.getFornecedorasVinculadas().forEach(vinculoMaterialComFornecedora -> {
+            if(!this.fornecedoraService.existsById(vinculoMaterialComFornecedora.getFornecedora().getId())) {
+                throw new NotFoundException("Fornecedora");
+            }
+            vinculoMaterialComFornecedora.setMaterial(materialToCreate);
+
+            vinculoMaterialComFornecedora.getConversaoDeCompras().forEach(conversaoDeCompra -> {
+                conversaoDeCompra.setVinculoComFornecedoras(vinculoMaterialComFornecedora);
+            });
+        });
 
         return this.materialRepository.save(materialToCreate);
     }
@@ -51,9 +70,22 @@ public class MaterialServiceImpl implements MaterialService {
             throw new BusinessException("Os IDs de atualização devem ser iguais.");
         }
 
+        materialToUpdate.getFornecedorasVinculadas().forEach(vinculoMaterialComFornecedora -> {
+            if(!this.fornecedoraService.existsById(vinculoMaterialComFornecedora.getFornecedora().getId())) {
+                throw new NotFoundException("Fornecedora");
+            }
+            vinculoMaterialComFornecedora.setMaterial(materialToUpdate);
+
+            vinculoMaterialComFornecedora.getConversaoDeCompras().forEach(conversaoDeCompra -> {
+                conversaoDeCompra.setVinculoComFornecedoras(vinculoMaterialComFornecedora);
+            });
+        });
+
         dbMaterial.setDescricao(materialToUpdate.getDescricao());
-        dbMaterial.setValorUntMed(materialToUpdate.getValorUntMed());
-        dbMaterial.setQtdEmEstoque(materialToUpdate.getQtdEmEstoque());
+        dbMaterial.setValorUntMedAuto(materialToUpdate.getValorUntMedAuto());
+        if(!materialToUpdate.getValorUntMedAuto()) {
+            dbMaterial.setValorUntMed(materialToUpdate.getValorUntMed());
+        }
         dbMaterial.getFornecedorasVinculadas().clear();
         dbMaterial.getFornecedorasVinculadas().addAll(materialToUpdate.getFornecedorasVinculadas());
         dbMaterial.setCategoria(materialToUpdate.getCategoria());
@@ -65,5 +97,9 @@ public class MaterialServiceImpl implements MaterialService {
     public void delete(Long id) {
         Material dbMaterial = this.findById(id);
         this.materialRepository.delete(dbMaterial);
+    }
+
+    public Boolean existsById(Long id) {
+        return this.materialRepository.existsById(id);
     }
 }

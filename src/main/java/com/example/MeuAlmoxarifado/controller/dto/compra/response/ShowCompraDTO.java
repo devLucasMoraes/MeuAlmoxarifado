@@ -3,62 +3,56 @@ package com.example.MeuAlmoxarifado.controller.dto.compra.response;
 import com.example.MeuAlmoxarifado.controller.dto.itemDeCompra.response.ShowItemDeCompraDTO;
 import com.example.MeuAlmoxarifado.domain.model.ItemDeCompra;
 import com.example.MeuAlmoxarifado.domain.model.NfeDeCompra;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
+
 public record ShowCompraDTO(
-
         Long id,
-
         String nfe,
-
+        String chaveNfe,
         LocalDateTime dataEmissao,
-
         LocalDateTime dataRecebimento,
-
-        BigDecimal valorTotal,
-
         BigDecimal valorFrete,
-
-        BigDecimal valorIpiTotal,
-
+        BigDecimal valorSeguro,
+        BigDecimal valorDesconto,
+        BigDecimal valorOutros,
+        BigDecimal valorTotalIpi,
+        BigDecimal valorTotalProdutos,
+        BigDecimal valorTotalNfe,
         String obs,
-
         Long idTransportadora,
-
         Long idFornecedora,
 
         List<ShowItemDeCompraDTO> itens
 ) {
-    public ShowCompraDTO(NfeDeCompra nfeDeCompra) {
+    public ShowCompraDTO(NfeDeCompra model) {
         this(
-                nfeDeCompra.getId(),
-                nfeDeCompra.getChaveNfe(),
-                nfeDeCompra.getDataEmissao(),
-                nfeDeCompra.getDataRecebimento(),
-                nfeDeCompra.getValorTotalNfe(),
-                nfeDeCompra.getValorFrete(),
-                nfeDeCompra.getValorTotalIpi(),
-                nfeDeCompra.getObs(),
-                nfeDeCompra.getTransportadora().getId(),
-                nfeDeCompra.getFornecedora().getId(),
-                toDTO(nfeDeCompra.getItens())
+                model.getId(),
+                model.getNfe(),
+                model.getChaveNfe(),
+                model.getDataEmissao(),
+                model.getDataRecebimento(),
+                model.getValorFrete(),
+                model.getValorSeguro(),
+                model.getValorDesconto(),
+                model.getValorOutros(),
+                model.getValorTotalIpi(),
+                model.getValorTotalProdutos(),
+                model.getValorTotalNfe(),
+                model.getObs(),
+                model.getTransportadora().getId(),
+                model.getFornecedora().getId(),
+                ofNullable(model.getItens()).orElse(emptyList()).stream().map(ShowItemDeCompraDTO::new).collect(toList())
         );
-    }
-
-    private static List<ShowItemDeCompraDTO> toDTO(List<ItemDeCompra> itens) {
-        return itens.stream().map(item -> new ShowItemDeCompraDTO(
-                item.getMaterial().getId(),
-                item.getUndCom(),
-                item.getQuantCom(),
-                item.getValorUntCom(),
-                item.getValorIpi(),
-                item.getDescricaoFornecedor(),
-                item.getReferenciaFornecedor()
-        )).collect(Collectors.toList());
     }
 
 }

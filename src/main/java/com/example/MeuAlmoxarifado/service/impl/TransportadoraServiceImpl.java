@@ -28,7 +28,7 @@ public class TransportadoraServiceImpl implements TransportadoraService {
 
     @Transactional(readOnly = true)
     public Transportadora findById(Long id) {
-        return this.transportadoraRepository.findById(id).orElseThrow(NotFoundException::new);
+        return this.transportadoraRepository.findById(id).orElseThrow(() -> new NotFoundException("Transportadora"));
     }
 
     @Transactional
@@ -64,5 +64,9 @@ public class TransportadoraServiceImpl implements TransportadoraService {
     public void delete(Long id) {
         Transportadora dbTransportadora = this.findById(id);
         this.transportadoraRepository.delete(dbTransportadora);
+    }
+
+    public Boolean existsById(Long id) {
+        return this.transportadoraRepository.existsById(id);
     }
 }

@@ -28,7 +28,7 @@ public class DestinoServiceImpl implements DestinoService {
 
     @Transactional(readOnly = true)
     public Destino findById(Long id) {
-        return this.destinoRepository.findById(id).orElseThrow(NotFoundException::new);
+        return this.destinoRepository.findById(id).orElseThrow(() -> new NotFoundException("Destino"));
     }
 
     @Transactional

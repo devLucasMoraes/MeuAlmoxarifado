@@ -58,15 +58,15 @@ public class NfeDeCompra {
     @JoinColumn(name = "obs")
     private String obs;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "transportadoras_id")
     private Transportadora transportadora;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "fornecedoras_id")
     private Fornecedora fornecedora;
 
-    @OneToMany(mappedBy = "nfeDeCompra", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "nfeDeCompra", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ItemDeCompra> itens;
 
 
