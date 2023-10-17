@@ -1,9 +1,11 @@
 package com.example.MeuAlmoxarifado.service;
 
-import com.example.MeuAlmoxarifado.domain.model.NfeDeCompra;
+import com.example.MeuAlmoxarifado.domain.model.Movimentacao;
 
 public interface MovimentacaoService {
 
-    void movimentar(NfeDeCompra saved);
+    void entrada(Movimentacao entrada);
+
+    void saida(Movimentacao saida);
 
 }

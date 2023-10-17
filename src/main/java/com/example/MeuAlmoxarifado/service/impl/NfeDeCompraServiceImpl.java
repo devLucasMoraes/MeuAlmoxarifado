@@ -1,6 +1,9 @@
 package com.example.MeuAlmoxarifado.service.impl;
 
+import com.example.MeuAlmoxarifado.domain.model.Material;
+import com.example.MeuAlmoxarifado.domain.model.Movimentacao;
 import com.example.MeuAlmoxarifado.domain.model.NfeDeCompra;
+import com.example.MeuAlmoxarifado.domain.model.Tipo;
 import com.example.MeuAlmoxarifado.domain.repository.NfeDeCompraRepository;
 import com.example.MeuAlmoxarifado.service.*;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
@@ -8,6 +11,9 @@ import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,12 +29,15 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
 
     private final MaterialService materialService;
 
-    public NfeDeCompraServiceImpl(NfeDeCompraRepository nfeDeCompraRepository, MovimentacaoService movimentacaoService, FornecedoraService fornecedoraService, TransportadoraService transportadoraService, MaterialService materialService) {
+    private final ConversaoDeCompraService conversaoDeCompraService;
+
+    public NfeDeCompraServiceImpl(NfeDeCompraRepository nfeDeCompraRepository, MovimentacaoService movimentacaoService, FornecedoraService fornecedoraService, TransportadoraService transportadoraService, MaterialService materialService, ConversaoDeCompraService conversaoDeCompraService) {
         this.nfeDeCompraRepository = nfeDeCompraRepository;
         this.movimentacaoService = movimentacaoService;
         this.fornecedoraService = fornecedoraService;
         this.transportadoraService = transportadoraService;
         this.materialService = materialService;
+        this.conversaoDeCompraService = conversaoDeCompraService;
     }
 
     @Transactional(readOnly = true)
@@ -57,14 +66,28 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
                 throw new NotFoundException("Material");
             }
             itemDeCompra.setNfeDeCompra(nfeDeCompraToCreate);
+
+            Material dbMaterial = this.materialService.findById(itemDeCompra.getMaterial().getId());
+            BigDecimal qtdConvertida = this.conversaoDeCompraService.coverterQuantidadeParaUndidadeDeEstoque(itemDeCompra, nfeDeCompraToCreate.getFornecedora(), dbMaterial);
+            BigDecimal valorTotalCom = itemDeCompra.getValorUntCom().multiply(itemDeCompra.getQuantCom()).add(itemDeCompra.getValorIpi());
+            BigDecimal valorUnt = valorTotalCom.divide(qtdConvertida,4, RoundingMode.HALF_UP);
+
+            Movimentacao entrada = new Movimentacao();
+            entrada.setTipo(Tipo.ENTRADA);
+            entrada.setMaterial(dbMaterial);
+            entrada.setData(LocalDateTime.now());
+            entrada.setQuantidade(qtdConvertida);
+            entrada.setUnidade(dbMaterial.getCategoria().getUndEstoque());
+            entrada.setValorUnt(valorUnt);
+            entrada.setValorTotal(valorTotalCom);
+            entrada.setJustificativa("referente a nfe");
+
+            this.movimentacaoService.entrada(entrada);
+
         });
 
 
-        NfeDeCompra nfeDeCompraSaved = this.nfeDeCompraRepository.save(nfeDeCompraToCreate);
-
-        this.movimentacaoService.movimentar(nfeDeCompraSaved);
-
-        return nfeDeCompraSaved;
+        return this.nfeDeCompraRepository.save(nfeDeCompraToCreate);
     }
 
     @Transactional
@@ -75,11 +98,48 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
             throw new BusinessException("Os IDs de atualização devem ser iguais.");
         }
 
+        dbNfeDeCompra.getItens().forEach(itemDeCompra -> {
+            Material dbMaterial = this.materialService.findById(itemDeCompra.getMaterial().getId());
+
+            BigDecimal qtdConvertida = this.conversaoDeCompraService.coverterQuantidadeParaUndidadeDeEstoque(itemDeCompra, nfeDeCompraToUpdate.getFornecedora(), dbMaterial);
+            BigDecimal valorTotalCom = itemDeCompra.getValorUntCom().multiply(itemDeCompra.getQuantCom()).add(itemDeCompra.getValorIpi());
+            BigDecimal valorUnt = valorTotalCom.divide(qtdConvertida,4, RoundingMode.HALF_UP);
+
+            Movimentacao saida = new Movimentacao();
+            saida.setTipo(Tipo.SAIDA);
+            saida.setMaterial(dbMaterial);
+            saida.setData(LocalDateTime.now());
+            saida.setQuantidade(qtdConvertida);
+            saida.setUnidade(dbMaterial.getCategoria().getUndEstoque());
+            saida.setValorUnt(valorUnt);
+            saida.setValorTotal(valorTotalCom);
+            saida.setJustificativa("referente a nfe");
+
+            this.movimentacaoService.saida(saida);
+        });
+
         nfeDeCompraToUpdate.getItens().forEach(itemDeCompra -> {
             if(!this.materialService.existsById(itemDeCompra.getMaterial().getId())) {
                 throw new NotFoundException("Material");
             }
             itemDeCompra.setNfeDeCompra(nfeDeCompraToUpdate);
+
+            Material dbMaterial = this.materialService.findById(itemDeCompra.getMaterial().getId());
+            BigDecimal qtdConvertida = this.conversaoDeCompraService.coverterQuantidadeParaUndidadeDeEstoque(itemDeCompra, nfeDeCompraToUpdate.getFornecedora(), dbMaterial);
+            BigDecimal valorTotalCom = itemDeCompra.getValorUntCom().multiply(itemDeCompra.getQuantCom()).add(itemDeCompra.getValorIpi());
+            BigDecimal valorUnt = valorTotalCom.divide(qtdConvertida,4, RoundingMode.HALF_UP);
+
+            Movimentacao entrada = new Movimentacao();
+            entrada.setTipo(Tipo.ENTRADA);
+            entrada.setMaterial(dbMaterial);
+            entrada.setData(LocalDateTime.now());
+            entrada.setQuantidade(qtdConvertida);
+            entrada.setUnidade(dbMaterial.getCategoria().getUndEstoque());
+            entrada.setValorUnt(valorUnt);
+            entrada.setValorTotal(valorTotalCom);
+            entrada.setJustificativa("referente a nfe");
+
+            this.movimentacaoService.entrada(entrada);
         });
 
         dbNfeDeCompra.setNfe(nfeDeCompraToUpdate.getNfe());
@@ -102,7 +162,7 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
 
         NfeDeCompra nfeDeCompraUpdated = this.nfeDeCompraRepository.save(dbNfeDeCompra);
 
-        this.movimentacaoService.movimentar(nfeDeCompraUpdated);
+
 
         return nfeDeCompraUpdated;
     }
