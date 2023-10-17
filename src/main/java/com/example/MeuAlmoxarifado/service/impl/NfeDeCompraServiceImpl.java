@@ -140,7 +140,7 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
         entrada.setValorTotal(valorTotalCom);
         entrada.setJustificativa("referente a nfe");
         return entrada;
-    };
+    }
 
     private Movimentacao criarMovimentacaoSaida(ItemDeCompra itemDeCompra, NfeDeCompra nfe) {
         Material dbMaterial = this.materialService.findById(itemDeCompra.getMaterial().getId());
