@@ -25,7 +25,7 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
     }
 
     @Transactional
-    public void entrada(Movimentacao entrada) {
+    public void registrarEntrada(Movimentacao entrada) {
         Material dbMaterial = this.materialService.findById(entrada.getMaterial().getId());
 
         BigDecimal qtdEmEstoque = dbMaterial.getQtdEmEstoque();
@@ -43,11 +43,11 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         movimentacaoRepository.save(entrada);
     }
 
-    public void saida(Movimentacao saida) {
+    @Transactional
+    public void registrarSaida(Movimentacao saida) {
         Material dbMaterial = this.materialService.findById(saida.getMaterial().getId());
-
-
-
+        BigDecimal qtdEmEstoque = dbMaterial.getQtdEmEstoque();
+        dbMaterial.setQtdEmEstoque(qtdEmEstoque.add(saida.getQuantidade()));
 
         movimentacaoRepository.save(saida);
     }
