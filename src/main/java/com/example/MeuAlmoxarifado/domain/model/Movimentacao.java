@@ -27,7 +27,7 @@ public class Movimentacao {
 
     private LocalDateTime data;
 
-    private BigDecimal valorUnitMed;
+    private BigDecimal valorUnt;
 
     private BigDecimal quantidade;
 
