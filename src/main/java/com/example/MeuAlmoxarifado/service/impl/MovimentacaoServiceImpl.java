@@ -47,7 +47,7 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
     public void registrarSaida(Movimentacao saida) {
         Material dbMaterial = this.materialService.findById(saida.getMaterial().getId());
         BigDecimal qtdEmEstoque = dbMaterial.getQtdEmEstoque();
-        dbMaterial.setQtdEmEstoque(qtdEmEstoque.add(saida.getQuantidade()));
+        dbMaterial.setQtdEmEstoque(qtdEmEstoque.subtract(saida.getQuantidade()));
 
         movimentacaoRepository.save(saida);
     }
