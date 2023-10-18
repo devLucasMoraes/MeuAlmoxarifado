@@ -64,7 +64,7 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
             }
             itemDeCompra.setNfeDeCompra(nfeDeCompraToCreate);
 
-            Movimentacao entrada = criarMovimentacaoEntrada(itemDeCompra, nfeDeCompraToCreate);
+            Movimentacao entrada = criarMovimentacaoEntrada(itemDeCompra, nfeDeCompraToCreate, "Entrada de NFe %s".formatted(nfeDeCompraToCreate.getNfe()));
 
             this.movimentacaoService.registrarEntrada(entrada);
 
@@ -83,7 +83,7 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
         }
 
         dbNfeDeCompra.getItens().forEach(itemDeCompra -> {
-            Movimentacao saida = criarMovimentacaoSaida(itemDeCompra, nfeDeCompraToUpdate);
+            Movimentacao saida = criarMovimentacaoSaida(itemDeCompra, nfeDeCompraToUpdate, "Alteração de NFe id : %s".formatted(dbNfeDeCompra.getId()));
             this.movimentacaoService.registrarSaida(saida);
         });
 
@@ -92,7 +92,7 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
                 throw new NotFoundException("Material");
             }
             itemDeCompra.setNfeDeCompra(nfeDeCompraToUpdate);
-            Movimentacao entrada = criarMovimentacaoEntrada(itemDeCompra, nfeDeCompraToUpdate);
+            Movimentacao entrada = criarMovimentacaoEntrada(itemDeCompra, nfeDeCompraToUpdate, "Alteração de NFe id : %s".formatted(dbNfeDeCompra.getId()));
 
             this.movimentacaoService.registrarEntrada(entrada);
         });
@@ -121,10 +121,15 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
     @Transactional
     public void delete(Long id) {
         NfeDeCompra dbNfeDeCompra = this.findById(id);
+        dbNfeDeCompra.getItens().forEach(itemDeCompra -> {
+            Movimentacao saida = criarMovimentacaoSaida(itemDeCompra, dbNfeDeCompra, "Cancelamento de NFe id : %s".formatted(dbNfeDeCompra.getId()));
+            this.movimentacaoService.registrarSaida(saida);
+        });
+
         this.nfeDeCompraRepository.delete(dbNfeDeCompra);
     }
 
-    private Movimentacao criarMovimentacaoEntrada(ItemDeCompra itemDeCompra, NfeDeCompra nfe) {
+    private Movimentacao criarMovimentacaoEntrada(ItemDeCompra itemDeCompra, NfeDeCompra nfe, String justificativa) {
         Material dbMaterial = this.materialService.findById(itemDeCompra.getMaterial().getId());
         BigDecimal qtdConvertida = this.conversaoDeCompraService.coverterQuantidadeParaUndidadeDeEstoque(itemDeCompra, nfe.getFornecedora(), dbMaterial);
         BigDecimal valorTotalCom = itemDeCompra.getValorUntCom().multiply(itemDeCompra.getQuantCom()).add(itemDeCompra.getValorIpi());
@@ -138,11 +143,11 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
         entrada.setUnidade(dbMaterial.getCategoria().getUndEstoque());
         entrada.setValorUnt(valorUnt);
         entrada.setValorTotal(valorTotalCom);
-        entrada.setJustificativa("referente a nfe");
+        entrada.setJustificativa(justificativa);
         return entrada;
     }
 
-    private Movimentacao criarMovimentacaoSaida(ItemDeCompra itemDeCompra, NfeDeCompra nfe) {
+    private Movimentacao criarMovimentacaoSaida(ItemDeCompra itemDeCompra, NfeDeCompra nfe, String justificativa) {
         Material dbMaterial = this.materialService.findById(itemDeCompra.getMaterial().getId());
 
         BigDecimal qtdConvertida = this.conversaoDeCompraService.coverterQuantidadeParaUndidadeDeEstoque(itemDeCompra, nfe.getFornecedora(), dbMaterial);
@@ -157,7 +162,7 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
         saida.setUnidade(dbMaterial.getCategoria().getUndEstoque());
         saida.setValorUnt(valorUnt);
         saida.setValorTotal(valorTotalCom);
-        saida.setJustificativa("referente a nfe");
+        saida.setJustificativa(justificativa);
         return saida;
     }
 
