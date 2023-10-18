@@ -1,8 +1,7 @@
 package com.example.MeuAlmoxarifado.controller;
 
-import com.example.MeuAlmoxarifado.controller.dto.destino.request.DestinoDTO;
-import com.example.MeuAlmoxarifado.controller.dto.destino.response.ListDestinoDTO;
-import com.example.MeuAlmoxarifado.controller.dto.destino.response.ShowDestinoDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.DestinoDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.ShowDestinoDTO;
 import com.example.MeuAlmoxarifado.service.DestinoService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +28,9 @@ public record DestinoController(DestinoService destinoService) {
     }
 
     @GetMapping
-    public ResponseEntity<List<ListDestinoDTO>> getAll() {
+    public ResponseEntity<List<ShowDestinoDTO>> getAll() {
         var destinos = destinoService.findAll();
-        var destinosDTO = destinos.stream().map(ListDestinoDTO::new).collect(Collectors.toList());
+        var destinosDTO = destinos.stream().map(ShowDestinoDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok(destinosDTO);
     }
 

@@ -40,11 +40,11 @@ public class ItemDeCompra {
     @JoinColumn(name = "valor_ipi")
     private BigDecimal valorIpi;
 
-    @JoinColumn(name = "descricao_fornecedor")
-    private String descricaoFornecedor;
+    @JoinColumn(name = "descricao_fornecedora")
+    private String descricaoFornecedora;
 
-    @JoinColumn(name = "referencia_fornecedor")
-    private String referenciaFornecedor;
+    @JoinColumn(name = "referencia_fornecedora")
+    private String referenciaFornecedora;
 
 
 }

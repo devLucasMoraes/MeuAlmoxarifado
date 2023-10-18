@@ -1,9 +1,8 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.request.TransacaoSaidaDTO;
-import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.response.ListTransacaoSaidaDTO;
-import com.example.MeuAlmoxarifado.controller.dto.transacaoSaida.response.ShowTransacaoSaidaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.TransacaoSaidaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.ShowTransacaoSaidaDTO;
 import com.example.MeuAlmoxarifado.service.TransacaoSaidaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +29,9 @@ public record TransacaoSaidaController(TransacaoSaidaService transacaoSaidaServi
     }
 
     @GetMapping
-    public ResponseEntity<List<ListTransacaoSaidaDTO>> getAll() {
+    public ResponseEntity<List<ShowTransacaoSaidaDTO>> getAll() {
         var transacoesSaida = transacaoSaidaService.findAll();
-        var transacoesSaidaDTO = transacoesSaida.stream().map(ListTransacaoSaidaDTO::new).collect(Collectors.toList());
+        var transacoesSaidaDTO = transacoesSaida.stream().map(ShowTransacaoSaidaDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok(transacoesSaidaDTO);
     }
 

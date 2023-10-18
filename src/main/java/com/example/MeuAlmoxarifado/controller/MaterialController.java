@@ -1,9 +1,8 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.material.request.MaterialDTO;
-import com.example.MeuAlmoxarifado.controller.dto.material.response.ListMateriaisDTO;
-import com.example.MeuAlmoxarifado.controller.dto.material.response.ShowMaterialDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.MaterialDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.ShowMaterialDTO;
 import com.example.MeuAlmoxarifado.service.MaterialService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +28,9 @@ public record MaterialController(MaterialService materialService) {
     }
 
     @GetMapping
-    public ResponseEntity<List<ListMateriaisDTO>> getAll() {
+    public ResponseEntity<List<ShowMaterialDTO>> getAll() {
         var materiais = materialService.findAll();
-        var materiaisDTO = materiais.stream().map(ListMateriaisDTO::new).collect(Collectors.toList());
+        var materiaisDTO = materiais.stream().map(ShowMaterialDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok(materiaisDTO);
     }
 

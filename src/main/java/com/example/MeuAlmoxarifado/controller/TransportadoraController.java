@@ -1,9 +1,8 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.transportadora.request.TransportadoraDTO;
-import com.example.MeuAlmoxarifado.controller.dto.transportadora.response.ListTransportadoraDTO;
-import com.example.MeuAlmoxarifado.controller.dto.transportadora.response.ShowTransportadoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.TransportadoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.ShowTransportadoraDTO;
 import com.example.MeuAlmoxarifado.service.TransportadoraService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +28,9 @@ public record TransportadoraController(TransportadoraService transportadoraServi
     }
 
     @GetMapping
-    public ResponseEntity<List<ListTransportadoraDTO>> getAll() {
+    public ResponseEntity<List<ShowTransportadoraDTO>> getAll() {
         var transportadoras = transportadoraService.findAll();
-        var transportadorasDTO = transportadoras.stream().map(ListTransportadoraDTO::new).collect(Collectors.toList());
+        var transportadorasDTO = transportadoras.stream().map(ShowTransportadoraDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok(transportadorasDTO);
     }
 
