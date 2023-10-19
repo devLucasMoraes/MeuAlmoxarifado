@@ -51,7 +51,7 @@ public class TransacaoSaidaServiceImpl implements TransacaoSaidaService {
         dbTransacaoSaida.setObs(transacaoSaidaToUpdate.getObs());
         dbTransacaoSaida.setValorTotal(transacaoSaidaToUpdate.getValorTotal());
         dbTransacaoSaida.setDataRequisicao(transacaoSaidaToUpdate.getDataRequisicao());
-        dbTransacaoSaida.setDestino(transacaoSaidaToUpdate.getDestino());
+        dbTransacaoSaida.setLocal(transacaoSaidaToUpdate.getLocal());
         dbTransacaoSaida.setRequisitante(transacaoSaidaToUpdate.getRequisitante());
         dbTransacaoSaida.setOrdemProducao(transacaoSaidaToUpdate.getOrdemProducao());
 

@@ -39,8 +39,8 @@ public class TransacaoSaida {
     private Requisitante requisitante;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "destinos_id")
-    private Destino destino;
+    @JoinColumn(name = "locais_id")
+    private Local local;
 
     @OneToMany(mappedBy = "transacaoSaida", cascade = CascadeType.ALL)
     private List<ItemTransacaoSaida> itens = new ArrayList<>();

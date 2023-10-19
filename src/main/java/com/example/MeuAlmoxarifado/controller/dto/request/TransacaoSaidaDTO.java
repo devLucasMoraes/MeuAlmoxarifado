@@ -1,6 +1,6 @@
 package com.example.MeuAlmoxarifado.controller.dto.request;
 
-import com.example.MeuAlmoxarifado.domain.model.Destino;
+import com.example.MeuAlmoxarifado.domain.model.Local;
 import com.example.MeuAlmoxarifado.domain.model.Requisitante;
 import com.example.MeuAlmoxarifado.domain.model.TransacaoSaida;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,7 +26,7 @@ public record TransacaoSaidaDTO(
         @NotNull
         Long idRequisitante,
         @NotNull
-        Long idDestino,
+        Long idLocal,
         @Valid
         @NotNull
         @NotEmpty
@@ -38,7 +38,7 @@ public record TransacaoSaidaDTO(
         model.setValorTotal(this.valorTotal);
         model.setObs(this.obs);
         model.setOrdemProducao(this.ordemProducao);
-        model.setDestino(new Destino(this.idDestino));
+        model.setLocal(new Local(this.idLocal));
         model.setRequisitante(new Requisitante(this.idRequisitante));
         model.setItens(ofNullable(this.itens)
                 .orElse(emptyList())
