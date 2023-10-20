@@ -7,13 +7,13 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "itens_transacoes_saida")
+@Table(name = "itens_requisicao")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class ItemTransacaoSaida {
+public class ItemRequisicao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,8 @@ public class ItemTransacaoSaida {
     private Material material;
 
     @ManyToOne
-    @JoinColumn(name = "transacoes_saida_id")
-    private TransacaoSaida transacaoSaida;
+    @JoinColumn(name = "requisicoes_de_estoque_id")
+    private RequisicaoDeEstoque requisicaoDeEstoque;
 
     @Enumerated(EnumType.STRING)
     @JoinColumn(name = "und_consumo")

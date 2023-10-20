@@ -6,17 +6,16 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "transacoes_saida")
+@Table(name = "requisicoes_de_estoque")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class TransacaoSaida {
+public class RequisicaoDeEstoque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,15 +33,15 @@ public class TransacaoSaida {
     @JoinColumn(name = "ordem_producao")
     private String ordemProducao;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "requisitantes_id")
     private Requisitante requisitante;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "locais_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "locais_de_aplicacao_id")
     private LocalDeAplicacao localDeAplicacao;
 
-    @OneToMany(mappedBy = "transacaoSaida", cascade = CascadeType.ALL)
-    private List<ItemTransacaoSaida> itens = new ArrayList<>();
+    @OneToMany(mappedBy = "requisicaoDeEstoque", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemRequisicao> itens;
 
 }
