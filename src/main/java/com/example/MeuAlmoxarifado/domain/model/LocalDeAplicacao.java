@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Local {
+public class LocalDeAplicacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class Local {
     @JoinColumn(name = "nome")
     private String nome;
 
-    public Local(Long id) {
+    public LocalDeAplicacao(Long id) {
         this.id = id;
     }
 }

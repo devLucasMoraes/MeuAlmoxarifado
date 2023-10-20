@@ -22,7 +22,7 @@ public record ShowTransacaoSaidaDTO(
 
         Long idRequisitante,
 
-        Long idLocal,
+        Long idLocalDeAplicacao,
 
         List<ShowItemTransacaoSaidaDTO> itens
 ) {
@@ -34,7 +34,7 @@ public record ShowTransacaoSaidaDTO(
                 transacaoSaida.getOrdemProducao(),
                 transacaoSaida.getObs(),
                 transacaoSaida.getRequisitante().getId(),
-                transacaoSaida.getLocal().getId(),
+                transacaoSaida.getLocalDeAplicacao().getId(),
                 toDTO(transacaoSaida.getItens())
         );
     }

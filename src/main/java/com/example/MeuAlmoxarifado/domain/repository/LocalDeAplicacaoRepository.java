@@ -1,11 +1,11 @@
 package com.example.MeuAlmoxarifado.domain.repository;
 
 
-import com.example.MeuAlmoxarifado.domain.model.Local;
+import com.example.MeuAlmoxarifado.domain.model.LocalDeAplicacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LocalRepository extends JpaRepository<Local, Long> {
+public interface LocalDeAplicacaoRepository extends JpaRepository<LocalDeAplicacao, Long> {
     boolean existsByNome(String nome);
 }

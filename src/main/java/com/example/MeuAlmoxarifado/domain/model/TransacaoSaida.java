@@ -40,7 +40,7 @@ public class TransacaoSaida {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locais_id")
-    private Local local;
+    private LocalDeAplicacao localDeAplicacao;
 
     @OneToMany(mappedBy = "transacaoSaida", cascade = CascadeType.ALL)
     private List<ItemTransacaoSaida> itens = new ArrayList<>();

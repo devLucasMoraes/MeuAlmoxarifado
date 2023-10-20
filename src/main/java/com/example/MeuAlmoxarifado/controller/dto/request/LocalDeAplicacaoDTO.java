@@ -1,14 +1,14 @@
 package com.example.MeuAlmoxarifado.controller.dto.request;
 
-import com.example.MeuAlmoxarifado.domain.model.Local;
+import com.example.MeuAlmoxarifado.domain.model.LocalDeAplicacao;
 import jakarta.validation.constraints.NotBlank;
 
-public record LocalDTO(
+public record LocalDeAplicacaoDTO(
         Long id,
         @NotBlank
         String nome) {
-    public Local toModel() {
-        Local model = new Local();
+    public LocalDeAplicacao toModel() {
+        LocalDeAplicacao model = new LocalDeAplicacao();
         model.setId(this.id);
         model.setNome(this.nome);
         return model;
