@@ -41,7 +41,7 @@ public class RequisicaoDeEstoque {
     @JoinColumn(name = "locais_de_aplicacao_id")
     private LocalDeAplicacao localDeAplicacao;
 
-    @OneToMany(mappedBy = "requisicaoDeEstoque", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "requisicaoDeEstoque", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ItemRequisicao> itens;
 
 }

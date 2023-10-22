@@ -19,7 +19,7 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
 
     private final MaterialService materialService;
 
-    public MovimentacaoServiceImpl(MovimentacaoRepository movimentacaoRepository, MaterialService materialService, ConversaoDeCompraService conversaoDeCompraService) {
+    public MovimentacaoServiceImpl(MovimentacaoRepository movimentacaoRepository, MaterialService materialService) {
         this.movimentacaoRepository = movimentacaoRepository;
         this.materialService = materialService;
     }
@@ -32,12 +32,12 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         BigDecimal valorUntMed = dbMaterial.getValorUntMed();
         BigDecimal valorTotalDoEstoque = qtdEmEstoque.multiply(valorUntMed);
 
-        BigDecimal divisor = qtdEmEstoque.add(entrada.getQuantidade());
-        BigDecimal valorUnt = valorTotalDoEstoque.add(entrada.getValorTotal()).divide(divisor, 4, RoundingMode.HALF_UP);
+        BigDecimal qtdEmEstoqueAtualizada = qtdEmEstoque.add(entrada.getQuantidade());
+        BigDecimal valorUnt = valorTotalDoEstoque.add(entrada.getValorTotal()).divide(qtdEmEstoqueAtualizada, 4, RoundingMode.HALF_UP);
 
 
         dbMaterial.setValorUntMed(valorUnt);
-        dbMaterial.setQtdEmEstoque(qtdEmEstoque.add(entrada.getQuantidade()));
+        dbMaterial.setQtdEmEstoque(qtdEmEstoqueAtualizada);
 
 
         movimentacaoRepository.save(entrada);
@@ -49,6 +49,6 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         BigDecimal qtdEmEstoque = dbMaterial.getQtdEmEstoque();
         dbMaterial.setQtdEmEstoque(qtdEmEstoque.subtract(saida.getQuantidade()));
 
-        movimentacaoRepository.save(saida);
+        movimentacaoRepository.saveAndFlush(saida);
     }
 }

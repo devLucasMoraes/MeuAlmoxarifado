@@ -13,4 +13,10 @@ public record LocalDeAplicacaoDTO(
         model.setNome(this.nome);
         return model;
     }
+
+    public LocalDeAplicacao toNewModel() {
+        LocalDeAplicacao model = new LocalDeAplicacao();
+        model.setNome(this.nome);
+        return model;
+    }
 }

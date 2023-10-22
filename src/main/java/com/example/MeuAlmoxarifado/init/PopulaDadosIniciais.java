@@ -1,14 +1,8 @@
 package com.example.MeuAlmoxarifado.init;
 
-import com.example.MeuAlmoxarifado.controller.dto.request.CategoriaDTO;
-import com.example.MeuAlmoxarifado.controller.dto.request.FornecedoraDTO;
-import com.example.MeuAlmoxarifado.controller.dto.request.MaterialDTO;
-import com.example.MeuAlmoxarifado.controller.dto.request.TransportadoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.*;
 import com.example.MeuAlmoxarifado.domain.model.Unidade;
-import com.example.MeuAlmoxarifado.service.CategoriaService;
-import com.example.MeuAlmoxarifado.service.FornecedoraService;
-import com.example.MeuAlmoxarifado.service.MaterialService;
-import com.example.MeuAlmoxarifado.service.TransportadoraService;
+import com.example.MeuAlmoxarifado.service.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
@@ -26,11 +20,17 @@ public class PopulaDadosIniciais {
 
     private final TransportadoraService transportadoraService;
 
-    public PopulaDadosIniciais(CategoriaService categoriaService, MaterialService materialService, FornecedoraService fornecedoraService, TransportadoraService transportadoraService) {
+    private final RequisitanteService requisitanteService;
+
+    private final LocalDeAplicacaoService localDeAplicacaoService;
+
+    public PopulaDadosIniciais(CategoriaService categoriaService, MaterialService materialService, FornecedoraService fornecedoraService, TransportadoraService transportadoraService, RequisitanteService requisitanteService, LocalDeAplicacaoService localDeAplicacaoService) {
         this.categoriaService = categoriaService;
         this.materialService = materialService;
         this.fornecedoraService = fornecedoraService;
         this.transportadoraService = transportadoraService;
+        this.requisitanteService = requisitanteService;
+        this.localDeAplicacaoService = localDeAplicacaoService;
     }
 
     @PostConstruct
@@ -91,6 +91,17 @@ public class PopulaDadosIniciais {
                 "11 4063-8826"
         );
 
+        RequisitanteDTO requisitanteDTO = new RequisitanteDTO(
+                null,
+                "ROGERIO",
+                "(xx)x xxxx-xxxx"
+        );
+
+        LocalDeAplicacaoDTO localDeAplicacaoDTO = new LocalDeAplicacaoDTO(
+                null,
+                "SM102"
+        );
+
         fornecedoraService.create(fornecedoraDTO.toModel());
         transportadoraService.create(transportadoraDTO.toModel());
         categoriaService.create(alcoois.toModel());
@@ -98,5 +109,7 @@ public class PopulaDadosIniciais {
         materialService.create(ipa7030.toModel());
         materialService.create(ipa100.toModel());
         materialService.create(papelao08100015.toModel());
+        requisitanteService.create(requisitanteDTO.toNewModel());
+        localDeAplicacaoService.create(localDeAplicacaoDTO.toNewModel());
     }
 }

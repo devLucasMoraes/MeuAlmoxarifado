@@ -16,4 +16,11 @@ public record RequisitanteDTO(
         model.setFone(this.fone);
         return model;
     }
+
+    public Requisitante toNewModel() {
+        Requisitante model = new Requisitante();
+        model.setNome(this.nome);
+        model.setFone(this.fone);
+        return model;
+    }
 }

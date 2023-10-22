@@ -32,7 +32,7 @@ public class ItemRequisicao {
     private Unidade undConsumo;
 
     @JoinColumn(name = "quant_ent")
-    private BigDecimal quantEnt;
+    private BigDecimal quantEntregue;
 
     @JoinColumn(name = "valor_unt_ent")
     private BigDecimal valorUntEnt;

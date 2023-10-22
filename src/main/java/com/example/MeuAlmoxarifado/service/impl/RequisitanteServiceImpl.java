@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static java.util.Optional.ofNullable;
-
 @Service
 public class RequisitanteServiceImpl implements RequisitanteService {
 
@@ -34,8 +32,6 @@ public class RequisitanteServiceImpl implements RequisitanteService {
 
     @Transactional
     public Requisitante create(Requisitante requisitanteToCreate) {
-        ofNullable(requisitanteToCreate).orElseThrow(() -> new BusinessException("O requisitante a ser criado não deve ser nulo."));
-        ofNullable(requisitanteToCreate.getNome()).orElseThrow(() -> new BusinessException("O nome do destino não dever ser nulo"));
 
         if(requisitanteRepository.existsByNome(requisitanteToCreate.getNome())){
             throw new BusinessException("O nome do requisitante ja existe");
@@ -63,5 +59,9 @@ public class RequisitanteServiceImpl implements RequisitanteService {
         Requisitante dbRequisitante = this.findById(id);
 
         this.requisitanteRepository.delete(dbRequisitante);
+    }
+
+    public Boolean existsById(Long id) {
+       return this.requisitanteRepository.existsById(id);
     }
 }

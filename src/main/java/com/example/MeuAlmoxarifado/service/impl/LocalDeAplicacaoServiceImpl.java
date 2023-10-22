@@ -58,4 +58,8 @@ public class LocalDeAplicacaoServiceImpl implements LocalDeAplicacaoService {
         LocalDeAplicacao dbLocalDeAplicacao = this.findById(id);
         this.localDeAplicacaoRepository.delete(dbLocalDeAplicacao);
     }
+
+    public Boolean existsById(Long id) {
+        return this.localDeAplicacaoRepository.existsById(id);
+    }
 }

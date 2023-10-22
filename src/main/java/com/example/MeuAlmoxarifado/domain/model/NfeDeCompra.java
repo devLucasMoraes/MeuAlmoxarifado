@@ -6,11 +6,10 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "transacoes_entrada")
+@Table(name = "nfes_de_compra")
 @Getter
 @Setter
 @NoArgsConstructor
