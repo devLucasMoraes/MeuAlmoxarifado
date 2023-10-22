@@ -1,9 +1,8 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.requisitante.request.RequisitanteDTO;
-import com.example.MeuAlmoxarifado.controller.dto.requisitante.response.ListRequisitanteDTO;
-import com.example.MeuAlmoxarifado.controller.dto.requisitante.response.ShowRequisitanteDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.RequisitanteDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.ShowRequisitanteDTO;
 import com.example.MeuAlmoxarifado.service.RequisitanteService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +28,9 @@ public record RequisitanteController(RequisitanteService requisitanteService) {
     }
 
     @GetMapping
-    public ResponseEntity<List<ListRequisitanteDTO>> getAll() {
+    public ResponseEntity<List<ShowRequisitanteDTO>> getAll() {
         var requisitantes = requisitanteService.findAll();
-        var requisitantesDTO = requisitantes.stream().map(ListRequisitanteDTO::new).collect(Collectors.toList());
+        var requisitantesDTO = requisitantes.stream().map(ShowRequisitanteDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok(requisitantesDTO);
     }
 

@@ -1,8 +1,8 @@
 package com.example.MeuAlmoxarifado.controller;
 
 
-import com.example.MeuAlmoxarifado.controller.dto.categoria.request.CategoriaDTO;
-import com.example.MeuAlmoxarifado.controller.dto.categoria.response.ShowCategoriaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.CategoriaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.ShowCategoriaDTO;
 import com.example.MeuAlmoxarifado.service.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

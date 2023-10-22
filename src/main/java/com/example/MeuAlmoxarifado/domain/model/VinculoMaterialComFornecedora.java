@@ -4,7 +4,6 @@ package com.example.MeuAlmoxarifado.domain.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,8 +19,11 @@ public class VinculoMaterialComFornecedora {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "cod_prod")
-    private String codProd;
+    @JoinColumn(name = "referencia_fornecedora")
+    private String referenciaFornecedora;
+
+    @JoinColumn(name = "descricao_fornecedora")
+    private String descricaoFornecedora;
 
     @ManyToOne
     @JoinColumn(name = "materiais_id")

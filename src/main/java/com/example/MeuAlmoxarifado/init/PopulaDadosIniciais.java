@@ -1,9 +1,9 @@
 package com.example.MeuAlmoxarifado.init;
 
-import com.example.MeuAlmoxarifado.controller.dto.categoria.request.CategoriaDTO;
-import com.example.MeuAlmoxarifado.controller.dto.fornecedora.request.FornecedoraDTO;
-import com.example.MeuAlmoxarifado.controller.dto.material.request.MaterialDTO;
-import com.example.MeuAlmoxarifado.controller.dto.transportadora.request.TransportadoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.CategoriaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.FornecedoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.MaterialDTO;
+import com.example.MeuAlmoxarifado.controller.dto.request.TransportadoraDTO;
 import com.example.MeuAlmoxarifado.domain.model.Unidade;
 import com.example.MeuAlmoxarifado.service.CategoriaService;
 import com.example.MeuAlmoxarifado.service.FornecedoraService;
@@ -35,10 +35,17 @@ public class PopulaDadosIniciais {
 
     @PostConstruct
     public void populaDadosIniciais(){
-        CategoriaDTO categoriaDTO = new CategoriaDTO(
+        CategoriaDTO alcoois = new CategoriaDTO(
                 null,
                 "ALCOOIS",
                 Unidade.LITRO,
+                new BigDecimal(150),
+                new ArrayList<>()
+        );
+        CategoriaDTO papelaoParana = new CategoriaDTO(
+                null,
+                "PAPELAO PARANA",
+                Unidade.UNID,
                 new BigDecimal(150),
                 new ArrayList<>()
         );
@@ -57,6 +64,14 @@ public class PopulaDadosIniciais {
                 true,
                 null,
                 1L,
+                new ArrayList<>()
+        );
+        MaterialDTO papelao08100015 = new MaterialDTO(
+                null,
+                "PAPELAO 800 x 1000mm 1.5mm",
+                true,
+                null,
+                2L,
                 new ArrayList<>()
         );
 
@@ -78,8 +93,10 @@ public class PopulaDadosIniciais {
 
         fornecedoraService.create(fornecedoraDTO.toModel());
         transportadoraService.create(transportadoraDTO.toModel());
-        categoriaService.create(categoriaDTO.toModel());
+        categoriaService.create(alcoois.toModel());
+        categoriaService.create(papelaoParana.toModel());
         materialService.create(ipa7030.toModel());
         materialService.create(ipa100.toModel());
+        materialService.create(papelao08100015.toModel());
     }
 }
