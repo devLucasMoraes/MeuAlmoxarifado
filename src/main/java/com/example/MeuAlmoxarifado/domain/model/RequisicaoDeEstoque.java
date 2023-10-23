@@ -25,7 +25,7 @@ public class RequisicaoDeEstoque {
     private LocalDateTime dataRequisicao;
 
     @JoinColumn(name = "valor_total")
-    private BigDecimal valorTotal;
+    private BigDecimal valorTotal = BigDecimal.ZERO;
 
     @JoinColumn(name = "obs")
     private String obs;

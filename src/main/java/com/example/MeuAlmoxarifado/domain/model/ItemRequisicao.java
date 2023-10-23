@@ -35,7 +35,7 @@ public class ItemRequisicao {
     private BigDecimal quantEntregue;
 
     @JoinColumn(name = "valor_unt_ent")
-    private BigDecimal valorUntEnt;
+    private BigDecimal valorUntEnt = BigDecimal.ZERO;
 
 
 }

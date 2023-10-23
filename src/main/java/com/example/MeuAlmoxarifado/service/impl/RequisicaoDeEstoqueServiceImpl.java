@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,63 +48,72 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
     }
 
     @Transactional
-    public RequisicaoDeEstoque create(RequisicaoDeEstoque requisicaoDeEstoqueToCreate) {
-        if (!this.requisitanteService.existsById(requisicaoDeEstoqueToCreate.getRequisitante().getId())) {
+    public RequisicaoDeEstoque create(RequisicaoDeEstoque requisicaoToCreate) {
+
+        if (!this.requisitanteService.existsById(requisicaoToCreate.getRequisitante().getId())) {
             throw new NotFoundException("Requisitante");
         }
 
-        if (!this.localDeAplicacaoService.existsById(requisicaoDeEstoqueToCreate.getLocalDeAplicacao().getId())) {
+        if (!this.localDeAplicacaoService.existsById(requisicaoToCreate.getLocalDeAplicacao().getId())) {
             throw new NotFoundException("Local de aplicação");
         }
 
-        requisicaoDeEstoqueToCreate.getItens().forEach(itemRequisicao -> {
+        requisicaoToCreate.getItens().forEach(itemRequisicao -> {
             if (!this.materialService.existsById(itemRequisicao.getMaterial().getId())) {
                 throw new NotFoundException("Material");
             }
-            itemRequisicao.setRequisicaoDeEstoque(requisicaoDeEstoqueToCreate);
+            itemRequisicao.setRequisicaoDeEstoque(requisicaoToCreate);
 
             Movimentacao saida = criarMovimentacaoSaida(itemRequisicao, "Requisição de estoque. Local id: %s , Requisitante id: %s"
-                    .formatted(requisicaoDeEstoqueToCreate.getLocalDeAplicacao().getId(), requisicaoDeEstoqueToCreate.getRequisitante().getId()));
+                    .formatted(requisicaoToCreate.getLocalDeAplicacao().getId(), requisicaoToCreate.getRequisitante().getId()));
             this.movimentacaoService.registrarSaida(saida);
 
         });
 
-        return this.requisicaoDeEstoqueRepository.save(requisicaoDeEstoqueToCreate);
+        return this.requisicaoDeEstoqueRepository.save(requisicaoToCreate);
     }
 
     @Transactional
-    public RequisicaoDeEstoque update(Long id, RequisicaoDeEstoque requisicaoDeEstoqueToUpdate) {
+    public RequisicaoDeEstoque update(Long id, RequisicaoDeEstoque requisicaoToUpdate) {
         RequisicaoDeEstoque dbRequisicaoDeEstoque = this.findById(id);
 
-        if (!dbRequisicaoDeEstoque.getId().equals(requisicaoDeEstoqueToUpdate.getId())) {
+        if (!dbRequisicaoDeEstoque.getId().equals(requisicaoToUpdate.getId())) {
             throw new BusinessException("Os IDs de atualização devem ser iguais.");
         }
 
-        if (!this.requisitanteService.existsById(requisicaoDeEstoqueToUpdate.getRequisitante().getId())) {
+        if (!this.requisitanteService.existsById(requisicaoToUpdate.getRequisitante().getId())) {
             throw new NotFoundException("Requisitante");
         }
 
-        if (!this.localDeAplicacaoService.existsById(requisicaoDeEstoqueToUpdate.getLocalDeAplicacao().getId())) {
+        if (!this.localDeAplicacaoService.existsById(requisicaoToUpdate.getLocalDeAplicacao().getId())) {
             throw new NotFoundException("Local de aplicação");
         }
 
-        requisicaoDeEstoqueToUpdate.getItens().forEach(itemRequisicao -> {
+        dbRequisicaoDeEstoque.getItens().forEach(itemRequisicao -> {
+            Movimentacao entrada = criarMovimentacaoEntrada(itemRequisicao, "Alteração de Requisiçao id : %s".formatted(dbRequisicaoDeEstoque.getId()));
+            this.movimentacaoService.registrarEntrada(entrada);
+        });
+
+        requisicaoToUpdate.getItens().forEach(itemRequisicao -> {
             if (!this.materialService.existsById(itemRequisicao.getMaterial().getId())) {
                 throw new NotFoundException("Material");
             }
-            itemRequisicao.setRequisicaoDeEstoque(requisicaoDeEstoqueToUpdate);
+            itemRequisicao.setRequisicaoDeEstoque(requisicaoToUpdate);
 
+            Movimentacao saida = criarMovimentacaoSaida(itemRequisicao, "Alteração de Requisiçao id : %s"
+                    .formatted(dbRequisicaoDeEstoque.getId()));
+            this.movimentacaoService.registrarSaida(saida);
 
         });
 
-        dbRequisicaoDeEstoque.setObs(requisicaoDeEstoqueToUpdate.getObs());
-        dbRequisicaoDeEstoque.setValorTotal(requisicaoDeEstoqueToUpdate.getValorTotal());
-        dbRequisicaoDeEstoque.setDataRequisicao(requisicaoDeEstoqueToUpdate.getDataRequisicao());
-        dbRequisicaoDeEstoque.setLocalDeAplicacao(requisicaoDeEstoqueToUpdate.getLocalDeAplicacao());
-        dbRequisicaoDeEstoque.setRequisitante(requisicaoDeEstoqueToUpdate.getRequisitante());
-        dbRequisicaoDeEstoque.setOrdemProducao(requisicaoDeEstoqueToUpdate.getOrdemProducao());
+        dbRequisicaoDeEstoque.setObs(requisicaoToUpdate.getObs());
+        dbRequisicaoDeEstoque.setValorTotal(requisicaoToUpdate.getValorTotal());
+        dbRequisicaoDeEstoque.setDataRequisicao(requisicaoToUpdate.getDataRequisicao());
+        dbRequisicaoDeEstoque.setLocalDeAplicacao(requisicaoToUpdate.getLocalDeAplicacao());
+        dbRequisicaoDeEstoque.setRequisitante(requisicaoToUpdate.getRequisitante());
+        dbRequisicaoDeEstoque.setOrdemProducao(requisicaoToUpdate.getOrdemProducao());
         dbRequisicaoDeEstoque.getItens().clear();
-        dbRequisicaoDeEstoque.getItens().addAll(requisicaoDeEstoqueToUpdate.getItens());
+        dbRequisicaoDeEstoque.getItens().addAll(requisicaoToUpdate.getItens());
 
         return this.requisicaoDeEstoqueRepository.save(dbRequisicaoDeEstoque);
     }
@@ -130,5 +140,23 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
         saida.setValorTotal(valorTotalCom);
         saida.setJustificativa(justificativa);
         return saida;
+    }
+
+    private Movimentacao criarMovimentacaoEntrada(ItemRequisicao itemRequisicao, String justificativa) {
+        Material dbMaterial = this.materialService.findById(itemRequisicao.getMaterial().getId());
+        BigDecimal qtdConvertida = this.conversaoDeConsumoService.coverterQuantidadeParaUndidadeDeEstoque(itemRequisicao, dbMaterial);
+        BigDecimal valorTotalCom = itemRequisicao.getValorUntEnt().multiply(itemRequisicao.getQuantEntregue());
+        BigDecimal valorUnt = valorTotalCom.divide(qtdConvertida,4, RoundingMode.HALF_UP);
+
+        Movimentacao entrada = new Movimentacao();
+        entrada.setTipo(Tipo.ENTRADA);
+        entrada.setMaterial(dbMaterial);
+        entrada.setData(LocalDateTime.now());
+        entrada.setQuantidade(qtdConvertida);
+        entrada.setUnidade(dbMaterial.getCategoria().getUndEstoque());
+        entrada.setValorUnt(valorUnt);
+        entrada.setValorTotal(valorTotalCom);
+        entrada.setJustificativa(justificativa);
+        return entrada;
     }
 }
