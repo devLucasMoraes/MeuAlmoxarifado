@@ -19,7 +19,7 @@ public record RequisitanteController(RequisitanteService requisitanteService) {
 
     @PostMapping("new")
     public ResponseEntity<ShowRequisitanteDTO> create(@RequestBody @Valid RequisitanteDTO requisitanteDTO) {
-        var requisitante = requisitanteService.create(requisitanteDTO.toModel());
+        var requisitante = requisitanteService.create(requisitanteDTO.toNewModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(requisitante.getId())

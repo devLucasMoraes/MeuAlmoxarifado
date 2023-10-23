@@ -19,7 +19,7 @@ public record LocalDeAplicacaoController(LocalDeAplicacaoService localDeAplicaca
 
     @PostMapping("new")
     public ResponseEntity<ShowLocalDeAplicacaoDTO> create(@RequestBody @Valid LocalDeAplicacaoDTO localDeAplicacaoDTO) {
-        var localDeAplicacao = localDeAplicacaoService.create(localDeAplicacaoDTO.toModel());
+        var localDeAplicacao = localDeAplicacaoService.create(localDeAplicacaoDTO.toNewModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(localDeAplicacao.getId())

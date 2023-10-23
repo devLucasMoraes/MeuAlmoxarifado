@@ -15,15 +15,21 @@ public record ItemRequisicaoDTO(
         @NotNull
         Unidade undConsumo,
         @Positive(message = "deve ser maior que zero")
-        BigDecimal quantEntregue,
-        BigDecimal valorUntEntregue) {
+        BigDecimal quantEntregue) {
     public ItemRequisicao toModel() {
         ItemRequisicao model = new ItemRequisicao();
         model.setId(this.id);
         model.setMaterial(new Material(this.idMaterial));
         model.setUndConsumo(this.undConsumo);
-        model.setQuantEnt(this.quantEntregue);
-        model.setValorUntEnt(valorUntEntregue);
+        model.setQuantEntregue(this.quantEntregue);
+        return model;
+    }
+
+    public ItemRequisicao toNewModel() {
+        ItemRequisicao model = new ItemRequisicao();
+        model.setMaterial(new Material(this.idMaterial));
+        model.setUndConsumo(this.undConsumo);
+        model.setQuantEntregue(this.quantEntregue);
         return model;
     }
 }

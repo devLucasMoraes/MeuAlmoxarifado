@@ -16,7 +16,6 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 @ToString
 public class Material {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,4 +48,6 @@ public class Material {
     public Material(Long id) {
         this.id = id;
     }
+
+
 }

@@ -20,7 +20,7 @@ public record RequisicaoDeEstoqueController(RequisicaoDeEstoqueService requisica
 
     @PostMapping("new")
     public ResponseEntity<ShowRequisicaoDeEstoqueDTO> create(@RequestBody @Valid RequisicaoDeEstoqueDTO requisicaoDeEstoqueDTO) {
-        var requisicaoDeEstoque = requisicaoDeEstoqueService.create(requisicaoDeEstoqueDTO.toModel());
+        var requisicaoDeEstoque = requisicaoDeEstoqueService.create(requisicaoDeEstoqueDTO.toNewModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(requisicaoDeEstoque.getId())
