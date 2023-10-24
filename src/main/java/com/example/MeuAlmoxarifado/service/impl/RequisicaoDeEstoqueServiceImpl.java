@@ -64,11 +64,17 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
             }
             itemRequisicao.setRequisicaoDeEstoque(requisicaoToCreate);
 
+
             Movimentacao saida = criarMovimentacaoSaida(itemRequisicao, "Requisição de estoque. Local id: %s , Requisitante id: %s"
                     .formatted(requisicaoToCreate.getLocalDeAplicacao().getId(), requisicaoToCreate.getRequisitante().getId()));
             this.movimentacaoService.registrarSaida(saida);
 
+            itemRequisicao.setValorUntEnt(saida.getValorUnt());
+
         });
+
+        BigDecimal valorTotalItens = requisicaoToCreate.getItens().stream().map(ItemRequisicao::getValorTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+        requisicaoToCreate.setValorTotal(valorTotalItens);
 
         return this.requisicaoDeEstoqueRepository.save(requisicaoToCreate);
     }
@@ -104,10 +110,13 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
                     .formatted(dbRequisicaoDeEstoque.getId()));
             this.movimentacaoService.registrarSaida(saida);
 
+            itemRequisicao.setValorUntEnt(saida.getValorUnt());
         });
 
+        BigDecimal valorTotalItens = requisicaoToUpdate.getItens().stream().map(ItemRequisicao::getValorTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+
         dbRequisicaoDeEstoque.setObs(requisicaoToUpdate.getObs());
-        dbRequisicaoDeEstoque.setValorTotal(requisicaoToUpdate.getValorTotal());
+        dbRequisicaoDeEstoque.setValorTotal(valorTotalItens);
         dbRequisicaoDeEstoque.setDataRequisicao(requisicaoToUpdate.getDataRequisicao());
         dbRequisicaoDeEstoque.setLocalDeAplicacao(requisicaoToUpdate.getLocalDeAplicacao());
         dbRequisicaoDeEstoque.setRequisitante(requisicaoToUpdate.getRequisitante());
@@ -121,6 +130,12 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
     @Transactional
     public void delete(Long id) {
         RequisicaoDeEstoque dbRequisicaoDeEstoque = this.findById(id);
+
+        dbRequisicaoDeEstoque.getItens().forEach(itemRequisicao -> {
+            Movimentacao entrada = criarMovimentacaoEntrada(itemRequisicao, "Cancelamento de Requisiçao id : %s".formatted(dbRequisicaoDeEstoque.getId()));
+            this.movimentacaoService.registrarEntrada(entrada);
+        });
+
         this.requisicaoDeEstoqueRepository.delete(dbRequisicaoDeEstoque);
     }
 
@@ -128,7 +143,7 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
         Material dbMaterial = this.materialService.findById(itemRequisicao.getMaterial().getId());
 
         BigDecimal qtdConvertida = this.conversaoDeConsumoService.coverterQuantidadeParaUndidadeDeEstoque(itemRequisicao, dbMaterial);
-        BigDecimal valorTotalCom = dbMaterial.getValorUntMed().multiply(itemRequisicao.getQuantEntregue());
+        BigDecimal valorTotalEntregue = dbMaterial.getValorUntMed().multiply(itemRequisicao.getQuantEntregue());
 
         Movimentacao saida = new Movimentacao();
         saida.setTipo(Tipo.SAIDA);
@@ -137,16 +152,17 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
         saida.setQuantidade(qtdConvertida);
         saida.setUnidade(dbMaterial.getCategoria().getUndEstoque());
         saida.setValorUnt(dbMaterial.getValorUntMed());
-        saida.setValorTotal(valorTotalCom);
+        saida.setValorTotal(valorTotalEntregue);
         saida.setJustificativa(justificativa);
         return saida;
     }
 
     private Movimentacao criarMovimentacaoEntrada(ItemRequisicao itemRequisicao, String justificativa) {
         Material dbMaterial = this.materialService.findById(itemRequisicao.getMaterial().getId());
+
         BigDecimal qtdConvertida = this.conversaoDeConsumoService.coverterQuantidadeParaUndidadeDeEstoque(itemRequisicao, dbMaterial);
-        BigDecimal valorTotalCom = itemRequisicao.getValorUntEnt().multiply(itemRequisicao.getQuantEntregue());
-        BigDecimal valorUnt = valorTotalCom.divide(qtdConvertida,4, RoundingMode.HALF_UP);
+        BigDecimal valorTotalEntregue = itemRequisicao.getValorUntEnt().multiply(itemRequisicao.getQuantEntregue());
+        BigDecimal valorUnt = valorTotalEntregue.divide(qtdConvertida,4, RoundingMode.HALF_UP);
 
         Movimentacao entrada = new Movimentacao();
         entrada.setTipo(Tipo.ENTRADA);
@@ -155,7 +171,7 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
         entrada.setQuantidade(qtdConvertida);
         entrada.setUnidade(dbMaterial.getCategoria().getUndEstoque());
         entrada.setValorUnt(valorUnt);
-        entrada.setValorTotal(valorTotalCom);
+        entrada.setValorTotal(valorTotalEntregue);
         entrada.setJustificativa(justificativa);
         return entrada;
     }

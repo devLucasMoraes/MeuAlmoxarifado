@@ -33,20 +33,16 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
 
         BigDecimal qtdEmEstoqueAtualizada = qtdEmEstoque.add(entrada.getQuantidade());
 
-        BigDecimal valorUnt;
-        try {
-            valorUnt = valorTotalDoEstoque.add(entrada.getValorTotal())
+        if(qtdEmEstoqueAtualizada.compareTo(BigDecimal.ZERO) != 0){
+            BigDecimal valorUnt = valorTotalDoEstoque.add(entrada.getValorTotal())
                     .divide(qtdEmEstoqueAtualizada, 4, RoundingMode.HALF_UP);
-        } catch (ArithmeticException e) {
-            valorUnt = BigDecimal.ZERO;
+            dbMaterial.setValorUntMed(valorUnt);
         }
 
-
-        dbMaterial.setValorUntMed(valorUnt);
         dbMaterial.setQtdEmEstoque(qtdEmEstoqueAtualizada);
 
 
-        movimentacaoRepository.save(entrada);
+        movimentacaoRepository.saveAndFlush(entrada);
     }
 
     @Transactional

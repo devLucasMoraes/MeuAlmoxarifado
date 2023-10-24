@@ -37,5 +37,9 @@ public class ItemRequisicao {
     @JoinColumn(name = "valor_unt_ent")
     private BigDecimal valorUntEnt = BigDecimal.ZERO;
 
+    public BigDecimal getValorTotal() {
+        return this.quantEntregue.multiply(this.valorUntEnt);
+    }
+
 
 }
