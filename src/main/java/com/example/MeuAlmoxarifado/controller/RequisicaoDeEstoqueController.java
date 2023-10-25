@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/requisicoes")
+@CrossOrigin
 public record RequisicaoDeEstoqueController(RequisicaoDeEstoqueService requisicaoDeEstoqueService) {
 
 

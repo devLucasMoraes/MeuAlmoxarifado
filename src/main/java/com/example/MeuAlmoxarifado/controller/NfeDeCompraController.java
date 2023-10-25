@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/nfe_de_compra")
+@CrossOrigin
 public record NfeDeCompraController(NfeDeCompraService nfeDeCompraService) {
 
 

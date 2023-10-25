@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/fornecedoras")
+@CrossOrigin
 public record FornecedoraController(FornecedoraService fornecedoraService) {
 
     @PostMapping("new")

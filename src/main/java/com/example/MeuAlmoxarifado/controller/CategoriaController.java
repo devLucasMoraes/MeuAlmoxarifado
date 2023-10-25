@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/categorias")
+@CrossOrigin
 public record CategoriaController(CategoriaService categoriaService) {
 
     @PostMapping("new")
