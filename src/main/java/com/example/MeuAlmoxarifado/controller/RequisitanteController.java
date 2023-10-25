@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/requisitantes")
+@CrossOrigin
 public record RequisitanteController(RequisitanteService requisitanteService) {
 
     @PostMapping("new")

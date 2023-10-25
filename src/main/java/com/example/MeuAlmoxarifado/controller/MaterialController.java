@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/materiais")
+@CrossOrigin
 public record MaterialController(MaterialService materialService) {
 
     @PostMapping("new")
