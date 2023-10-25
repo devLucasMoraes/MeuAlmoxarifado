@@ -3,7 +3,6 @@ package com.example.MeuAlmoxarifado.service.impl;
 import com.example.MeuAlmoxarifado.domain.model.Material;
 import com.example.MeuAlmoxarifado.domain.model.Movimentacao;
 import com.example.MeuAlmoxarifado.domain.repository.MovimentacaoRepository;
-import com.example.MeuAlmoxarifado.service.ConversaoDeCompraService;
 import com.example.MeuAlmoxarifado.service.MaterialService;
 import com.example.MeuAlmoxarifado.service.MovimentacaoService;
 import org.springframework.stereotype.Service;
@@ -33,14 +32,17 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         BigDecimal valorTotalDoEstoque = qtdEmEstoque.multiply(valorUntMed);
 
         BigDecimal qtdEmEstoqueAtualizada = qtdEmEstoque.add(entrada.getQuantidade());
-        BigDecimal valorUnt = valorTotalDoEstoque.add(entrada.getValorTotal()).divide(qtdEmEstoqueAtualizada, 4, RoundingMode.HALF_UP);
 
+        if(qtdEmEstoqueAtualizada.compareTo(BigDecimal.ZERO) != 0){
+            BigDecimal valorUnt = valorTotalDoEstoque.add(entrada.getValorTotal())
+                    .divide(qtdEmEstoqueAtualizada, 4, RoundingMode.HALF_UP);
+            dbMaterial.setValorUntMed(valorUnt);
+        }
 
-        dbMaterial.setValorUntMed(valorUnt);
         dbMaterial.setQtdEmEstoque(qtdEmEstoqueAtualizada);
 
 
-        movimentacaoRepository.save(entrada);
+        movimentacaoRepository.saveAndFlush(entrada);
     }
 
     @Transactional

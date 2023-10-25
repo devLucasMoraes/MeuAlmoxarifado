@@ -82,6 +82,14 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
             throw new BusinessException("Os IDs de atualização devem ser iguais.");
         }
 
+        if(!this.fornecedoraService.existsById(nfeDeCompraToUpdate.getFornecedora().getId())) {
+            throw new NotFoundException("Fornecedora");
+        }
+
+        if(!this.transportadoraService.existsById(nfeDeCompraToUpdate.getTransportadora().getId())) {
+            throw new NotFoundException("Transportadora");
+        }
+
         dbNfeDeCompra.getItens().forEach(itemDeCompra -> {
             Movimentacao saida = criarMovimentacaoSaida(itemDeCompra, nfeDeCompraToUpdate, "Alteração de NFe id : %s".formatted(dbNfeDeCompra.getId()));
             this.movimentacaoService.registrarSaida(saida);
