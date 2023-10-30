@@ -5,13 +5,14 @@ import com.example.MeuAlmoxarifado.domain.repository.NfeDeCompraRepository;
 import com.example.MeuAlmoxarifado.service.*;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class NfeDeCompraServiceImpl implements NfeDeCompraService {
@@ -38,8 +39,8 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
     }
 
     @Transactional(readOnly = true)
-    public List<NfeDeCompra> findAll() {
-        return this.nfeDeCompraRepository.findAll();
+    public Page<NfeDeCompra> findAll(Pageable pageable) {
+        return this.nfeDeCompraRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

@@ -5,13 +5,13 @@ import com.example.MeuAlmoxarifado.controller.dto.request.TransportadoraDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowTransportadoraDTO;
 import com.example.MeuAlmoxarifado.service.TransportadoraService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/transportadoras")
@@ -29,9 +29,9 @@ public record TransportadoraController(TransportadoraService transportadoraServi
     }
 
     @GetMapping
-    public ResponseEntity<List<ShowTransportadoraDTO>> getAll() {
-        var transportadoras = transportadoraService.findAll();
-        var transportadorasDTO = transportadoras.stream().map(ShowTransportadoraDTO::new).collect(Collectors.toList());
+    public ResponseEntity<Page<ShowTransportadoraDTO>> getAll(Pageable pageable) {
+        var transportadoras = transportadoraService.findAll(pageable);
+        var transportadorasDTO = transportadoras.map(ShowTransportadoraDTO::new);
         return ResponseEntity.ok(transportadorasDTO);
     }
 

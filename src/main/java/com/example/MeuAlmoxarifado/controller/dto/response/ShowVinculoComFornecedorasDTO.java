@@ -10,7 +10,7 @@ import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 public record ShowVinculoComFornecedorasDTO(
-        Long id,
+        Long idVinculo,
         Long idFornecedora,
         String referenciaFornecedora,
         String descricaoFornecedora,

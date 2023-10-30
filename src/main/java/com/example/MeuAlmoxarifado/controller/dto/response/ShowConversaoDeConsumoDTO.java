@@ -7,7 +7,7 @@ import com.example.MeuAlmoxarifado.domain.model.Unidade;
 import java.math.BigDecimal;
 
 public record ShowConversaoDeConsumoDTO(
-        Long id,
+        Long idConversao,
         Unidade undConsumo,
         Unidade undEstoque,
         BigDecimal fatorDeConversao

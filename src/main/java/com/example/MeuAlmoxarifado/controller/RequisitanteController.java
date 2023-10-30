@@ -5,13 +5,13 @@ import com.example.MeuAlmoxarifado.controller.dto.request.RequisitanteDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowRequisitanteDTO;
 import com.example.MeuAlmoxarifado.service.RequisitanteService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/requisitantes")
@@ -29,9 +29,9 @@ public record RequisitanteController(RequisitanteService requisitanteService) {
     }
 
     @GetMapping
-    public ResponseEntity<List<ShowRequisitanteDTO>> getAll() {
-        var requisitantes = requisitanteService.findAll();
-        var requisitantesDTO = requisitantes.stream().map(ShowRequisitanteDTO::new).collect(Collectors.toList());
+    public ResponseEntity<Page<ShowRequisitanteDTO>> getAll(Pageable pageable) {
+        var requisitantes = requisitanteService.findAll(pageable);
+        var requisitantesDTO = requisitantes.map(ShowRequisitanteDTO::new);
         return ResponseEntity.ok(requisitantesDTO);
     }
 

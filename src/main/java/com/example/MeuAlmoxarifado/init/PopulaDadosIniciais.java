@@ -75,11 +75,19 @@ public class PopulaDadosIniciais {
                 new ArrayList<>()
         );
 
-        FornecedoraDTO fornecedoraDTO = new FornecedoraDTO(
+        FornecedoraDTO canopusQuimica = new FornecedoraDTO(
                 null,
                 "68.958.487/0001-10",
                 "CANOPUS IND E COM DE PRODUTOS",
                 "CANOPUS QUIMICA",
+                "11 4093-8300"
+        );
+
+        FornecedoraDTO eurustar = new FornecedoraDTO(
+                null,
+                "XX.XXX.XXX/XXXX-XX",
+                "EUROSTAR LTDA",
+                "EUROSTAR",
                 "11 4093-8300"
         );
 
@@ -102,7 +110,8 @@ public class PopulaDadosIniciais {
                 "SM102"
         );
 
-        fornecedoraService.create(fornecedoraDTO.toModel());
+        fornecedoraService.create(eurustar.toModel());
+        fornecedoraService.create(canopusQuimica.toModel());
         transportadoraService.create(transportadoraDTO.toModel());
         categoriaService.create(alcoois.toModel());
         categoriaService.create(papelaoParana.toModel());

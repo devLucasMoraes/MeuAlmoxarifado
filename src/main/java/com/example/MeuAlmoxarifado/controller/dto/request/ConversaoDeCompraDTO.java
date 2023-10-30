@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record  ConversaoDeCompraDTO(
-        Long id,
+        Long idConversao,
         @NotNull
         Unidade undCompra,
         @NotNull
@@ -16,7 +16,7 @@ public record  ConversaoDeCompraDTO(
         BigDecimal fatorDeConversao) {
     public ConversaoDeCompra toModel() {
         ConversaoDeCompra model = new ConversaoDeCompra();
-        model.setId(this.id);
+        model.setId(this.idConversao);
         model.setUndEstoque(this.undEstoque);
         model.setUndCompra(this.undCompra);
         model.setFatorDeConversao(this.fatorDeConversao);

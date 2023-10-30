@@ -5,13 +5,13 @@ import com.example.MeuAlmoxarifado.controller.dto.request.NfeDeCompraDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowNfeDeCompraDTO;
 import com.example.MeuAlmoxarifado.service.NfeDeCompraService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/nfe_de_compra")
@@ -30,9 +30,9 @@ public record NfeDeCompraController(NfeDeCompraService nfeDeCompraService) {
     }
 
     @GetMapping
-    public ResponseEntity<List<ShowNfeDeCompraDTO>> getAll() {
-        var nfesDeCompra = nfeDeCompraService.findAll();
-        var nfesDeCompraDTO = nfesDeCompra.stream().map(ShowNfeDeCompraDTO::new).collect(Collectors.toList());
+    public ResponseEntity<Page<ShowNfeDeCompraDTO>> getAll(Pageable pageable) {
+        var nfesDeCompra = nfeDeCompraService.findAll(pageable);
+        var nfesDeCompraDTO = nfesDeCompra.map(ShowNfeDeCompraDTO::new);
         return ResponseEntity.ok(nfesDeCompraDTO);
     }
 

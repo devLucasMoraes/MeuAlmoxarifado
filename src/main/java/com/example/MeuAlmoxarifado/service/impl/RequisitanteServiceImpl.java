@@ -5,10 +5,10 @@ import com.example.MeuAlmoxarifado.domain.repository.RequisitanteRepository;
 import com.example.MeuAlmoxarifado.service.RequisitanteService;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class RequisitanteServiceImpl implements RequisitanteService {
@@ -21,8 +21,8 @@ public class RequisitanteServiceImpl implements RequisitanteService {
 
 
    @Transactional(readOnly = true)
-    public List<Requisitante> findAll() {
-        return this.requisitanteRepository.findAll();
+    public Page<Requisitante> findAll(Pageable pageable) {
+        return this.requisitanteRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

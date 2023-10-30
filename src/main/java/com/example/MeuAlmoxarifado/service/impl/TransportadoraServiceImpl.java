@@ -5,10 +5,10 @@ import com.example.MeuAlmoxarifado.domain.repository.TransportadoraRepository;
 import com.example.MeuAlmoxarifado.service.TransportadoraService;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static java.util.Optional.ofNullable;
 
@@ -22,8 +22,8 @@ public class TransportadoraServiceImpl implements TransportadoraService {
     }
 
     @Transactional(readOnly = true)
-    public List<Transportadora> findAll() {
-        return this.transportadoraRepository.findAll();
+    public Page<Transportadora> findAll(Pageable pageable) {
+        return this.transportadoraRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

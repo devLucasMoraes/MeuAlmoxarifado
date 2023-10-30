@@ -5,13 +5,14 @@ import com.example.MeuAlmoxarifado.domain.repository.RequisicaoDeEstoqueReposito
 import com.example.MeuAlmoxarifado.service.*;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueService {
@@ -38,8 +39,8 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
     }
 
     @Transactional(readOnly = true)
-    public List<RequisicaoDeEstoque> findAll() {
-        return this.requisicaoDeEstoqueRepository.findAll();
+    public Page<RequisicaoDeEstoque> findAll(Pageable pageable) {
+        return this.requisicaoDeEstoqueRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

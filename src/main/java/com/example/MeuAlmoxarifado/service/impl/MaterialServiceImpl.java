@@ -7,10 +7,10 @@ import com.example.MeuAlmoxarifado.service.FornecedoraService;
 import com.example.MeuAlmoxarifado.service.MaterialService;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class MaterialServiceImpl implements MaterialService {
@@ -28,8 +28,8 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Transactional(readOnly = true)
-    public List<Material> findAll() {
-        return this.materialRepository.findAll();
+    public Page<Material> findAll(Pageable pageable) {
+        return this.materialRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)
@@ -54,9 +54,7 @@ public class MaterialServiceImpl implements MaterialService {
             }
             vinculoMaterialComFornecedora.setMaterial(materialToCreate);
 
-            vinculoMaterialComFornecedora.getConversaoDeCompras().forEach(conversaoDeCompra -> {
-                conversaoDeCompra.setVinculoComFornecedoras(vinculoMaterialComFornecedora);
-            });
+            vinculoMaterialComFornecedora.getConversaoDeCompras().forEach(conversaoDeCompra -> conversaoDeCompra.setVinculoComFornecedoras(vinculoMaterialComFornecedora));
         });
 
         return this.materialRepository.save(materialToCreate);
@@ -76,9 +74,7 @@ public class MaterialServiceImpl implements MaterialService {
             }
             vinculoMaterialComFornecedora.setMaterial(materialToUpdate);
 
-            vinculoMaterialComFornecedora.getConversaoDeCompras().forEach(conversaoDeCompra -> {
-                conversaoDeCompra.setVinculoComFornecedoras(vinculoMaterialComFornecedora);
-            });
+            vinculoMaterialComFornecedora.getConversaoDeCompras().forEach(conversaoDeCompra -> conversaoDeCompra.setVinculoComFornecedoras(vinculoMaterialComFornecedora));
         });
 
         dbMaterial.setDescricao(materialToUpdate.getDescricao());

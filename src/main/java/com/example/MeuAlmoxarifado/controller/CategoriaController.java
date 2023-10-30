@@ -5,13 +5,13 @@ import com.example.MeuAlmoxarifado.controller.dto.request.CategoriaDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowCategoriaDTO;
 import com.example.MeuAlmoxarifado.service.CategoriaService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/categorias")
@@ -29,9 +29,9 @@ public record CategoriaController(CategoriaService categoriaService) {
     }
 
     @GetMapping
-    public ResponseEntity<List<ShowCategoriaDTO>> getAll() {
-        var categorias = categoriaService.findAll();
-        var categoriasDTO = categorias.stream().map(ShowCategoriaDTO::new).collect(Collectors.toList());
+    public ResponseEntity<Page<ShowCategoriaDTO>> getAll(Pageable pageable) {
+        var categorias = categoriaService.findAll(pageable);
+        var categoriasDTO = categorias.map(ShowCategoriaDTO::new);
         return ResponseEntity.ok(categoriasDTO);
     }
 

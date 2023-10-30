@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public record ItemDeCompraDTO(
-        Long id,
+        Long idItem,
         @NotNull
         Long idMaterial,
         @NotNull
@@ -25,7 +25,7 @@ public record ItemDeCompraDTO(
         String referenciaFornecedora) {
     public ItemDeCompra toModel() {
         ItemDeCompra model = new ItemDeCompra();
-        model.setId(this.id);
+        model.setId(this.idItem);
         model.setMaterial(new Material(this.idMaterial));
         model.setUndCom(this.undCom);
         model.setQuantCom(this.quantCom);
