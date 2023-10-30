@@ -5,13 +5,13 @@ import com.example.MeuAlmoxarifado.controller.dto.request.FornecedoraDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowFornecedoraDTO;
 import com.example.MeuAlmoxarifado.service.FornecedoraService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/fornecedoras")
@@ -29,9 +29,9 @@ public record FornecedoraController(FornecedoraService fornecedoraService) {
     }
 
     @GetMapping
-    public ResponseEntity<List<ShowFornecedoraDTO>> getAll() {
-        var fornecedoras = fornecedoraService.findAll();
-        var fornecedorasDTO = fornecedoras.stream().map(ShowFornecedoraDTO::new).collect(Collectors.toList());
+    public ResponseEntity<Page<ShowFornecedoraDTO>> getAll(Pageable pageable) {
+        var fornecedoras = fornecedoraService.findAll(pageable);
+        var fornecedorasDTO = fornecedoras.map(ShowFornecedoraDTO::new);
         return ResponseEntity.ok(fornecedorasDTO);
     }
 

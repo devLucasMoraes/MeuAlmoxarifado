@@ -5,10 +5,10 @@ import com.example.MeuAlmoxarifado.domain.repository.FornecedoraRepository;
 import com.example.MeuAlmoxarifado.service.FornecedoraService;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static java.util.Optional.ofNullable;
 
@@ -22,8 +22,8 @@ public class FornecedoraServiceImpl implements FornecedoraService {
     }
 
     @Transactional(readOnly = true)
-    public List<Fornecedora> findAll() {
-        return this.fornecedoraRepository.findAll();
+    public Page<Fornecedora> findAll(Pageable pageable) {
+        return this.fornecedoraRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

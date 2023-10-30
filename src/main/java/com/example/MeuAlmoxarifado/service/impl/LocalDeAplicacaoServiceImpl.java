@@ -5,10 +5,10 @@ import com.example.MeuAlmoxarifado.domain.repository.LocalDeAplicacaoRepository;
 import com.example.MeuAlmoxarifado.service.LocalDeAplicacaoService;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class LocalDeAplicacaoServiceImpl implements LocalDeAplicacaoService {
@@ -20,8 +20,8 @@ public class LocalDeAplicacaoServiceImpl implements LocalDeAplicacaoService {
     }
 
     @Transactional(readOnly = true)
-    public List<LocalDeAplicacao> findAll() {
-        return this.localDeAplicacaoRepository.findAll();
+    public Page<LocalDeAplicacao> findAll(Pageable pageable) {
+        return this.localDeAplicacaoRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

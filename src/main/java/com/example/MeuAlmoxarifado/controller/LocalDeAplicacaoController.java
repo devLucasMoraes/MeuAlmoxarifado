@@ -4,13 +4,13 @@ import com.example.MeuAlmoxarifado.controller.dto.request.LocalDeAplicacaoDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowLocalDeAplicacaoDTO;
 import com.example.MeuAlmoxarifado.service.LocalDeAplicacaoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -29,9 +29,9 @@ public record LocalDeAplicacaoController(LocalDeAplicacaoService localDeAplicaca
     }
 
     @GetMapping
-    public ResponseEntity<List<ShowLocalDeAplicacaoDTO>> getAll() {
-        var locaisDeAplicacao = localDeAplicacaoService.findAll();
-        var locaisDeAplicacaoDTO = locaisDeAplicacao.stream().map(ShowLocalDeAplicacaoDTO::new).collect(Collectors.toList());
+    public ResponseEntity<Page<ShowLocalDeAplicacaoDTO>> getAll(Pageable pageable) {
+        var locaisDeAplicacao = localDeAplicacaoService.findAll(pageable);
+        var locaisDeAplicacaoDTO = locaisDeAplicacao.map(ShowLocalDeAplicacaoDTO::new);
         return ResponseEntity.ok(locaisDeAplicacaoDTO);
     }
 

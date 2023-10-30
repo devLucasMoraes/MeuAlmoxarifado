@@ -13,7 +13,7 @@ import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 public record VinculoComFornecedorasDTO(
-        Long id,
+        Long idVinculo,
         @NotNull
         Long idFornecedora,
         @NotBlank
@@ -24,7 +24,7 @@ public record VinculoComFornecedorasDTO(
         List<ConversaoDeCompraDTO> conversoesDeCompra) {
     public VinculoMaterialComFornecedora toModel() {
         VinculoMaterialComFornecedora model = new VinculoMaterialComFornecedora();
-        model.setId(this.id);
+        model.setId(this.idVinculo);
         model.setFornecedora(new Fornecedora(this.idFornecedora));
         model.setReferenciaFornecedora(this.referenciaFornecedora);
         model.setDescricaoFornecedora(this.descricaoFornecedora);

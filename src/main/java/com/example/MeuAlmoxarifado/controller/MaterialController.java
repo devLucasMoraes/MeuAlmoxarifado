@@ -5,13 +5,13 @@ import com.example.MeuAlmoxarifado.controller.dto.request.MaterialDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowMaterialDTO;
 import com.example.MeuAlmoxarifado.service.MaterialService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/materiais")
@@ -29,9 +29,9 @@ public record MaterialController(MaterialService materialService) {
     }
 
     @GetMapping
-    public ResponseEntity<List<ShowMaterialDTO>> getAll() {
-        var materiais = materialService.findAll();
-        var materiaisDTO = materiais.stream().map(ShowMaterialDTO::new).collect(Collectors.toList());
+    public ResponseEntity<Page<ShowMaterialDTO>> getAll(Pageable pageable) {
+        var materiais = materialService.findAll(pageable);
+        var materiaisDTO = materiais.map(ShowMaterialDTO::new);
         return ResponseEntity.ok(materiaisDTO);
     }
 

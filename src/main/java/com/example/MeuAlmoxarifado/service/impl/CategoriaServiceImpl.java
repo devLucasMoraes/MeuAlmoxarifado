@@ -5,10 +5,10 @@ import com.example.MeuAlmoxarifado.domain.repository.CategoriaRepository;
 import com.example.MeuAlmoxarifado.service.CategoriaService;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static java.util.Optional.ofNullable;
 
@@ -22,8 +22,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Transactional(readOnly = true)
-    public List<Categoria> findAll() {
-        return this.categoriaRepository.findAll();
+    public Page<Categoria> findAll(Pageable pageable) {
+        return this.categoriaRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)
@@ -74,6 +74,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         this.categoriaRepository.delete(dbCategoria);
     }
 
+    @Transactional(readOnly = true)
     public Boolean existsById(Long id) {
         return this.categoriaRepository.existsById(id);
     }
