@@ -3,6 +3,7 @@ package com.example.MeuAlmoxarifado.controller;
 
 import com.example.MeuAlmoxarifado.controller.dto.request.MaterialDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowMaterialDTO;
+import com.example.MeuAlmoxarifado.controller.filter.MaterialSearchFilter;
 import com.example.MeuAlmoxarifado.service.MaterialService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,13 @@ public record MaterialController(MaterialService materialService) {
     @GetMapping
     public ResponseEntity<Page<ShowMaterialDTO>> getAll(Pageable pageable) {
         var materiais = materialService.findAll(pageable);
+        var materiaisDTO = materiais.map(ShowMaterialDTO::new);
+        return ResponseEntity.ok(materiaisDTO);
+    }
+
+    @GetMapping("query")
+    public ResponseEntity<Page<ShowMaterialDTO>> dynamicGetAll(MaterialSearchFilter filters, Pageable pageable) {
+        var materiais = materialService.dynamicFindAll(filters.toSpec(), pageable);
         var materiaisDTO = materiais.map(ShowMaterialDTO::new);
         return ResponseEntity.ok(materiaisDTO);
     }
