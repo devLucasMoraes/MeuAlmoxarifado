@@ -43,10 +43,14 @@ public class Material {
     private Categoria categoria;
 
     @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<VinculoMaterialComFornecedora> fornecedorasVinculadas;
+    private List<VinculoMaterialFornecedora> fornecedorasVinculadas;
 
     public Material(Long id) {
         this.id = id;
+    }
+
+    public void removerVinculo(VinculoMaterialFornecedora vinculo) {
+        this.fornecedorasVinculadas.remove(vinculo);
     }
 
 

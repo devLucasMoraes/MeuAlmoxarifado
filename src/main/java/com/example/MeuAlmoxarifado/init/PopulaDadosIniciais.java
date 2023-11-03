@@ -77,7 +77,7 @@ public class PopulaDadosIniciais {
 
         FornecedoraDTO canopusQuimica = new FornecedoraDTO(
                 null,
-                "68.958.487/0001-10",
+                "68958487000153",
                 "CANOPUS IND E COM DE PRODUTOS",
                 "CANOPUS QUIMICA",
                 "11 4093-8300"
@@ -85,7 +85,7 @@ public class PopulaDadosIniciais {
 
         FornecedoraDTO eurustar = new FornecedoraDTO(
                 null,
-                "XX.XXX.XXX/XXXX-XX",
+                "28859855000191",
                 "EUROSTAR LTDA",
                 "EUROSTAR",
                 "11 4093-8300"

@@ -31,6 +31,6 @@ public class ConversaoDeCompra {
 
     @ManyToOne
     @JoinColumn(name = "vinculos_materiais_fornecedoras_id")
-    private VinculoMaterialComFornecedora vinculoComFornecedoras;
+    private VinculoMaterialFornecedora vinculoComFornecedoras;
 
 }

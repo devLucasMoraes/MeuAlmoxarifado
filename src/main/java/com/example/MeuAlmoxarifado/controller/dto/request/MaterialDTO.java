@@ -23,7 +23,7 @@ public record MaterialDTO(
         @NotNull
         Long idCategoria,
         @Valid
-        List<VinculoComFornecedorasDTO> fornecedorasVinculadas) {
+        List<VinculoMaterialFornecedoraDTO> fornecedorasVinculadas) {
     public Material toModel() {
         Material model = new Material();
         model.setId(this.id);
@@ -35,7 +35,7 @@ public record MaterialDTO(
         model.setCategoria(new Categoria(this.idCategoria));
         model.setFornecedorasVinculadas(ofNullable(this.fornecedorasVinculadas)
                 .orElse(emptyList())
-                .stream().map(VinculoComFornecedorasDTO::toModel).collect(toList()));
+                .stream().map(VinculoMaterialFornecedoraDTO::toModel).collect(toList()));
         return model;
     }
 }

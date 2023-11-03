@@ -93,7 +93,7 @@ public class MaterialServiceImpl implements MaterialService {
         dbMaterial.getFornecedorasVinculadas().addAll(materialToUpdate.getFornecedorasVinculadas());
         dbMaterial.setCategoria(materialToUpdate.getCategoria());
 
-        return this.materialRepository.save(materialToUpdate);
+        return this.materialRepository.save(dbMaterial);
     }
 
     @Transactional
