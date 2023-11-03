@@ -1,0 +1,36 @@
+package com.example.MeuAlmoxarifado.controller.filter;
+
+import com.example.MeuAlmoxarifado.domain.model.Material;
+import org.springframework.data.jpa.domain.Specification;
+
+public record MaterialSearchFilter(
+        String descricao,
+
+        Long id_categoria
+) {
+    public Specification<Material> toSpec() {
+        Specification<Material> spec = Specification.where(null);
+
+        if(this.descricao != null){
+            spec = spec.and(descricaoLike(this.descricao));
+        }
+
+        if(this.id_categoria != null){
+            spec = spec.and(categoriaIdIs(this.id_categoria));
+        }
+
+        return spec;
+    }
+
+    private Specification<Material> descricaoLike(String descricao) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("descricao")),
+                        "%" + descricao.toLowerCase() + "%");
+    }
+
+    private Specification<Material> categoriaIdIs(Long id) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("categoria").get("id"), id);
+    }
+}

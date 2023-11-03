@@ -7,6 +7,7 @@ import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +28,17 @@ public class FornecedoraServiceImpl implements FornecedoraService {
     }
 
     @Transactional(readOnly = true)
+    public Page<Fornecedora> dynamicFindAll(Specification<Fornecedora> spec, Pageable pageable) {
+        return this.fornecedoraRepository.findAll(spec, pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Fornecedora findById(Long id) {
         return this.fornecedoraRepository.findById(id).orElseThrow(() -> new NotFoundException("Fornecedora"));
+    }
+
+    public Fornecedora getByCnpj(String cnpj) {
+        return this.fornecedoraRepository.getReferenceByCnpj(cnpj).orElseThrow(() -> new NotFoundException("Fornecedora"));
     }
 
     @Transactional
@@ -37,7 +47,7 @@ public class FornecedoraServiceImpl implements FornecedoraService {
         ofNullable(fornecedoraToCreate.getCnpj()).orElseThrow(() -> new BusinessException("O CNPJ da fornecedora não deve ser nulo."));
         ofNullable(fornecedoraToCreate.getRazaoSocial()).orElseThrow(() -> new BusinessException("A razão social da fornecedora não deve ser nula."));
 
-        if(fornecedoraRepository.existsByCnpj(fornecedoraToCreate.getCnpj())){
+        if (fornecedoraRepository.existsByCnpj(fornecedoraToCreate.getCnpj())) {
             throw new BusinessException("Transportadora com mesmo CNPJ já cadastrada");
         }
 
@@ -48,7 +58,7 @@ public class FornecedoraServiceImpl implements FornecedoraService {
     public Fornecedora update(Long id, Fornecedora fornecedoraToUpdate) {
         Fornecedora dbFornecedora = this.findById(id);
 
-        if(!dbFornecedora.getId().equals(fornecedoraToUpdate.getId())) {
+        if (!dbFornecedora.getId().equals(fornecedoraToUpdate.getId())) {
             throw new BusinessException("Os IDs de atualização devem ser iguais.");
         }
 

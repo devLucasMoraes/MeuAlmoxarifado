@@ -3,6 +3,7 @@ package com.example.MeuAlmoxarifado.controller;
 
 import com.example.MeuAlmoxarifado.controller.dto.request.FornecedoraDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowFornecedoraDTO;
+import com.example.MeuAlmoxarifado.controller.filter.FornecedoraSearchFilter;
 import com.example.MeuAlmoxarifado.service.FornecedoraService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -35,9 +36,22 @@ public record FornecedoraController(FornecedoraService fornecedoraService) {
         return ResponseEntity.ok(fornecedorasDTO);
     }
 
+    @GetMapping("/query")
+    public ResponseEntity<Page<ShowFornecedoraDTO>> dynamicGetAll(FornecedoraSearchFilter filter, Pageable pageable) {
+        var fornecedoras = fornecedoraService.dynamicFindAll(filter.toSpec(),pageable);
+        var fornecedorasDTO = fornecedoras.map(ShowFornecedoraDTO::new);
+        return ResponseEntity.ok(fornecedorasDTO);
+    }
+
     @GetMapping("show/{id}")
     public ResponseEntity<ShowFornecedoraDTO> getById(@PathVariable Long id){
         var fornecedora = fornecedoraService.findById(id);
+        return ResponseEntity.ok(new ShowFornecedoraDTO(fornecedora));
+    }
+
+    @GetMapping("show/cnpj/{cnpj}")
+    public ResponseEntity<ShowFornecedoraDTO> getByCnpj(@PathVariable String cnpj){
+        var fornecedora = fornecedoraService.getByCnpj(cnpj);
         return ResponseEntity.ok(new ShowFornecedoraDTO(fornecedora));
     }
 

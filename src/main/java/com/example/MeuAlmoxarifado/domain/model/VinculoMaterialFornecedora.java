@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class VinculoMaterialComFornecedora {
+public class VinculoMaterialFornecedora {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

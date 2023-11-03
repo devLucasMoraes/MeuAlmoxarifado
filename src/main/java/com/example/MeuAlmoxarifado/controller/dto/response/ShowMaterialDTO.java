@@ -17,7 +17,7 @@ public record ShowMaterialDTO(
         BigDecimal valorUnt,
         BigDecimal qtdEmEstoque,
         Long idCategoria,
-        List<ShowVinculoComFornecedorasDTO> fornecedorasVinculadas) {
+        List<ShowVinculoMaterialFornecedoraDTO> fornecedorasVinculadas) {
     public ShowMaterialDTO(Material model) {
         this(
                 model.getId(),
@@ -26,7 +26,7 @@ public record ShowMaterialDTO(
                 model.getValorUntMed(),
                 model.getQtdEmEstoque(),
                 model.getCategoria().getId(),
-                ofNullable(model.getFornecedorasVinculadas()).orElse(emptyList()).stream().map(ShowVinculoComFornecedorasDTO::new).collect(toList())
+                ofNullable(model.getFornecedorasVinculadas()).orElse(emptyList()).stream().map(ShowVinculoMaterialFornecedoraDTO::new).collect(toList())
         );
     }
 }

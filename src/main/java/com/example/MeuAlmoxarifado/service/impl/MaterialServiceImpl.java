@@ -9,6 +9,7 @@ import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,12 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Transactional(readOnly = true)
+    public Page<Material> dynamicFindAll(Specification<Material> specification, Pageable pageable) {
+
+        return this.materialRepository.findAll(specification, pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Material findById(Long id) {
         return this.materialRepository.findById(id).orElseThrow(() -> new NotFoundException("Material"));
     }
@@ -40,16 +47,16 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional
     public Material create(Material materialToCreate) {
 
-        if(!categoriaService.existsById(materialToCreate.getCategoria().getId())) {
+        if (!categoriaService.existsById(materialToCreate.getCategoria().getId())) {
             throw new NotFoundException("Categoria");
         }
 
-        if(materialRepository.existsByDescricao(materialToCreate.getDescricao())){
+        if (materialRepository.existsByDescricao(materialToCreate.getDescricao())) {
             throw new BusinessException("Material com mesma descrição já cadastrada");
         }
 
         materialToCreate.getFornecedorasVinculadas().forEach(vinculoMaterialComFornecedora -> {
-            if(!this.fornecedoraService.existsById(vinculoMaterialComFornecedora.getFornecedora().getId())) {
+            if (!this.fornecedoraService.existsById(vinculoMaterialComFornecedora.getFornecedora().getId())) {
                 throw new NotFoundException("Fornecedora");
             }
             vinculoMaterialComFornecedora.setMaterial(materialToCreate);
@@ -64,12 +71,12 @@ public class MaterialServiceImpl implements MaterialService {
     public Material update(Long id, Material materialToUpdate) {
         Material dbMaterial = this.findById(id);
 
-        if(!dbMaterial.getId().equals(materialToUpdate.getId())) {
+        if (!dbMaterial.getId().equals(materialToUpdate.getId())) {
             throw new BusinessException("Os IDs de atualização devem ser iguais.");
         }
 
         materialToUpdate.getFornecedorasVinculadas().forEach(vinculoMaterialComFornecedora -> {
-            if(!this.fornecedoraService.existsById(vinculoMaterialComFornecedora.getFornecedora().getId())) {
+            if (!this.fornecedoraService.existsById(vinculoMaterialComFornecedora.getFornecedora().getId())) {
                 throw new NotFoundException("Fornecedora");
             }
             vinculoMaterialComFornecedora.setMaterial(materialToUpdate);
@@ -79,14 +86,14 @@ public class MaterialServiceImpl implements MaterialService {
 
         dbMaterial.setDescricao(materialToUpdate.getDescricao());
         dbMaterial.setValorUntMedAuto(materialToUpdate.getValorUntMedAuto());
-        if(!materialToUpdate.getValorUntMedAuto()) {
+        if (!materialToUpdate.getValorUntMedAuto()) {
             dbMaterial.setValorUntMed(materialToUpdate.getValorUntMed());
         }
         dbMaterial.getFornecedorasVinculadas().clear();
         dbMaterial.getFornecedorasVinculadas().addAll(materialToUpdate.getFornecedorasVinculadas());
         dbMaterial.setCategoria(materialToUpdate.getCategoria());
 
-        return this.materialRepository.save(materialToUpdate);
+        return this.materialRepository.save(dbMaterial);
     }
 
     @Transactional
