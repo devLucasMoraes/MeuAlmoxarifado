@@ -13,6 +13,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static java.util.Optional.ofNullable;
 
 @Service
@@ -50,6 +52,10 @@ public class VinculoMaterialFornecedoraServiceImpl implements VinculoMaterialFor
 
         if (!this.materialService.existsById(vinculoToCreate.getMaterial().getId())) {
             throw new NotFoundException("Material");
+        }
+
+        if (this.vinculoMaterialFornecedoraRepository.existsByReferenciaFornecedoraAndFornecedora(vinculoToCreate.getReferenciaFornecedora(), vinculoToCreate.getFornecedora())) {
+            throw new BusinessException("Vínculo com mesma referência já cadastrada");
         }
 
         vinculoToCreate.getConversaoDeCompras().forEach(conversaoDeCompra -> conversaoDeCompra.setVinculoComFornecedoras(vinculoToCreate));
@@ -100,5 +106,10 @@ public class VinculoMaterialFornecedoraServiceImpl implements VinculoMaterialFor
     @Transactional(readOnly = true)
     public Page<VinculoMaterialFornecedora> dynamicFindAll(Specification<VinculoMaterialFornecedora> spec, Pageable pageable) {
         return this.vinculoMaterialFornecedoraRepository.findAll(spec, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public VinculoMaterialFornecedora dynamicFindOne(Specification<VinculoMaterialFornecedora> spec) {
+        return Optional.of(this.vinculoMaterialFornecedoraRepository.findOne(spec)).get().orElseThrow(() -> new NotFoundException("Vinculo"));
     }
 }

@@ -9,4 +9,6 @@ public interface VinculoMaterialFornecedoraService extends CrudService<Long, Vin
     Boolean existsById(Long id);
 
     Page<VinculoMaterialFornecedora> dynamicFindAll(Specification<VinculoMaterialFornecedora> spec, Pageable pageable);
+
+    VinculoMaterialFornecedora dynamicFindOne(Specification<VinculoMaterialFornecedora> spec);
 }
