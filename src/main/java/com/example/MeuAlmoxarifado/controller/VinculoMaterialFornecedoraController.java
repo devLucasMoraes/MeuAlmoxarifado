@@ -43,6 +43,12 @@ public record VinculoMaterialFornecedoraController(VinculoMaterialFornecedoraSer
         return ResponseEntity.ok(dtoPage);
     }
 
+    @GetMapping("show/query")
+    public ResponseEntity<ShowVinculoMaterialFornecedoraDTO> dynamicGetOne(VinculoMaterialFornecedoraSearchFilter filters) {
+        var vinculo = vinculoMaterialFornecedoraService.dynamicFindOne(filters.toSpec());
+        return ResponseEntity.ok(new ShowVinculoMaterialFornecedoraDTO(vinculo));
+    }
+
     @GetMapping("show/{id}")
     public ResponseEntity<ShowVinculoMaterialFornecedoraDTO> getById(@PathVariable Long id) {
         var material = vinculoMaterialFornecedoraService.findById(id);
