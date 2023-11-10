@@ -41,6 +41,12 @@ public record TransportadoraController(TransportadoraService transportadoraServi
         return ResponseEntity.ok(new ShowTransportadoraDTO(transportadora));
     }
 
+    @GetMapping("show/cnpj/{cnpj}")
+    public ResponseEntity<ShowTransportadoraDTO> getByCnpj(@PathVariable String cnpj){
+        var transportadora = transportadoraService.getByCnpj(cnpj);
+        return ResponseEntity.ok(new ShowTransportadoraDTO(transportadora));
+    }
+
 
     @PutMapping("edit/{id}")
     public  ResponseEntity<ShowTransportadoraDTO> updateById(@PathVariable Long id, @RequestBody @Valid TransportadoraDTO transportadoraDTO) {

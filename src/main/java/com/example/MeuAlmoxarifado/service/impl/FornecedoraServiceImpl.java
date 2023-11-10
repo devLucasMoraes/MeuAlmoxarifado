@@ -37,6 +37,7 @@ public class FornecedoraServiceImpl implements FornecedoraService {
         return this.fornecedoraRepository.findById(id).orElseThrow(() -> new NotFoundException("Fornecedora"));
     }
 
+    @Transactional(readOnly = true)
     public Fornecedora getByCnpj(String cnpj) {
         return this.fornecedoraRepository.getReferenceByCnpj(cnpj).orElseThrow(() -> new NotFoundException("Fornecedora"));
     }
@@ -76,6 +77,7 @@ public class FornecedoraServiceImpl implements FornecedoraService {
         this.fornecedoraRepository.delete(dbFornecedora);
     }
 
+    @Transactional(readOnly = true)
     public Boolean existsById(Long id) {
         return this.fornecedoraRepository.existsById(id);
     }
