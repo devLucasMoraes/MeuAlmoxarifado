@@ -69,4 +69,8 @@ public class TransportadoraServiceImpl implements TransportadoraService {
     public Boolean existsById(Long id) {
         return this.transportadoraRepository.existsById(id);
     }
+
+    public Transportadora getByCnpj(String cnpj) {
+        return this.transportadoraRepository.getReferenceByCnpj(cnpj).orElseThrow(() -> new NotFoundException("Transportadora"));
+    }
 }
