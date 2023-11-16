@@ -6,7 +6,7 @@ import com.example.MeuAlmoxarifado.domain.model.Unidade;
 import java.math.BigDecimal;
 
 public record ShowItemRequisicaoDTO(
-        Long id,
+        Long idItem,
         Long idMaterial,
         Unidade undConsumo,
         BigDecimal quantEntregue,

@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public record ItemRequisicaoDTO(
-        Long id,
+        Long idItem,
         @NotNull
         Long idMaterial,
         @NotNull
@@ -18,7 +18,7 @@ public record ItemRequisicaoDTO(
         BigDecimal quantEntregue) {
     public ItemRequisicao toModel() {
         ItemRequisicao model = new ItemRequisicao();
-        model.setId(this.id);
+        model.setId(this.idItem);
         model.setMaterial(new Material(this.idMaterial));
         model.setUndConsumo(this.undConsumo);
         model.setQuantEntregue(this.quantEntregue);
