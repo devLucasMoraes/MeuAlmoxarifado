@@ -7,6 +7,7 @@ import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,11 +67,18 @@ public class TransportadoraServiceImpl implements TransportadoraService {
         this.transportadoraRepository.delete(dbTransportadora);
     }
 
+    @Transactional(readOnly = true)
     public Boolean existsById(Long id) {
         return this.transportadoraRepository.existsById(id);
     }
 
+    @Transactional(readOnly = true)
     public Transportadora getByCnpj(String cnpj) {
         return this.transportadoraRepository.getReferenceByCnpj(cnpj).orElseThrow(() -> new NotFoundException("Transportadora"));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Transportadora> dynamicFindAll(Specification<Transportadora> spec, Pageable pageable) {
+        return this.transportadoraRepository.findAll(spec, pageable);
     }
 }

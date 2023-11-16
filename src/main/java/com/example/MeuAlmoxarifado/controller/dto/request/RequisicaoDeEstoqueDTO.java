@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 
 public record RequisicaoDeEstoqueDTO(
         Long id,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'XXX", locale = "pt_BR")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", locale = "pt_BR")
         LocalDateTime dataRequisicao,
         String obs,
         String ordemProducao,

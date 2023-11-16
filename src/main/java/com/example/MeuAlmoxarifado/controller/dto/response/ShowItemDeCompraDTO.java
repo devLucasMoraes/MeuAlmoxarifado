@@ -12,8 +12,8 @@ public record ShowItemDeCompraDTO(
         BigDecimal quantCom,
         BigDecimal valorUntCom,
         BigDecimal valorIpi,
-        String descricaoFornecedor,
-        String referenciaFornecedor) {
+        String descricaoFornecedora,
+        String referenciaFornecedora) {
     public ShowItemDeCompraDTO(ItemDeCompra model) {
         this(
                 model.getId(),
