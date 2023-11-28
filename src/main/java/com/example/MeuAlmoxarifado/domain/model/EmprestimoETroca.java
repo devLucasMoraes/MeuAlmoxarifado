@@ -8,16 +8,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "emprestimos")
+@Table(name = "emprestimos_e_trocas")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Emprestimo {
+public class EmprestimoETroca {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private Tipo tipo;
 
     private LocalDateTime data;
 
@@ -29,6 +32,6 @@ public class Emprestimo {
     @Enumerated(EnumType.STRING)
     private Situacao situacao;
 
-    @OneToMany(mappedBy = "emprestimo", cascade = CascadeType.ALL)
-    private List<ItemEmprestimo> itensEmprestimo;
+    @OneToMany(mappedBy = "emprestimoETroca", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<ItemEmprestimoETroca> itensEmprestimo;
 }

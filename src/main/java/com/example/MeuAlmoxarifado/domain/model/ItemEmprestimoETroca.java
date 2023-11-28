@@ -13,26 +13,26 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class ItemEmprestimo {
+public class ItemEmprestimoETroca {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "movimentacoes_id")
-    private Emprestimo emprestimo;
+    @JoinColumn(name = "emprestimos_e_trocas_id")
+    private EmprestimoETroca emprestimoETroca;
 
     @ManyToOne
     @JoinColumn(name = "materiais_id")
     private Material material;
 
-    @ManyToOne
-    @JoinColumn(name = "transacoes_saida_id")
-    private Fornecedora fornecedora;
-
     @JoinColumn(name = "quant")
     private BigDecimal quantEnt;
+
+    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "unidade")
+    private Unidade undidade;
 
     @JoinColumn(name = "valor_unt")
     private BigDecimal valorUnt;
