@@ -24,10 +24,10 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
     }
 
     @Transactional
-    public void registrarEntrada(Movimentacao entrada) {
+    public void registrarEntradaAoEstoqueFisico(Movimentacao entrada) {
         Material dbMaterial = this.materialService.findById(entrada.getMaterial().getId());
 
-        BigDecimal qtdEmEstoque = dbMaterial.getQtdEmEstoque();
+        BigDecimal qtdEmEstoque = dbMaterial.getQtdEmEstoqueFisico();
         BigDecimal valorUntMed = dbMaterial.getValorUntMed();
         BigDecimal valorTotalDoEstoque = qtdEmEstoque.multiply(valorUntMed);
 
@@ -39,17 +39,17 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
             dbMaterial.setValorUntMed(valorUnt);
         }
 
-        dbMaterial.setQtdEmEstoque(qtdEmEstoqueAtualizada);
+        dbMaterial.setQtdEmEstoqueFisico(qtdEmEstoqueAtualizada);
 
 
         movimentacaoRepository.saveAndFlush(entrada);
     }
 
     @Transactional
-    public void registrarSaida(Movimentacao saida) {
+    public void registrarSaidaAoEstoqueFisico(Movimentacao saida) {
         Material dbMaterial = this.materialService.findById(saida.getMaterial().getId());
-        BigDecimal qtdEmEstoque = dbMaterial.getQtdEmEstoque();
-        dbMaterial.setQtdEmEstoque(qtdEmEstoque.subtract(saida.getQuantidade()));
+        BigDecimal qtdEmEstoque = dbMaterial.getQtdEmEstoqueFisico();
+        dbMaterial.setQtdEmEstoqueFisico(qtdEmEstoque.subtract(saida.getQuantidade()));
 
         movimentacaoRepository.saveAndFlush(saida);
     }

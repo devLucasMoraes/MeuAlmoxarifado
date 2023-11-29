@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @Service
@@ -59,7 +58,7 @@ public class EmprestimoETrocaServiceImpl implements EmprestimoETrocaService {
             if(emprestimoETrocaToCreate.getTipo().equals(Tipo.SAIDA)){
                 Movimentacao saida = criarMovimentacaoSaida(item, "Emprestando materail a: Forecedora id: %s"
                         .formatted(emprestimoETrocaToCreate.getFornecedora().getId()));
-                this.movimentacaoService.registrarSaida(saida);
+                this.movimentacaoService.registrarSaidaAoEstoqueFisico(saida);
 
                 item.setValorUnt(saida.getValorUnt());
             }
@@ -67,7 +66,7 @@ public class EmprestimoETrocaServiceImpl implements EmprestimoETrocaService {
             if(emprestimoETrocaToCreate.getTipo().equals(Tipo.ENTRADA)){
                 Movimentacao entrada = criarMovimentacaoEntrada(item, "Forecedora id: %s, Emprestou material"
                         .formatted(emprestimoETrocaToCreate.getFornecedora().getId()));
-                this.movimentacaoService.registrarEntrada(entrada);
+                this.movimentacaoService.registrarEntradaAoEstoqueFisico(entrada);
 
                 item.setValorUnt(entrada.getValorUnt());
             }
