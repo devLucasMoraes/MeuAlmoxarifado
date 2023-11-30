@@ -6,6 +6,6 @@ public interface MovimentacaoService {
 
     void registrarEntradaAoEstoqueFisico(Movimentacao entrada);
 
-    void registrarSaidaAoEstoqueFisico(Movimentacao saida);
+    void registrarSaidaDoEstoqueFisico(Movimentacao saida);
 
 }

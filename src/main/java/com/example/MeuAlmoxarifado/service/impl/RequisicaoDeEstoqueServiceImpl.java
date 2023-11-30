@@ -68,7 +68,7 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
 
             Movimentacao saida = criarMovimentacaoSaida(itemRequisicao, "Requisição de estoque. Local id: %s , Requisitante id: %s"
                     .formatted(requisicaoToCreate.getLocalDeAplicacao().getId(), requisicaoToCreate.getRequisitante().getId()));
-            this.movimentacaoService.registrarSaidaAoEstoqueFisico(saida);
+            this.movimentacaoService.registrarSaidaDoEstoqueFisico(saida);
 
             itemRequisicao.setValorUntEnt(saida.getValorUnt());
 
@@ -109,7 +109,7 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
 
             Movimentacao saida = criarMovimentacaoSaida(itemRequisicao, "Alteração de Requisiçao id : %s"
                     .formatted(dbRequisicaoDeEstoque.getId()));
-            this.movimentacaoService.registrarSaidaAoEstoqueFisico(saida);
+            this.movimentacaoService.registrarSaidaDoEstoqueFisico(saida);
 
             itemRequisicao.setValorUntEnt(saida.getValorUnt());
         });

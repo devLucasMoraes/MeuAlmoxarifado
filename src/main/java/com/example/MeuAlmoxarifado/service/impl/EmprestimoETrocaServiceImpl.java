@@ -58,7 +58,7 @@ public class EmprestimoETrocaServiceImpl implements EmprestimoETrocaService {
             if(emprestimoETrocaToCreate.getTipo().equals(Tipo.SAIDA)){
                 Movimentacao saida = criarMovimentacaoSaida(item, "Emprestando materail a: Forecedora id: %s"
                         .formatted(emprestimoETrocaToCreate.getFornecedora().getId()));
-                this.movimentacaoService.registrarSaidaAoEstoqueFisico(saida);
+                this.movimentacaoService.registrarSaidaDoEstoqueFisico(saida);
 
                 item.setValorUnt(saida.getValorUnt());
             }

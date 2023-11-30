@@ -93,7 +93,7 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
 
         dbNfeDeCompra.getItens().forEach(itemDeCompra -> {
             Movimentacao saida = criarMovimentacaoSaida(itemDeCompra, nfeDeCompraToUpdate, "Alteração de NFe id : %s".formatted(dbNfeDeCompra.getId()));
-            this.movimentacaoService.registrarSaidaAoEstoqueFisico(saida);
+            this.movimentacaoService.registrarSaidaDoEstoqueFisico(saida);
         });
 
         nfeDeCompraToUpdate.getItens().forEach(itemDeCompra -> {
@@ -132,7 +132,7 @@ public class NfeDeCompraServiceImpl implements NfeDeCompraService {
         NfeDeCompra dbNfeDeCompra = this.findById(id);
         dbNfeDeCompra.getItens().forEach(itemDeCompra -> {
             Movimentacao saida = criarMovimentacaoSaida(itemDeCompra, dbNfeDeCompra, "Cancelamento de NFe id : %s".formatted(dbNfeDeCompra.getId()));
-            this.movimentacaoService.registrarSaidaAoEstoqueFisico(saida);
+            this.movimentacaoService.registrarSaidaDoEstoqueFisico(saida);
         });
 
         this.nfeDeCompraRepository.delete(dbNfeDeCompra);

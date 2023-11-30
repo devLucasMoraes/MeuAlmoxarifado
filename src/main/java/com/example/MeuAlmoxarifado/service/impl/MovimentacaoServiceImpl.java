@@ -46,7 +46,7 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
     }
 
     @Transactional
-    public void registrarSaidaAoEstoqueFisico(Movimentacao saida) {
+    public void registrarSaidaDoEstoqueFisico(Movimentacao saida) {
         Material dbMaterial = this.materialService.findById(saida.getMaterial().getId());
         BigDecimal qtdEmEstoque = dbMaterial.getQtdEmEstoqueFisico();
         dbMaterial.setQtdEmEstoqueFisico(qtdEmEstoque.subtract(saida.getQuantidade()));
