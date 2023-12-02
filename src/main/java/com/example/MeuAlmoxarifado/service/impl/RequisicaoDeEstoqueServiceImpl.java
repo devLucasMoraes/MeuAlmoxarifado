@@ -68,7 +68,7 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
 
             Movimentacao saida = criarMovimentacaoSaida(itemRequisicao, "Requisição de estoque. Local id: %s , Requisitante id: %s"
                     .formatted(requisicaoToCreate.getLocalDeAplicacao().getId(), requisicaoToCreate.getRequisitante().getId()));
-            this.movimentacaoService.registrarSaida(saida);
+            this.movimentacaoService.registrarSaidaDoEstoqueFisico(saida);
 
             itemRequisicao.setValorUntEnt(saida.getValorUnt());
 
@@ -98,7 +98,7 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
 
         dbRequisicaoDeEstoque.getItens().forEach(itemRequisicao -> {
             Movimentacao entrada = criarMovimentacaoEntrada(itemRequisicao, "Alteração de Requisiçao id : %s".formatted(dbRequisicaoDeEstoque.getId()));
-            this.movimentacaoService.registrarEntrada(entrada);
+            this.movimentacaoService.registrarEntradaAoEstoqueFisico(entrada);
         });
 
         requisicaoToUpdate.getItens().forEach(itemRequisicao -> {
@@ -109,7 +109,7 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
 
             Movimentacao saida = criarMovimentacaoSaida(itemRequisicao, "Alteração de Requisiçao id : %s"
                     .formatted(dbRequisicaoDeEstoque.getId()));
-            this.movimentacaoService.registrarSaida(saida);
+            this.movimentacaoService.registrarSaidaDoEstoqueFisico(saida);
 
             itemRequisicao.setValorUntEnt(saida.getValorUnt());
         });
@@ -134,7 +134,7 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
 
         dbRequisicaoDeEstoque.getItens().forEach(itemRequisicao -> {
             Movimentacao entrada = criarMovimentacaoEntrada(itemRequisicao, "Cancelamento de Requisiçao id : %s".formatted(dbRequisicaoDeEstoque.getId()));
-            this.movimentacaoService.registrarEntrada(entrada);
+            this.movimentacaoService.registrarEntradaAoEstoqueFisico(entrada);
         });
 
         this.requisicaoDeEstoqueRepository.delete(dbRequisicaoDeEstoque);

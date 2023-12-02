@@ -29,8 +29,11 @@ public class Material {
     @JoinColumn(name = "valor_unt_med")
     private BigDecimal valorUntMed = BigDecimal.ZERO;
 
-    @JoinColumn(name = "qtd_em_estoque")
-    private BigDecimal qtdEmEstoque = BigDecimal.ZERO;
+    @JoinColumn(name = "qtd_em_estoque_fisico")
+    private BigDecimal qtdEmEstoqueFisico = BigDecimal.ZERO;
+
+    @JoinColumn(name = "qtd_em_estoque_total")
+    private BigDecimal qtdEmEstoqueTotal = BigDecimal.ZERO;
 
     @JoinColumn(name = "qtd_a_receber")
     private BigDecimal qtdAReceber = BigDecimal.ZERO;

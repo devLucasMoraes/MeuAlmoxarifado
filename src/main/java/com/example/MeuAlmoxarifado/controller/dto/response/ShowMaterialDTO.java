@@ -24,7 +24,7 @@ public record ShowMaterialDTO(
                 model.getDescricao(),
                 model.getValorUntMedAuto(),
                 model.getValorUntMed(),
-                model.getQtdEmEstoque(),
+                model.getQtdEmEstoqueFisico(),
                 model.getCategoria().getId(),
                 ofNullable(model.getFornecedorasVinculadas()).orElse(emptyList()).stream().map(ShowVinculoMaterialFornecedoraDTO::new).collect(toList())
         );

@@ -4,8 +4,8 @@ import com.example.MeuAlmoxarifado.domain.model.Movimentacao;
 
 public interface MovimentacaoService {
 
-    void registrarEntrada(Movimentacao entrada);
+    void registrarEntradaAoEstoqueFisico(Movimentacao entrada);
 
-    void registrarSaida(Movimentacao saida);
+    void registrarSaidaDoEstoqueFisico(Movimentacao saida);
 
 }

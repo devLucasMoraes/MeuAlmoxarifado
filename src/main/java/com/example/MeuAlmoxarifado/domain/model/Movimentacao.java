@@ -36,7 +36,6 @@ public class Movimentacao {
 
     private BigDecimal valorTotal;
 
-
     private String justificativa;
 
 
