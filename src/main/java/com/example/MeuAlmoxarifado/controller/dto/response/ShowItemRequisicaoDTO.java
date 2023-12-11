@@ -15,9 +15,9 @@ public record ShowItemRequisicaoDTO(
         this(
                 model.getId(),
                 model.getMaterial().getId(),
-                model.getUndConsumo(),
-                model.getQuantEntregue(),
-                model.getValorUntEnt()
+                model.getUnidade(),
+                model.getQuantidade(),
+                model.getValorUnitario()
         );
     }
 }

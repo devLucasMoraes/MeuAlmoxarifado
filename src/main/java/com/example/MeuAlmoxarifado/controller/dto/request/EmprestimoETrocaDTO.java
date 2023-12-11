@@ -29,6 +29,7 @@ public record EmprestimoETrocaDTO(
         @Valid
         @NotNull
         List<ItemEmprestimoETrocaDTO> itens) {
+
     public EmprestimoETroca toModel() {
         EmprestimoETroca model = new EmprestimoETroca();
         model.setId(this.id);
@@ -52,7 +53,7 @@ public record EmprestimoETrocaDTO(
         model.setSituacao(this.situacao);
         model.setItensEmprestimo(ofNullable(this.itens)
                 .orElse(emptyList())
-                .stream().map(ItemEmprestimoETrocaDTO::toModel).collect(toList()));
+                .stream().map(ItemEmprestimoETrocaDTO::toNewModel).collect(toList()));
         return model;
     }
 

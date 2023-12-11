@@ -1,7 +1,6 @@
 package com.example.MeuAlmoxarifado.controller.dto.request;
 
 import com.example.MeuAlmoxarifado.domain.model.ItemEmprestimoETroca;
-import com.example.MeuAlmoxarifado.domain.model.ItemRequisicao;
 import com.example.MeuAlmoxarifado.domain.model.Material;
 import com.example.MeuAlmoxarifado.domain.model.Unidade;
 import jakarta.validation.constraints.NotNull;
@@ -22,18 +21,18 @@ public record ItemEmprestimoETrocaDTO(
         ItemEmprestimoETroca model = new ItemEmprestimoETroca();
         model.setId(this.idItem);
         model.setMaterial(new Material(this.idMaterial));
-        model.setUndidade(this.unidade);
-        model.setQuantEnt(this.quantEntregue);
-        model.setValorUnt(this.valorUnt);
+        model.setUnidade(this.unidade);
+        model.setQuantidade(this.quantEntregue);
+        model.setValorUnitario(this.valorUnt);
         return model;
     }
 
     public ItemEmprestimoETroca toNewModel() {
         ItemEmprestimoETroca model = new ItemEmprestimoETroca();
         model.setMaterial(new Material(this.idMaterial));
-        model.setUndidade(this.unidade);
-        model.setQuantEnt(this.quantEntregue);
-        model.setValorUnt(this.valorUnt);
+        model.setUnidade(this.unidade);
+        model.setQuantidade(this.quantEntregue);
+        model.setValorUnitario(this.valorUnt);
         return model;
     }
 }

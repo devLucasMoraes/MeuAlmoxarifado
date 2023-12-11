@@ -20,16 +20,16 @@ public record ItemRequisicaoDTO(
         ItemRequisicao model = new ItemRequisicao();
         model.setId(this.idItem);
         model.setMaterial(new Material(this.idMaterial));
-        model.setUndConsumo(this.undConsumo);
-        model.setQuantEntregue(this.quantEntregue);
+        model.setUnidade(this.undConsumo);
+        model.setQuantidade(this.quantEntregue);
         return model;
     }
 
     public ItemRequisicao toNewModel() {
         ItemRequisicao model = new ItemRequisicao();
         model.setMaterial(new Material(this.idMaterial));
-        model.setUndConsumo(this.undConsumo);
-        model.setQuantEntregue(this.quantEntregue);
+        model.setUnidade(this.undConsumo);
+        model.setQuantidade(this.quantEntregue);
         return model;
     }
 }

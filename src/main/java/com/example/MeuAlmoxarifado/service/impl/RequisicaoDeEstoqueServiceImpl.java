@@ -1,6 +1,8 @@
 package com.example.MeuAlmoxarifado.service.impl;
 
-import com.example.MeuAlmoxarifado.domain.model.*;
+import com.example.MeuAlmoxarifado.domain.model.ItemRequisicao;
+import com.example.MeuAlmoxarifado.domain.model.Movimentacao;
+import com.example.MeuAlmoxarifado.domain.model.RequisicaoDeEstoque;
 import com.example.MeuAlmoxarifado.domain.repository.RequisicaoDeEstoqueRepository;
 import com.example.MeuAlmoxarifado.service.*;
 import com.example.MeuAlmoxarifado.service.exception.BusinessException;
@@ -11,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDateTime;
 
 @Service
 public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueService {
@@ -27,15 +27,15 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
 
     private final MovimentacaoService movimentacaoService;
 
-    private final ConversaoDeConsumoService conversaoDeConsumoService;
+    private final MovimentacaoFactory movimentacaoFactory;
 
-    public RequisicaoDeEstoqueServiceImpl(RequisicaoDeEstoqueRepository requisicaoDeEstoqueRepository, LocalDeAplicacaoService localDeAplicacaoService, RequisitanteService requisitanteService, MaterialService materialService, MovimentacaoService movimentacaoService, ConversaoDeConsumoService conversaoDeConsumoService) {
+    public RequisicaoDeEstoqueServiceImpl(RequisicaoDeEstoqueRepository requisicaoDeEstoqueRepository, LocalDeAplicacaoService localDeAplicacaoService, RequisitanteService requisitanteService, MaterialService materialService, MovimentacaoService movimentacaoService, ConversaoDeConsumoService conversaoDeConsumoService, MovimentacaoFactory movimentacaoFactory) {
         this.requisicaoDeEstoqueRepository = requisicaoDeEstoqueRepository;
         this.localDeAplicacaoService = localDeAplicacaoService;
         this.requisitanteService = requisitanteService;
         this.materialService = materialService;
         this.movimentacaoService = movimentacaoService;
-        this.conversaoDeConsumoService = conversaoDeConsumoService;
+        this.movimentacaoFactory = movimentacaoFactory;
     }
 
     @Transactional(readOnly = true)
@@ -66,11 +66,11 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
             itemRequisicao.setRequisicaoDeEstoque(requisicaoToCreate);
 
 
-            Movimentacao saida = criarMovimentacaoSaida(itemRequisicao, "Requisição de estoque. Local id: %s , Requisitante id: %s"
-                    .formatted(requisicaoToCreate.getLocalDeAplicacao().getId(), requisicaoToCreate.getRequisitante().getId()));
+            Movimentacao saida = this.movimentacaoFactory.criarMovimentacaoSaida(itemRequisicao,
+                    "Requisição de estoque. Local id: %s , Requisitante id: %s".formatted(requisicaoToCreate.getLocalDeAplicacao().getId(), requisicaoToCreate.getRequisitante().getId()));
             this.movimentacaoService.registrarSaidaDoEstoqueFisico(saida);
 
-            itemRequisicao.setValorUntEnt(saida.getValorUnt());
+            itemRequisicao.setValorUnitario(saida.getValorUnt());
 
         });
 
@@ -97,7 +97,8 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
         }
 
         dbRequisicaoDeEstoque.getItens().forEach(itemRequisicao -> {
-            Movimentacao entrada = criarMovimentacaoEntrada(itemRequisicao, "Alteração de Requisiçao id : %s".formatted(dbRequisicaoDeEstoque.getId()));
+            Movimentacao entrada = this.movimentacaoFactory.criarMovimentacaoEntrada(itemRequisicao,
+                    "Alteração de Requisiçao id : %s".formatted(dbRequisicaoDeEstoque.getId()));
             this.movimentacaoService.registrarEntradaAoEstoqueFisico(entrada);
         });
 
@@ -107,11 +108,11 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
             }
             itemRequisicao.setRequisicaoDeEstoque(requisicaoToUpdate);
 
-            Movimentacao saida = criarMovimentacaoSaida(itemRequisicao, "Alteração de Requisiçao id : %s"
-                    .formatted(dbRequisicaoDeEstoque.getId()));
+            Movimentacao saida = this.movimentacaoFactory.criarMovimentacaoSaida(itemRequisicao,
+                    "Alteração de Requisiçao id : %s".formatted(dbRequisicaoDeEstoque.getId()));
             this.movimentacaoService.registrarSaidaDoEstoqueFisico(saida);
 
-            itemRequisicao.setValorUntEnt(saida.getValorUnt());
+            itemRequisicao.setValorUnitario(saida.getValorUnt());
         });
 
         BigDecimal valorTotalItens = requisicaoToUpdate.getItens().stream().map(ItemRequisicao::getValorTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -133,47 +134,12 @@ public class RequisicaoDeEstoqueServiceImpl implements RequisicaoDeEstoqueServic
         RequisicaoDeEstoque dbRequisicaoDeEstoque = this.findById(id);
 
         dbRequisicaoDeEstoque.getItens().forEach(itemRequisicao -> {
-            Movimentacao entrada = criarMovimentacaoEntrada(itemRequisicao, "Cancelamento de Requisiçao id : %s".formatted(dbRequisicaoDeEstoque.getId()));
+            Movimentacao entrada = this.movimentacaoFactory.criarMovimentacaoEntrada(itemRequisicao,
+                    "Cancelamento de Requisiçao id : %s".formatted(dbRequisicaoDeEstoque.getId()));
             this.movimentacaoService.registrarEntradaAoEstoqueFisico(entrada);
         });
 
         this.requisicaoDeEstoqueRepository.delete(dbRequisicaoDeEstoque);
     }
 
-    private Movimentacao criarMovimentacaoSaida(ItemRequisicao itemRequisicao, String justificativa) {
-        Material dbMaterial = this.materialService.findById(itemRequisicao.getMaterial().getId());
-
-        BigDecimal qtdConvertida = this.conversaoDeConsumoService.coverterQuantidadeParaUndidadeDeEstoque(itemRequisicao, dbMaterial);
-        BigDecimal valorTotalEntregue = dbMaterial.getValorUntMed().multiply(itemRequisicao.getQuantEntregue());
-
-        Movimentacao saida = new Movimentacao();
-        saida.setTipo(Tipo.SAIDA);
-        saida.setMaterial(dbMaterial);
-        saida.setData(LocalDateTime.now());
-        saida.setQuantidade(qtdConvertida);
-        saida.setUnidade(dbMaterial.getCategoria().getUndEstoque());
-        saida.setValorUnt(dbMaterial.getValorUntMed());
-        saida.setValorTotal(valorTotalEntregue);
-        saida.setJustificativa(justificativa);
-        return saida;
-    }
-
-    private Movimentacao criarMovimentacaoEntrada(ItemRequisicao itemRequisicao, String justificativa) {
-        Material dbMaterial = this.materialService.findById(itemRequisicao.getMaterial().getId());
-
-        BigDecimal qtdConvertida = this.conversaoDeConsumoService.coverterQuantidadeParaUndidadeDeEstoque(itemRequisicao, dbMaterial);
-        BigDecimal valorTotalEntregue = itemRequisicao.getValorUntEnt().multiply(itemRequisicao.getQuantEntregue());
-        BigDecimal valorUnt = valorTotalEntregue.divide(qtdConvertida,4, RoundingMode.HALF_UP);
-
-        Movimentacao entrada = new Movimentacao();
-        entrada.setTipo(Tipo.ENTRADA);
-        entrada.setMaterial(dbMaterial);
-        entrada.setData(LocalDateTime.now());
-        entrada.setQuantidade(qtdConvertida);
-        entrada.setUnidade(dbMaterial.getCategoria().getUndEstoque());
-        entrada.setValorUnt(valorUnt);
-        entrada.setValorTotal(valorTotalEntregue);
-        entrada.setJustificativa(justificativa);
-        return entrada;
-    }
 }

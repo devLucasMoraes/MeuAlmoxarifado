@@ -2,10 +2,7 @@ package com.example.MeuAlmoxarifado.service.impl;
 
 import com.example.MeuAlmoxarifado.domain.model.*;
 import com.example.MeuAlmoxarifado.domain.repository.EmprestimoETrocaRepository;
-import com.example.MeuAlmoxarifado.service.EmprestimoETrocaService;
-import com.example.MeuAlmoxarifado.service.FornecedoraService;
-import com.example.MeuAlmoxarifado.service.MaterialService;
-import com.example.MeuAlmoxarifado.service.MovimentacaoService;
+import com.example.MeuAlmoxarifado.service.*;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Service
 public class EmprestimoETrocaServiceImpl implements EmprestimoETrocaService {
@@ -26,11 +22,14 @@ public class EmprestimoETrocaServiceImpl implements EmprestimoETrocaService {
 
     private final MovimentacaoService movimentacaoService;
 
-    public EmprestimoETrocaServiceImpl(EmprestimoETrocaRepository emprestimoETrocaRepository, FornecedoraService fornecedoraService, MaterialService materialService, MovimentacaoService movimentacaoService) {
+    private final MovimentacaoFactory movimentacaoFactory;
+
+    public EmprestimoETrocaServiceImpl(EmprestimoETrocaRepository emprestimoETrocaRepository, FornecedoraService fornecedoraService, MaterialService materialService, MovimentacaoService movimentacaoService, MovimentacaoFactory movimentacaoFactory) {
         this.emprestimoETrocaRepository = emprestimoETrocaRepository;
         this.fornecedoraService = fornecedoraService;
         this.materialService = materialService;
         this.movimentacaoService = movimentacaoService;
+        this.movimentacaoFactory = movimentacaoFactory;
     }
 
     @Transactional(readOnly = true)
@@ -40,7 +39,7 @@ public class EmprestimoETrocaServiceImpl implements EmprestimoETrocaService {
 
     @Transactional(readOnly = true)
     public EmprestimoETroca findById(Long id) {
-        return this.emprestimoETrocaRepository.findById(id).orElseThrow(() -> new NotFoundException("Emprestimo"));
+        return this.emprestimoETrocaRepository.findById(id).orElseThrow(() -> new NotFoundException("Empréstimo"));
     }
 
     @Transactional
@@ -56,25 +55,25 @@ public class EmprestimoETrocaServiceImpl implements EmprestimoETrocaService {
             item.setEmprestimoETroca(emprestimoETrocaToCreate);
 
             if(emprestimoETrocaToCreate.getTipo().equals(Tipo.SAIDA)){
-                Movimentacao saida = criarMovimentacaoSaida(item, "Emprestando materail a: Forecedora id: %s"
-                        .formatted(emprestimoETrocaToCreate.getFornecedora().getId()));
+                Movimentacao saida = this.movimentacaoFactory.criarMovimentacaoSaida(item,
+                        "Saída de material referente a empréstimo à: Fornecedora id: %s".formatted(emprestimoETrocaToCreate.getFornecedora().getId()));
                 this.movimentacaoService.registrarSaidaDoEstoqueFisico(saida);
 
-                item.setValorUnt(saida.getValorUnt());
+                item.setValorUnitario(saida.getValorUnt());
             }
 
             if(emprestimoETrocaToCreate.getTipo().equals(Tipo.ENTRADA)){
-                Movimentacao entrada = criarMovimentacaoEntrada(item, "Forecedora id: %s, Emprestou material"
-                        .formatted(emprestimoETrocaToCreate.getFornecedora().getId()));
+                Movimentacao entrada = this.movimentacaoFactory.criarMovimentacaoEntrada(item,
+                        "Entrada de material referente a empréstimo da Fornecedora id: %s".formatted(emprestimoETrocaToCreate.getFornecedora().getId()));
                 this.movimentacaoService.registrarEntradaAoEstoqueFisico(entrada);
 
-                item.setValorUnt(entrada.getValorUnt());
+                item.setValorUnitario(entrada.getValorUnt());
             }
 
 
         });
 
-        BigDecimal valorTotalItens = emprestimoETrocaToCreate.getItensEmprestimo().stream().map(ItemEmprestimoETroca::getValorUnt).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal valorTotalItens = emprestimoETrocaToCreate.getItensEmprestimo().stream().map(ItemEmprestimoETroca::getValorUnitario).reduce(BigDecimal.ZERO, BigDecimal::add);
         emprestimoETrocaToCreate.setValorTotal(valorTotalItens);
 
         return this.emprestimoETrocaRepository.save(emprestimoETrocaToCreate);
@@ -88,36 +87,4 @@ public class EmprestimoETrocaServiceImpl implements EmprestimoETrocaService {
 
     }
 
-    private Movimentacao criarMovimentacaoSaida(ItemEmprestimoETroca item, String justificativa) {
-        Material dbMaterial = this.materialService.findById(item.getMaterial().getId());
-
-        BigDecimal valorTotalEntregue = dbMaterial.getValorUntMed().multiply(item.getQuantEnt());
-
-        Movimentacao saida = new Movimentacao();
-        saida.setTipo(Tipo.SAIDA);
-        saida.setMaterial(dbMaterial);
-        saida.setData(LocalDateTime.now());
-        saida.setQuantidade(item.getQuantEnt());
-        saida.setUnidade(dbMaterial.getCategoria().getUndEstoque());
-        saida.setValorUnt(dbMaterial.getValorUntMed());
-        saida.setValorTotal(valorTotalEntregue);
-        saida.setJustificativa(justificativa);
-        return saida;
-    }
-
-    private Movimentacao criarMovimentacaoEntrada(ItemEmprestimoETroca item, String justificativa) {
-        Material dbMaterial = this.materialService.findById(item.getMaterial().getId());
-
-
-        Movimentacao entrada = new Movimentacao();
-        entrada.setTipo(Tipo.ENTRADA);
-        entrada.setMaterial(dbMaterial);
-        entrada.setData(LocalDateTime.now());
-        entrada.setQuantidade(item.getQuantEnt());
-        entrada.setUnidade(dbMaterial.getCategoria().getUndEstoque());
-        entrada.setValorUnt(BigDecimal.ZERO);
-        entrada.setValorTotal(BigDecimal.ZERO);
-        entrada.setJustificativa(justificativa);
-        return entrada;
-    }
 }
