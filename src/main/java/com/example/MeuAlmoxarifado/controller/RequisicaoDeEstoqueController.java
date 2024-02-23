@@ -19,7 +19,7 @@ import java.net.URI;
 public record RequisicaoDeEstoqueController(RequisicaoDeEstoqueService requisicaoDeEstoqueService) {
 
 
-    @PostMapping("new")
+    @PostMapping("create")
     public ResponseEntity<ShowRequisicaoDeEstoqueDTO> create(@RequestBody @Valid RequisicaoDeEstoqueDTO requisicaoDeEstoqueDTO) {
         var requisicaoDeEstoque = requisicaoDeEstoqueService.create(requisicaoDeEstoqueDTO.toNewModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()

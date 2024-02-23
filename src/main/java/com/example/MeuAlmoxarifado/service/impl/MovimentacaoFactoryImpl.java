@@ -90,27 +90,27 @@ public class MovimentacaoFactoryImpl implements MovimentacaoFactory {
         return entrada;
     }
 
-    public Movimentacao criarMovimentacaoSaida(ItemEmprestimoETroca itemEmprestimoETroca, String justificativa) {
-        Material dbMaterial = this.materialService.findById(itemEmprestimoETroca.getMaterial().getId());
+    public Movimentacao criarMovimentacaoSaida(BaseItem baseItem, String justificativa) {
+        Material dbMaterial = this.materialService.findById(baseItem.getMaterial().getId());
 
-        BigDecimal valorTotal = getValorTotal(itemEmprestimoETroca, dbMaterial);
+        BigDecimal valorTotal = getValorTotal(baseItem, dbMaterial);
 
         BigDecimal valorUnitario = dbMaterial.getValorUntMed();
 
         Movimentacao saida = criarMovimentacaoBase(dbMaterial, Tipo.SAIDA,
-                itemEmprestimoETroca.getQuantidade(), valorUnitario,
+                baseItem.getQuantidade(), valorUnitario,
                 valorTotal, justificativa);
 
         return saida;
 
     }
 
-    public Movimentacao criarMovimentacaoEntrada(ItemEmprestimoETroca itemEmprestimoETroca, String justificativa) {
-        Material dbMaterial = this.materialService.findById(itemEmprestimoETroca.getMaterial().getId());
+    public Movimentacao criarMovimentacaoEntrada(BaseItem baseItem, String justificativa) {
+        Material dbMaterial = this.materialService.findById(baseItem.getMaterial().getId());
 
         Movimentacao entrada = criarMovimentacaoBase(dbMaterial, Tipo.ENTRADA,
-                itemEmprestimoETroca.getQuantidade(), BigDecimal.ZERO,
-                BigDecimal.ZERO, justificativa);
+                baseItem.getQuantidade(), baseItem.getValorUnitario(),
+                baseItem.getValorTotal(), justificativa);
 
         return entrada;
     }

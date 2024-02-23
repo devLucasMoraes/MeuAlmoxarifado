@@ -12,7 +12,7 @@ public interface MovimentacaoFactory {
 
     Movimentacao criarMovimentacaoEntrada(ItemRequisicao itemRequisicao, String justificativa);
 
-    Movimentacao criarMovimentacaoSaida(ItemEmprestimoETroca itemEmprestimoETroca, String justificativa);
+    Movimentacao criarMovimentacaoSaida(BaseItem itemEmprestimoAReceber, String justificativa);
 
-    Movimentacao criarMovimentacaoEntrada(ItemEmprestimoETroca itemEmprestimoETroca, String justificativa);
+    Movimentacao criarMovimentacaoEntrada(BaseItem itemEmprestimoAReceber, String justificativa);
 }

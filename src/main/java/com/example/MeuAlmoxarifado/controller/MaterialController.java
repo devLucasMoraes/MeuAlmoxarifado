@@ -2,6 +2,7 @@ package com.example.MeuAlmoxarifado.controller;
 
 
 import com.example.MeuAlmoxarifado.controller.dto.request.MaterialDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.AutoCompleteDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowMaterialDTO;
 import com.example.MeuAlmoxarifado.controller.filter.MaterialSearchFilter;
 import com.example.MeuAlmoxarifado.service.MaterialService;
@@ -19,7 +20,7 @@ import java.net.URI;
 @CrossOrigin
 public record MaterialController(MaterialService materialService) {
 
-    @PostMapping("new")
+    @PostMapping("create")
     public ResponseEntity<ShowMaterialDTO> create(@RequestBody @Valid MaterialDTO materialDTO) {
         var material = materialService.create(materialDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -40,6 +41,13 @@ public record MaterialController(MaterialService materialService) {
     public ResponseEntity<Page<ShowMaterialDTO>> dynamicGetAll(MaterialSearchFilter filters, Pageable pageable) {
         var materiais = materialService.dynamicFindAll(filters.toSpec(), pageable);
         var materiaisDTO = materiais.map(ShowMaterialDTO::new);
+        return ResponseEntity.ok(materiaisDTO);
+    }
+
+    @GetMapping("autocomplete")
+    public ResponseEntity<Page<AutoCompleteDTO>> searchTerm(MaterialSearchFilter filters, Pageable pageable) {
+        var materiais = materialService.dynamicFindAll(filters.toSpec(), pageable);
+        var materiaisDTO = materiais.map(AutoCompleteDTO::new);
         return ResponseEntity.ok(materiaisDTO);
     }
 

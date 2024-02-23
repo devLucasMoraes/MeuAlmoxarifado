@@ -2,6 +2,7 @@ package com.example.MeuAlmoxarifado.controller;
 
 
 import com.example.MeuAlmoxarifado.controller.dto.request.FornecedoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.AutoCompleteDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowFornecedoraDTO;
 import com.example.MeuAlmoxarifado.controller.filter.FornecedoraSearchFilter;
 import com.example.MeuAlmoxarifado.service.FornecedoraService;
@@ -19,7 +20,7 @@ import java.net.URI;
 @CrossOrigin
 public record FornecedoraController(FornecedoraService fornecedoraService) {
 
-    @PostMapping("new")
+    @PostMapping("create")
     public ResponseEntity<ShowFornecedoraDTO> create(@RequestBody @Valid FornecedoraDTO fornecedoraDTO) {
         var fornecedora = fornecedoraService.create(fornecedoraDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -40,6 +41,13 @@ public record FornecedoraController(FornecedoraService fornecedoraService) {
     public ResponseEntity<Page<ShowFornecedoraDTO>> dynamicGetAll(FornecedoraSearchFilter filter, Pageable pageable) {
         var fornecedoras = fornecedoraService.dynamicFindAll(filter.toSpec(),pageable);
         var fornecedorasDTO = fornecedoras.map(ShowFornecedoraDTO::new);
+        return ResponseEntity.ok(fornecedorasDTO);
+    }
+
+    @GetMapping("/autocomplete")
+    public ResponseEntity<Page<AutoCompleteDTO>> searchTerm(FornecedoraSearchFilter filter, Pageable pageable) {
+        var fornecedoras = fornecedoraService.dynamicFindAll(filter.toSpec(),pageable);
+        var fornecedorasDTO = fornecedoras.map(AutoCompleteDTO::new);
         return ResponseEntity.ok(fornecedorasDTO);
     }
 

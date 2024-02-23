@@ -2,7 +2,9 @@ package com.example.MeuAlmoxarifado.controller;
 
 
 import com.example.MeuAlmoxarifado.controller.dto.request.CategoriaDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.AutoCompleteDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowCategoriaDTO;
+import com.example.MeuAlmoxarifado.controller.filter.CategoriaSearchFilter;
 import com.example.MeuAlmoxarifado.service.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -18,7 +20,7 @@ import java.net.URI;
 @CrossOrigin
 public record CategoriaController(CategoriaService categoriaService) {
 
-    @PostMapping("new")
+    @PostMapping("create")
     public ResponseEntity<ShowCategoriaDTO> create(@RequestBody @Valid CategoriaDTO categoriaDTO) {
         var categoria = categoriaService.create(categoriaDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -32,6 +34,13 @@ public record CategoriaController(CategoriaService categoriaService) {
     public ResponseEntity<Page<ShowCategoriaDTO>> getAll(Pageable pageable) {
         var categorias = categoriaService.findAll(pageable);
         var categoriasDTO = categorias.map(ShowCategoriaDTO::new);
+        return ResponseEntity.ok(categoriasDTO);
+    }
+
+    @GetMapping("autocomplete")
+    public ResponseEntity<Page<AutoCompleteDTO>> searchTerm(CategoriaSearchFilter filters, Pageable pageable) {
+        var categorias = categoriaService.dynamicFindAll(filters.toSpec(), pageable);
+        var categoriasDTO = categorias.map(AutoCompleteDTO::new);
         return ResponseEntity.ok(categoriasDTO);
     }
 

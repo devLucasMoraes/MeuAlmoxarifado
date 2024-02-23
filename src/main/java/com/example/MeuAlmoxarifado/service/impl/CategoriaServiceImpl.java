@@ -7,6 +7,7 @@ import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,11 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional(readOnly = true)
     public Page<Categoria> findAll(Pageable pageable) {
         return this.categoriaRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Categoria> dynamicFindAll(Specification<Categoria> spec, Pageable pageable) {
+        return this.categoriaRepository.findAll(spec, pageable);
     }
 
     @Transactional(readOnly = true)

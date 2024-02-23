@@ -2,7 +2,9 @@ package com.example.MeuAlmoxarifado.controller;
 
 
 import com.example.MeuAlmoxarifado.controller.dto.request.RequisitanteDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.AutoCompleteDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowRequisitanteDTO;
+import com.example.MeuAlmoxarifado.controller.filter.RequisitanteSearchFilter;
 import com.example.MeuAlmoxarifado.service.RequisitanteService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -18,7 +20,7 @@ import java.net.URI;
 @CrossOrigin
 public record RequisitanteController(RequisitanteService requisitanteService) {
 
-    @PostMapping("new")
+    @PostMapping("create")
     public ResponseEntity<ShowRequisitanteDTO> create(@RequestBody @Valid RequisitanteDTO requisitanteDTO) {
         var requisitante = requisitanteService.create(requisitanteDTO.toNewModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -32,6 +34,13 @@ public record RequisitanteController(RequisitanteService requisitanteService) {
     public ResponseEntity<Page<ShowRequisitanteDTO>> getAll(Pageable pageable) {
         var requisitantes = requisitanteService.findAll(pageable);
         var requisitantesDTO = requisitantes.map(ShowRequisitanteDTO::new);
+        return ResponseEntity.ok(requisitantesDTO);
+    }
+
+    @GetMapping("autocomplete")
+    public ResponseEntity<Page<AutoCompleteDTO>> searchTerm(RequisitanteSearchFilter filters, Pageable pageable) {
+        var requisitantes = requisitanteService.dynamicFindAll(filters.toSpec(), pageable);
+        var requisitantesDTO = requisitantes.map(AutoCompleteDTO::new);
         return ResponseEntity.ok(requisitantesDTO);
     }
 

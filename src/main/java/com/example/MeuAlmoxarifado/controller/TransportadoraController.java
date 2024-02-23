@@ -2,6 +2,7 @@ package com.example.MeuAlmoxarifado.controller;
 
 
 import com.example.MeuAlmoxarifado.controller.dto.request.TransportadoraDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.AutoCompleteDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowTransportadoraDTO;
 import com.example.MeuAlmoxarifado.controller.filter.TransportadoraSearchFilter;
 import com.example.MeuAlmoxarifado.service.TransportadoraService;
@@ -19,7 +20,7 @@ import java.net.URI;
 @CrossOrigin
 public record TransportadoraController(TransportadoraService transportadoraService) {
 
-    @PostMapping("new")
+    @PostMapping("create")
     public ResponseEntity<ShowTransportadoraDTO> create(@RequestBody @Valid TransportadoraDTO transportadoraDTO) {
         var transportadora = transportadoraService.create(transportadoraDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -33,6 +34,13 @@ public record TransportadoraController(TransportadoraService transportadoraServi
     public ResponseEntity<Page<ShowTransportadoraDTO>> getAll(Pageable pageable) {
         var transportadoras = transportadoraService.findAll(pageable);
         var transportadorasDTO = transportadoras.map(ShowTransportadoraDTO::new);
+        return ResponseEntity.ok(transportadorasDTO);
+    }
+
+    @GetMapping("/autocomplete")
+    public ResponseEntity<Page<AutoCompleteDTO>> searchTerm(TransportadoraSearchFilter filter, Pageable pageable) {
+        var transportadoras = transportadoraService.dynamicFindAll(filter.toSpec(), pageable);
+        var transportadorasDTO = transportadoras.map(AutoCompleteDTO::new);
         return ResponseEntity.ok(transportadorasDTO);
     }
 
