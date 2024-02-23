@@ -4,16 +4,18 @@ import com.example.MeuAlmoxarifado.domain.model.Fornecedora;
 import org.springframework.data.jpa.domain.Specification;
 
 public record FornecedoraSearchFilter(
+        String label,
         String cnpj,
-
         String razao_social,
-
         String nome_fantasia,
-
         String fone
 ) {
     public Specification<Fornecedora> toSpec() {
         Specification<Fornecedora> spec = Specification.where(null);
+
+        if (this.label != null) {
+            spec = spec.and(nomeFantasiaLike(this.label));
+        }
 
         if (this.cnpj != null) {
             spec = spec.and(cnpjIs(this.cnpj));

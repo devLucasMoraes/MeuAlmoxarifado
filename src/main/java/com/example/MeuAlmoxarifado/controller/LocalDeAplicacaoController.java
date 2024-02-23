@@ -1,7 +1,9 @@
 package com.example.MeuAlmoxarifado.controller;
 
 import com.example.MeuAlmoxarifado.controller.dto.request.LocalDeAplicacaoDTO;
+import com.example.MeuAlmoxarifado.controller.dto.response.AutoCompleteDTO;
 import com.example.MeuAlmoxarifado.controller.dto.response.ShowLocalDeAplicacaoDTO;
+import com.example.MeuAlmoxarifado.controller.filter.LocalDeAplicacaoSearchFilter;
 import com.example.MeuAlmoxarifado.service.LocalDeAplicacaoService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -18,7 +20,7 @@ import java.net.URI;
 @CrossOrigin
 public record LocalDeAplicacaoController(LocalDeAplicacaoService localDeAplicacaoService) {
 
-    @PostMapping("new")
+    @PostMapping("create")
     public ResponseEntity<ShowLocalDeAplicacaoDTO> create(@RequestBody @Valid LocalDeAplicacaoDTO localDeAplicacaoDTO) {
         var localDeAplicacao = localDeAplicacaoService.create(localDeAplicacaoDTO.toNewModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -32,6 +34,13 @@ public record LocalDeAplicacaoController(LocalDeAplicacaoService localDeAplicaca
     public ResponseEntity<Page<ShowLocalDeAplicacaoDTO>> getAll(Pageable pageable) {
         var locaisDeAplicacao = localDeAplicacaoService.findAll(pageable);
         var locaisDeAplicacaoDTO = locaisDeAplicacao.map(ShowLocalDeAplicacaoDTO::new);
+        return ResponseEntity.ok(locaisDeAplicacaoDTO);
+    }
+
+    @GetMapping("autocomplete")
+    public ResponseEntity<Page<AutoCompleteDTO>> searchTerm(LocalDeAplicacaoSearchFilter filters, Pageable pageable) {
+        var locaisDeAplicacao = localDeAplicacaoService.dynamicFindAll(filters.toSpec(), pageable);
+        var locaisDeAplicacaoDTO = locaisDeAplicacao.map(AutoCompleteDTO::new);
         return ResponseEntity.ok(locaisDeAplicacaoDTO);
     }
 

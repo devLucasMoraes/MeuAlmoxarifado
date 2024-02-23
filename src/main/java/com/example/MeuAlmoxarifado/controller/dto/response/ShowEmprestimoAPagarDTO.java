@@ -1,7 +1,6 @@
 package com.example.MeuAlmoxarifado.controller.dto.response;
 
-import com.example.MeuAlmoxarifado.controller.dto.request.ItemEmprestimoETrocaDTO;
-import com.example.MeuAlmoxarifado.domain.model.EmprestimoETroca;
+import com.example.MeuAlmoxarifado.domain.model.Emprestimo;
 import com.example.MeuAlmoxarifado.domain.model.Situacao;
 import com.example.MeuAlmoxarifado.domain.model.Tipo;
 
@@ -13,23 +12,29 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
-public record ShowEmprestimoETrocaDTO(
+public record ShowEmprestimoAPagarDTO(
         Long id,
         Tipo tipo,
-        LocalDateTime data,
+        LocalDateTime dataDeAbertura,
         BigDecimal valorTotal,
         Long idFornecedora,
         Situacao situacao,
-        List<ShowItemEmprestimoETrocaDTO> itens) {
-    public ShowEmprestimoETrocaDTO(EmprestimoETroca model) {
+        Boolean atribuirAoEstoqueFisico,
+        List<ShowItemEmprestimoAPagarDTO> itensAPagar,
+        List<ShowItemEmprestimoAReceberDTO> itensAReceber
+
+) {
+    public ShowEmprestimoAPagarDTO(Emprestimo model) {
         this(
                 model.getId(),
                 model.getTipo(),
-                model.getData(),
+                model.getDataDeAbertura(),
                 model.getValorTotal(),
                 model.getFornecedora().getId(),
                 model.getSituacao(),
-                ofNullable(model.getItensEmprestimo()).orElse(emptyList()).stream().map(ShowItemEmprestimoETrocaDTO::new).collect(toList())
+                model.getAtribuirAoEstoqueFisico(),
+                ofNullable(model.getItensAPagar()).orElse(emptyList()).stream().map(ShowItemEmprestimoAPagarDTO::new).collect(toList()),
+                ofNullable(model.getItensAReceber()).orElse(emptyList()).stream().map(ShowItemEmprestimoAReceberDTO::new).collect(toList())
         );
     }
 }

@@ -13,29 +13,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class ItemDeCompra {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ItemDeCompra extends BaseItem {
 
     @ManyToOne
     @JoinColumn(name = "transacoes_entrada_id")
     private NfeDeCompra nfeDeCompra;
-
-    @ManyToOne
-    @JoinColumn(name = "materiais_id")
-    private Material material;
-
-    @Enumerated(EnumType.STRING)
-    @JoinColumn(name = "und_com")
-    private Unidade undCom;
-
-    @JoinColumn(name = "quant_com")
-    private BigDecimal quantCom;
-
-    @JoinColumn(name = "valor_unt_com")
-    private BigDecimal valorUntCom;
 
     @JoinColumn(name = "valor_ipi")
     private BigDecimal valorIpi;

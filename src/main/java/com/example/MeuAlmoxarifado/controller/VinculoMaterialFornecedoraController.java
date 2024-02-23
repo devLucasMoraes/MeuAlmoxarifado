@@ -19,7 +19,7 @@ import java.net.URI;
 @CrossOrigin
 public record VinculoMaterialFornecedoraController(VinculoMaterialFornecedoraService vinculoMaterialFornecedoraService) {
 
-    @PostMapping("new")
+    @PostMapping("create")
     public ResponseEntity<ShowVinculoMaterialFornecedoraDTO> create(@RequestBody @Valid VinculoMaterialFornecedoraDTO vinculoMaterialFornecedoraDTO) {
         var vinculo = vinculoMaterialFornecedoraService.create(vinculoMaterialFornecedoraDTO.toModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()

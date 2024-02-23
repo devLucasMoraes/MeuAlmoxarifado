@@ -18,9 +18,9 @@ public record ShowItemDeCompraDTO(
         this(
                 model.getId(),
                 model.getMaterial().getId(),
-                model.getUndCom(),
-                model.getQuantCom(),
-                model.getValorUntCom(),
+                model.getUnidade(),
+                model.getQuantidade(),
+                model.getValorUnitario(),
                 model.getValorIpi(),
                 model.getDescricaoFornecedora(),
                 model.getReferenciaFornecedora()

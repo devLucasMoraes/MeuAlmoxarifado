@@ -1,17 +1,17 @@
 package com.example.MeuAlmoxarifado.controller.dto.response;
 
-import com.example.MeuAlmoxarifado.domain.model.ItemRequisicao;
+import com.example.MeuAlmoxarifado.domain.model.ItemEmprestimoAPagar;
 import com.example.MeuAlmoxarifado.domain.model.Unidade;
 
 import java.math.BigDecimal;
 
-public record ShowItemRequisicaoDTO(
+public record ShowItemEmprestimoAPagarDTO(
         Long idItem,
         Long idMaterial,
-        Unidade undConsumo,
+        Unidade unidade,
         BigDecimal quantEntregue,
-        BigDecimal valorUntEntregue) {
-    public ShowItemRequisicaoDTO(ItemRequisicao model) {
+        BigDecimal valorUnt) {
+    public ShowItemEmprestimoAPagarDTO(ItemEmprestimoAPagar model) {
         this(
                 model.getId(),
                 model.getMaterial().getId(),

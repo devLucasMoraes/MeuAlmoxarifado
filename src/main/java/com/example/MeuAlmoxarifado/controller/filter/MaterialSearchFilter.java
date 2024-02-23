@@ -4,12 +4,16 @@ import com.example.MeuAlmoxarifado.domain.model.Material;
 import org.springframework.data.jpa.domain.Specification;
 
 public record MaterialSearchFilter(
+        String label,
         String descricao,
-
         Long id_categoria
 ) {
     public Specification<Material> toSpec() {
         Specification<Material> spec = Specification.where(null);
+
+        if (this.label != null) {
+            spec = spec.and(descricaoLike(this.label));
+        }
 
         if(this.descricao != null){
             spec = spec.and(descricaoLike(this.descricao));

@@ -27,9 +27,9 @@ public record ItemDeCompraDTO(
         ItemDeCompra model = new ItemDeCompra();
         model.setId(this.idItem);
         model.setMaterial(new Material(this.idMaterial));
-        model.setUndCom(this.undCom);
-        model.setQuantCom(this.quantCom);
-        model.setValorUntCom(this.valorUntCom);
+        model.setUnidade(this.undCom);
+        model.setQuantidade(this.quantCom);
+        model.setValorUnitario(this.valorUntCom);
         model.setValorIpi(this.valorIpi);
         model.setDescricaoFornecedora(this.descricaoFornecedora);
         model.setReferenciaFornecedora(this.referenciaFornecedora);
@@ -38,9 +38,9 @@ public record ItemDeCompraDTO(
     public ItemDeCompra toNewModel() {
         ItemDeCompra model = new ItemDeCompra();
         model.setMaterial(new Material(this.idMaterial));
-        model.setUndCom(this.undCom);
-        model.setQuantCom(this.quantCom);
-        model.setValorUntCom(this.valorUntCom);
+        model.setUnidade(this.undCom);
+        model.setQuantidade(this.quantCom);
+        model.setValorUnitario(this.valorUntCom);
         model.setValorIpi(this.valorIpi);
         model.setDescricaoFornecedora(this.descricaoFornecedora);
         model.setReferenciaFornecedora(this.referenciaFornecedora);

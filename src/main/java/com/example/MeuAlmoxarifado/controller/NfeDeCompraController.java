@@ -14,12 +14,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("api/nfe_de_compra")
+@RequestMapping("api/nfe/compra")
 @CrossOrigin
 public record NfeDeCompraController(NfeDeCompraService nfeDeCompraService) {
 
 
-    @PostMapping("/new")
+    @PostMapping("/create")
     public ResponseEntity<ShowNfeDeCompraDTO> create(@RequestBody @Valid NfeDeCompraDTO nfeDeCompraDTO) {
         var nfeDeCompra = nfeDeCompraService.create(nfeDeCompraDTO.toNewModel());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()

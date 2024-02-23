@@ -4,16 +4,18 @@ import com.example.MeuAlmoxarifado.domain.model.Transportadora;
 import org.springframework.data.jpa.domain.Specification;
 
 public record TransportadoraSearchFilter(
+        String label,
         String cnpj,
-
         String razao_social,
-
         String nome_fantasia,
-
         String fone
 ) {
     public Specification<Transportadora> toSpec() {
         Specification<Transportadora> spec = Specification.where(null);
+
+        if (this.label != null) {
+            spec = spec.and(nomeFantasiaLike(this.label));
+        }
 
         if (this.cnpj != null) {
             spec = spec.and(cnpjIs(this.cnpj));

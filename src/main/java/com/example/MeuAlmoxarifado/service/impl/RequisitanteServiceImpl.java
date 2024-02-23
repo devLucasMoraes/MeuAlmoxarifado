@@ -7,6 +7,7 @@ import com.example.MeuAlmoxarifado.service.exception.BusinessException;
 import com.example.MeuAlmoxarifado.service.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,11 @@ public class RequisitanteServiceImpl implements RequisitanteService {
    @Transactional(readOnly = true)
     public Page<Requisitante> findAll(Pageable pageable) {
         return this.requisitanteRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Requisitante> dynamicFindAll(Specification<Requisitante> spec, Pageable pageable) {
+        return this.requisitanteRepository.findAll(spec, pageable);
     }
 
     @Transactional(readOnly = true)
