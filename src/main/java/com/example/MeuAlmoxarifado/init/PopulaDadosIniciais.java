@@ -50,6 +50,23 @@ public class PopulaDadosIniciais {
                 new ArrayList<>()
         );
 
+        CategoriaDTO vernizes = new CategoriaDTO(
+                null,
+                "VERNIZES",
+                Unidade.KG,
+                new BigDecimal(50),
+                new ArrayList<>()
+        );
+
+        MaterialDTO vernizUv = new MaterialDTO(
+                null,
+                "VERNIZ UV-8010/11 CALANDRA BRILHO",
+                true,
+                null,
+                3L,
+                new ArrayList<>()
+        );
+
         MaterialDTO ipa7030 = new MaterialDTO(
                 null,
                 "IPA 70/30",
@@ -115,8 +132,10 @@ public class PopulaDadosIniciais {
         transportadoraService.create(transportadoraDTO.toModel());
         categoriaService.create(alcoois.toModel());
         categoriaService.create(papelaoParana.toModel());
+        categoriaService.create(vernizes.toModel());
         materialService.create(ipa7030.toModel());
         materialService.create(ipa100.toModel());
+        materialService.create(vernizUv.toModel());
         materialService.create(papelao08100015.toModel());
         requisitanteService.create(requisitanteDTO.toNewModel());
         localDeAplicacaoService.create(localDeAplicacaoDTO.toNewModel());
