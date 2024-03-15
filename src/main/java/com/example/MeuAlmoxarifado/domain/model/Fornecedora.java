@@ -3,6 +3,8 @@ package com.example.MeuAlmoxarifado.domain.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "fornecedoras")
 @Getter
@@ -27,6 +29,9 @@ public class Fornecedora {
 
     @JoinColumn(name = "fone")
     private String fone;
+
+    @OneToMany(mappedBy = "fornecedora", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<VinculoMaterialFornecedora> fornecedorasVinculadas;
 
     public Fornecedora(Long id) {
         this.id = id;

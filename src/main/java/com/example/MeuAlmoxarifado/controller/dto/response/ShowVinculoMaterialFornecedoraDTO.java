@@ -12,7 +12,6 @@ import static java.util.stream.Collectors.toList;
 public record ShowVinculoMaterialFornecedoraDTO(
         Long idVinculo,
         Long idFornecedora,
-
         Long idMaterial,
         String referenciaFornecedora,
         String descricaoFornecedora,

@@ -18,8 +18,8 @@ public record VinculoMaterialFornecedoraDTO(
         @NotNull
         Long idFornecedora,
         Long idMaterial,
-        String referenciaFornecedora,
         @NotBlank
+        String referenciaFornecedora,
         String descricaoFornecedora,
         @Valid
         List<ConversaoDeCompraDTO> conversoesDeCompra) {
